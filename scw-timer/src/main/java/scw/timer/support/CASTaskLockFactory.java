@@ -1,9 +1,9 @@
 package scw.timer.support;
 
 import scw.data.cas.CASOperations;
-import scw.data.memcached.Memcached;
-import scw.data.redis.Redis;
 import scw.locks.Lock;
+import scw.memcached.Memcached;
+import scw.redis.Redis;
 import scw.timer.TaskConfig;
 import scw.timer.TaskLockFactory;
 

@@ -7,11 +7,11 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import scw.core.annotation.Order;
-import scw.data.memcached.Memcached;
-import scw.data.redis.Redis;
 import scw.db.AbstractDB;
 import scw.db.DBUtils;
 import scw.db.database.DataBase;
+import scw.memcached.Memcached;
+import scw.redis.Redis;
 import scw.sql.orm.dialect.SqlDialect;
 import scw.value.property.PropertyFactory;
 

@@ -6,11 +6,11 @@ import scw.beans.builder.BeanBuilderLoader;
 import scw.beans.builder.BeanBuilderLoaderChain;
 import scw.beans.builder.LoaderContext;
 import scw.core.instance.annotation.Configuration;
-import scw.data.memcached.Memcached;
-import scw.data.redis.Redis;
 import scw.db.DB;
 import scw.db.DBUtils;
 import scw.io.ResourceUtils;
+import scw.memcached.Memcached;
+import scw.redis.Redis;
 import scw.value.property.PropertyFactory;
 
 @Configuration(order = Integer.MIN_VALUE + 1)

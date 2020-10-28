@@ -1,10 +1,12 @@
 package scw.security.session;
 
 import scw.core.annotation.Order;
+import scw.core.instance.annotation.Configuration;
 import scw.core.parameter.annotation.DefaultValue;
 import scw.core.parameter.annotation.ParameterName;
 import scw.data.TemporaryCache;
 
+@Configuration(value = UserSessionFactory.class, order = Integer.MIN_VALUE)
 public final class DefaultUserSessionFactory<T> extends AbstractUserSessionFactory<T> {
 	private TemporaryCache temporaryCache;
 	private SessionFactory sessionFactory;

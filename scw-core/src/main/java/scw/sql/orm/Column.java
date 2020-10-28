@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
 import java.util.Date;
 
-import com.google.protobuf.Value;
-
 import scw.core.utils.StringUtils;
 import scw.core.utils.TypeUtils;
 import scw.json.JSONUtils;
@@ -21,6 +19,7 @@ import scw.sql.orm.dialect.SqlType;
 import scw.sql.orm.dialect.SqlTypeFactory;
 import scw.sql.orm.enums.CasType;
 import scw.value.AnyValue;
+import scw.value.Value;
 
 /**
  * 名称相同视为同一字段

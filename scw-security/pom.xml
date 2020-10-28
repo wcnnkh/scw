@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-core</artifactId>
+			<artifactId>scw-data</artifactId>
 		</dependency>
 	</dependencies>
 </project>
