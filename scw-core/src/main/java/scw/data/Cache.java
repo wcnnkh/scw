@@ -3,7 +3,7 @@ package scw.data;
 import java.util.Collection;
 import java.util.Map;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 
 /**
  * 缓存<br/>

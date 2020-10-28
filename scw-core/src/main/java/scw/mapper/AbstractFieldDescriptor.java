@@ -87,6 +87,21 @@ public abstract class AbstractFieldDescriptor implements FieldDescriptor {
 
 	@Override
 	public String toString() {
-		return "declaringClass [" + getDeclaringClass() + "] name [" + getName() + "]";
+		if(field == null && method == null){
+			return "declaringClass [" + getDeclaringClass() + "] name [" + getName() + "]";
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		if(field != null){
+			sb.append("field[").append(field).append("]");
+		}
+		
+		if(method != null){
+			if(sb.length() != 0){
+				sb.append(" ");
+			}
+			sb.append("method[").append(method).append("]");
+		}
+		return sb.toString();
 	}
 }

@@ -1,6 +1,6 @@
 package scw.timer;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.beans.annotation.AutoImpl;
 import scw.locks.Lock;
 import scw.timer.db.DBTaskLockFactory;

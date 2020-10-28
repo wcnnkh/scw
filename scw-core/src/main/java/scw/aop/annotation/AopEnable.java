@@ -1,4 +1,4 @@
-package scw.beans.annotation;
+package scw.aop.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

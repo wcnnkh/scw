@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 定义CAS的操作
  * 
- * @author asus1
+ * @author shuchaowen
  *
  * @param <K>
  * @param <V>

@@ -3,7 +3,7 @@ package scw.apple.pay;
 import java.util.HashMap;
 import java.util.Map;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.core.utils.StringUtils;
 import scw.http.HttpUtils;
 import scw.http.MediaType;

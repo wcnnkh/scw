@@ -10,7 +10,6 @@ import scw.core.utils.ClassUtils;
 import scw.io.Bits;
 import scw.io.IOUtils;
 import scw.io.UnsafeByteArrayOutputStream;
-import scw.lang.NestedRuntimeException;
 import scw.util.FormatUtils;
 
 public final class SerializerUtils {
@@ -67,7 +66,8 @@ public final class SerializerUtils {
 		try {
 			return DEFAULT_SERIALIZER.deserialize(DEFAULT_SERIALIZER.serialize(obj));
 		} catch (Exception e) {
-			throw new NestedRuntimeException(e);
+			//不可能存在此错误
+			throw new RuntimeException(e);
 		}
 	}
 

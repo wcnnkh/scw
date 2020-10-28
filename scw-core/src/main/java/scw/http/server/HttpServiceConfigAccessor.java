@@ -1,6 +1,6 @@
 package scw.http.server;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.http.HttpUtils;
 import scw.http.multipart.FileItemParser;
 

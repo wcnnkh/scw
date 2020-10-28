@@ -1,6 +1,6 @@
 package scw.result;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.core.GlobalPropertyFactory;
 import scw.event.support.DynamicValue;
 

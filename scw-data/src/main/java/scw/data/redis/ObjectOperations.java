@@ -1,9 +1,6 @@
 package scw.data.redis;
 
-import java.io.IOException;
-
 import scw.io.serialzer.Serializer;
-import scw.lang.NestedRuntimeException;
 import scw.util.StringCodec;
 
 public final class ObjectOperations extends AbstractRedisOperationsWrapper<String, byte[], Object, byte[]> {
@@ -25,41 +22,37 @@ public final class ObjectOperations extends AbstractRedisOperationsWrapper<Strin
 
 	@Override
 	protected byte[] encodeKey(String key) {
-		if(key == null){
+		if (key == null) {
 			return null;
 		}
-		
+
 		return stringCodec.encode(key);
 	}
 
 	@Override
 	protected String decodeKey(byte[] key) {
-		if(key == null){
+		if (key == null) {
 			return null;
 		}
-		
+
 		return stringCodec.decode(key);
 	}
 
 	@Override
 	protected byte[] encodeValue(Object value) {
-		if(value == null){
+		if (value == null) {
 			return null;
 		}
-		
-		try {
-			return serializer.serialize(value);
-		} catch (IOException e) {
-			throw new NestedRuntimeException(e);
-		}
+
+		return serializer.serialize(value);
 	}
 
 	@Override
 	protected Object decodeValue(byte[] value) {
-		if(value == null){
+		if (value == null) {
 			return null;
 		}
-		
+
 		try {
 			return serializer.deserialize(value);
 		} catch (Exception e) {

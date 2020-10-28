@@ -30,6 +30,8 @@ import scw.util.FormatUtils;
 import scw.util.comparator.CompareUtils;
 
 public abstract class ReflectionUtils {
+	private static final String SERIAL_VERSION_UID_FIELD_NAME = "serialVersionUID";
+	
 	private static final Method[] CLASS_PRESENT_METHODS = getMethods(Class.class, new Accept<Method>() {
 		public boolean accept(Method method) {
 			return !Modifier.isStatic(method.getModifiers()) && !Modifier.isNative(method.getModifiers())
@@ -1401,5 +1403,9 @@ public abstract class ReflectionUtils {
 		// declared in an interface.
 		return ((method.getModifiers() & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC)) == Modifier.PUBLIC)
 				&& method.getDeclaringClass().isInterface();
+	}
+	
+	public static boolean isSerialVersionUIDField(Field field){
+		return Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()) && field.getName().equals(SERIAL_VERSION_UID_FIELD_NAME);
 	}
 }

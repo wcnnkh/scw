@@ -3,7 +3,7 @@ package scw.beans;
 import java.util.Collection;
 import java.util.Map;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.value.property.PropertyFactory;
 
 @AopEnable(false)

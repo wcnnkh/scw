@@ -15,21 +15,21 @@ import scw.json.JSONUtils;
 import scw.logger.Logger;
 import scw.logger.LoggerUtils;
 
-public class ZookeeperServerStart extends Thread {
-	private Logger logger = LoggerUtils.getLogger(ZookeeperServerStart.class);
+public class ZooKeeperServerStart extends Thread {
+	private Logger logger = LoggerUtils.getLogger(ZooKeeperServerStart.class);
 	private static final String DATA_DIR = "dataDir";
 	private static final String DATA_LOG_DIR = "dataLogDir";
 	private static final String CLIENT_PORT = "clientPort";
 
 	private final ServerConfig serverConfig;
 
-	public ZookeeperServerStart(int port) throws IOException, ConfigException {
+	public ZooKeeperServerStart(int port) throws IOException, ConfigException {
 		Properties properties = new Properties();
 		properties.put(CLIENT_PORT, port);
 		this.serverConfig = parse(properties);
 	}
 
-	public ZookeeperServerStart(Properties properties) throws IOException,
+	public ZooKeeperServerStart(Properties properties) throws IOException,
 			ConfigException {
 		this.serverConfig = parse(properties);
 	}
@@ -57,7 +57,7 @@ public class ZookeeperServerStart extends Thread {
 		return serverConfig;
 	}
 
-	public ZookeeperServerStart(ServerConfig serverConfig) {
+	public ZooKeeperServerStart(ServerConfig serverConfig) {
 		Assert.requiredArgument(serverConfig != null, "serverConfig");
 		this.serverConfig = serverConfig;
 	}

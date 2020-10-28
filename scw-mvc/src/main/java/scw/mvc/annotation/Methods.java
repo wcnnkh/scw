@@ -9,7 +9,7 @@ import scw.http.HttpMethod;
 
 /**
  * 此值会覆盖controller中的内容,如果要追加内容请在action中添加
- * @author asus1
+ * @author shuchaowen
  *
  */
 @Target(ElementType.METHOD)

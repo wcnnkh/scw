@@ -4,7 +4,7 @@ import com.netflix.hystrix.HystrixCommand;
 
 import scw.aop.MethodInterceptorChain;
 import scw.aop.MethodInvoker;
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.beans.annotation.AutoImpl;
 
 @AutoImpl(DefaultHystrixCommandFactory.class)

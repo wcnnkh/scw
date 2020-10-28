@@ -11,7 +11,7 @@ public class NotSupportedException extends RuntimeException{
 		super(e);
 	}
 	
-	public NotSupportedException(Throwable e, String message) {
+	public NotSupportedException(String message, Throwable e) {
 		super(message, e);
 	}
 }

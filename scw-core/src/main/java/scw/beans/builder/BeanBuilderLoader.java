@@ -1,7 +1,7 @@
 package scw.beans.builder;
 
+import scw.aop.annotation.AopEnable;
 import scw.beans.BeanDefinition;
-import scw.beans.annotation.AopEnable;
 
 @AopEnable(false)
 public interface BeanBuilderLoader {

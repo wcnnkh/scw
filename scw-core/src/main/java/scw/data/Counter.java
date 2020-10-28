@@ -1,6 +1,6 @@
 package scw.data;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 
 /**
  * 计数器

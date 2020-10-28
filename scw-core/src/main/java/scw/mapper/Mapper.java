@@ -322,18 +322,25 @@ public abstract class Mapper {
 			return null;
 		}
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
+		StringBuilder sb = null;
 		Iterator<Field> iterator = getFields(entityClass == null ? instance.getClass() : entityClass,
-				FilterFeature.GETTER).iterator();
+				FilterFeature.IGNORE_STATIC, FilterFeature.EXISTING_GETTER_FIELD).iterator();
 		while (iterator.hasNext()) {
 			Field field = iterator.next();
-			sb.append(field.getGetter().getName()).append("=").append(field.getGetter().get(instance));
-			if (iterator.hasNext()) {
-				sb.append(", ");
+			Object value = field.getGetter().get(instance);
+			if (value == null) {
+				continue;
 			}
+
+			if (sb == null) {
+				sb = new StringBuilder();
+			}
+
+			if (sb.length() > 0) {
+				sb.append(",");
+			}
+			sb.append(field.getGetter().getName()).append("=").append(value);
 		}
-		sb.append("}");
-		return sb.toString();
+		return sb == null ? null : sb.toString();
 	}
 }

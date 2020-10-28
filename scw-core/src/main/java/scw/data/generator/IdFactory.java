@@ -2,7 +2,7 @@ package scw.data.generator;
 
 /**
  * ID工厂
- * @author asus1
+ * @author shuchaowen
  *
  * @param <T>
  */

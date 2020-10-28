@@ -33,4 +33,9 @@ public final class SerializableField implements FieldHolder, Serializable {
 	public String getFieldName() {
 		return fieldName;
 	}
+	
+	@Override
+	public String toString() {
+		return getField().toString();
+	}
 }

@@ -4,10 +4,10 @@ import java.lang.reflect.Modifier;
 
 public enum FilterFeature {
 	SUPPORT_GETTER(new SupportGetterFieldFilter()), 
-	SUPPORT_SETTER(new SupportSetterFieldFilter()),
+	SUPPORT_SETTER(new SupportSetterFieldFilter()), 
 	GETTER_PUBLIC(new GetterPublicFieldFilter()),
-	SETTER_PUBLIC(new SetterPublicFieldFilter()),
-	GETTER_IGNORE_STATIC(new IgnoreGetterStaticFieldFilter()),
+	SETTER_PUBLIC(new SetterPublicFieldFilter()), 
+	GETTER_IGNORE_STATIC(new IgnoreGetterStaticFieldFilter()), 
 	SETTER_IGNORE_STATIC(new IgnoreSetterStaticFieldFilter()),
 	GETTER_IGNORE_TRANSIENT(new IgnoreGetterTransientFieldFilter()),
 	SETTER_IGNORE_TRANSIENT(new IgnoreSetterTransientFieldFilter()),
@@ -23,7 +23,11 @@ public enum FilterFeature {
 	/**
 	 * 对象公有的getter字段,忽略static字段
 	 */
-	GETTER(new GetterFieldFilter());
+	GETTER(new GetterFieldFilter()),
+
+	EXISTING_GETTER_FIELD(new ExistingFieldFilter(true)),
+
+	EXISTING_SETTER_FIELD(new ExistingFieldFilter(false));
 
 	private final FieldFilter filter;
 
@@ -33,6 +37,22 @@ public enum FilterFeature {
 
 	public FieldFilter getFilter() {
 		return filter;
+	}
+
+	private static final class ExistingFieldFilter implements FieldFilter {
+		private final boolean getter;
+
+		public ExistingFieldFilter(boolean getter) {
+			this.getter = getter;
+		}
+
+		public boolean accept(Field field) {
+			if (getter) {
+				return field.isSupportGetter() && field.getGetter().getField() != null;
+			} else {
+				return field.isSupportSetter() && field.getSetter().getField() != null;
+			}
+		}
 	}
 
 	private static final class GetterFieldFilter implements FieldFilter {
@@ -45,7 +65,8 @@ public enum FilterFeature {
 	private static final class SetterFieldFilter implements FieldFilter {
 
 		public boolean accept(Field field) {
-			return field.isSupportSetter() && field.getSetter().getField() != null && !Modifier.isStatic(field.getSetter().getField().getModifiers())
+			return field.isSupportSetter() && field.getSetter().getField() != null
+					&& !Modifier.isStatic(field.getSetter().getField().getModifiers())
 					&& !Modifier.isFinal(field.getSetter().getField().getModifiers());
 		}
 	}

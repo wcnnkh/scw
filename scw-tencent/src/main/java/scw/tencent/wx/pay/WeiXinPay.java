@@ -10,7 +10,7 @@ import javax.net.ssl.SSLSocketFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.core.Constants;
 import scw.core.utils.CollectionUtils;
 import scw.core.utils.StringUtils;

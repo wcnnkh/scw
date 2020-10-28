@@ -6,9 +6,22 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import scw.core.utils.ObjectUtils;
+
 public class SimpleAttributes<K, V> implements Attributes<K, V>, Serializable {
 	private static final long serialVersionUID = 1L;
 	private Map<K, V> attributeMap;
+
+	public SimpleAttributes() {
+	}
+
+	public SimpleAttributes(Map<K, V> attributeMap) {
+		this.attributeMap = attributeMap;
+	}
+
+	public SimpleAttributes(SimpleAttributes<K, V> simpleAttributes) {
+		this.attributeMap = simpleAttributes.attributeMap;
+	}
 
 	public V getAttribute(K name) {
 		return attributeMap == null ? null : attributeMap.get(name);
@@ -40,4 +53,31 @@ public class SimpleAttributes<K, V> implements Attributes<K, V>, Serializable {
 		attributeMap.remove(name);
 	}
 
+	@Override
+	public String toString() {
+		return attributeMap.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return attributeMap == null ? 0 : attributeMap.hashCode();
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		if (obj == this) {
+			return true;
+		}
+
+		if (obj instanceof SimpleAttributes) {
+			return ObjectUtils.equals(attributeMap, ((SimpleAttributes) obj).attributeMap);
+		}
+
+		return false;
+	}
 }

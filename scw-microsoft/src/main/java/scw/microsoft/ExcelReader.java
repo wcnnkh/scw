@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 
 @AopEnable(false)
 public interface ExcelReader {

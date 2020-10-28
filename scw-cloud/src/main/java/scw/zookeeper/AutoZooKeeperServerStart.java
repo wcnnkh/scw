@@ -7,18 +7,18 @@ import scw.io.ResourceUtils;
 import scw.value.property.PropertyFactory;
 
 @Configuration(order=Integer.MAX_VALUE)
-public final class AutoZookeeperServerStart implements BeanFactoryLifeCycle{
+public final class AutoZooKeeperServerStart implements BeanFactoryLifeCycle{
 	private static final String DEFAULT_ZOOKEEPER_CONFIG = "zookeeper.properties";
 	
 	public void init(BeanFactory beanFactory, PropertyFactory propertyFactory)
 			throws Exception {
-		ZookeeperServerStart start = null;
+		ZooKeeperServerStart start = null;
 		if(ResourceUtils.getResourceOperations().isExist(DEFAULT_ZOOKEEPER_CONFIG)){
-			start = new ZookeeperServerStart(ResourceUtils.getResourceOperations().getProperties(DEFAULT_ZOOKEEPER_CONFIG).getResource());
+			start = new ZooKeeperServerStart(ResourceUtils.getResourceOperations().getProperties(DEFAULT_ZOOKEEPER_CONFIG).getResource());
 		}else{
 			Integer port = propertyFactory.getInteger("zookeeper.port");
 			if(port != null){
-				start = new ZookeeperServerStart(port);
+				start = new ZooKeeperServerStart(port);
 			}
 		}
 		

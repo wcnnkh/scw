@@ -13,7 +13,7 @@ import scw.lang.NotSupportedException;
  */
 public abstract class Serializer implements NoTypeSpecifiedSerializer, SpecifiedTypeSerializer {
 
-	public <T> T deserialize(byte[] data) throws IOException, ClassNotFoundException{
+	public <T> T deserialize(byte[] data) throws ClassNotFoundException{
 		throw new NotSupportedException("不支持不指定类型的反序列化方式(1)");
 	}
 
@@ -21,7 +21,7 @@ public abstract class Serializer implements NoTypeSpecifiedSerializer, Specified
 		throw new NotSupportedException("不支持不指定类型的反序列化方式(2)");
 	}
 
-	public byte[] serialize(Object data) throws IOException{
+	public byte[] serialize(Object data){
 		throw new NotSupportedException("不支持不指定类型的序列化方式(1)");
 	}
 
@@ -29,15 +29,23 @@ public abstract class Serializer implements NoTypeSpecifiedSerializer, Specified
 		throw new NotSupportedException("不支持不指定类型的序列化方式(2)");
 	}
 
-	public <T> T deserialize(Class<T> type, byte[] data) throws IOException, ClassNotFoundException{
-		return deserialize(data);
+	public <T> T deserialize(Class<T> type, byte[] data) {
+		try {
+			return deserialize(data);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public <T> T deserialize(Class<T> type, InputStream input) throws IOException, ClassNotFoundException {
-		return deserialize(input);
+	public <T> T deserialize(Class<T> type, InputStream input) throws IOException {
+		try {
+			return deserialize(input);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public <T> byte[] serialize(Class<T> type, T data) throws IOException{
+	public <T> byte[] serialize(Class<T> type, T data){
 		return serialize(data);
 	}
 

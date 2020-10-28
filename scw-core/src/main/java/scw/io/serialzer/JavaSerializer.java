@@ -29,12 +29,15 @@ public class JavaSerializer extends Serializer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T deserialize(byte[] data) throws IOException, ClassNotFoundException {
+	public <T> T deserialize(byte[] data) throws ClassNotFoundException {
 		UnsafeByteArrayInputStream bis = new UnsafeByteArrayInputStream(data);
 		ObjectInputStream ois = null;
 		try {
 			ois = new ObjectInputStream(bis);
 			return (T) ois.readObject();
+		} catch (IOException e) {
+			// 不可能存在此错误
+			throw new SerializerException(e);
 		} finally {
 			IOUtils.close(ois, bis);
 		}
@@ -51,7 +54,7 @@ public class JavaSerializer extends Serializer {
 		}
 	}
 
-	public byte[] serialize(Object data) throws IOException {
+	public byte[] serialize(Object data) {
 		UnsafeByteArrayOutputStream bos = new UnsafeByteArrayOutputStream();
 		ObjectOutputStream oos = null;
 		try {
@@ -59,6 +62,9 @@ public class JavaSerializer extends Serializer {
 			oos.writeObject(data);
 			oos.flush();
 			return bos.toByteArray();
+		} catch (IOException e) {
+			// 不可能存在此错误
+			throw new SerializerException(e);
 		} finally {
 			IOUtils.close(oos, bos);
 		}

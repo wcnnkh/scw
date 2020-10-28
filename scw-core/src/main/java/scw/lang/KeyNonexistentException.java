@@ -11,7 +11,7 @@ public class KeyNonexistentException extends RuntimeException{
 		super(e);
 	}
 	
-	public KeyNonexistentException(Throwable e, String message) {
+	public KeyNonexistentException(String message, Throwable e) {
 		super(message, e);
 	}
 }

@@ -1,6 +1,6 @@
 package scw.beans;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.value.property.PropertyFactory;
 
 /**

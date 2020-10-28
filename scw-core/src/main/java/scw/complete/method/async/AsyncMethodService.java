@@ -1,6 +1,6 @@
 package scw.complete.method.async;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 
 @AopEnable(false)
 public interface AsyncMethodService {

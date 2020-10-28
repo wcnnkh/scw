@@ -1,17 +1,31 @@
 package scw.aop;
 
 import java.io.Serializable;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import scw.aop.annotation.AopEnable;
+import scw.beans.BeanConfiguration;
+import scw.beans.BeanDefinition;
+import scw.beans.annotation.Service;
+import scw.beans.builder.BeanBuilderLoader;
+import scw.beans.builder.BeanBuilderLoaderChain;
+import scw.core.Constants;
 import scw.core.instance.InstanceUtils;
 import scw.core.reflect.ReflectionUtils;
 import scw.core.utils.ArrayUtils;
+import scw.io.ResourceUtils;
+import scw.util.DefaultStringMatcher;
 
 public final class ProxyUtils {
 	private static final ProxyFactory PROXY_FACTORY;
+	private static final List<String> DISABLE_PROXY_BEANS = ResourceUtils.getLines(
+			ResourceUtils.getResourceOperations().getResource("/scw/beans/disable-proxy.beans"),
+			Constants.DEFAULT_CHARSET);
 
 	static {
 		List<ProxyFactory> proxyFactories = new ArrayList<ProxyFactory>();
@@ -26,6 +40,56 @@ public final class ProxyUtils {
 
 	public static ProxyFactory getProxyFactory() {
 		return PROXY_FACTORY;
+	}
+	
+	public static boolean isAopEnable(Class<?> type, AnnotatedElement annotatedElement) {
+		if (Modifier.isFinal(type.getModifiers())) {// final修饰的类无法代理
+			return false;
+		}
+
+		if (type.getName().startsWith("java.") || type.getName().startsWith("javax.")) {
+			return false;
+		}
+
+		if (MethodInterceptor.class.isAssignableFrom(type) || BeanConfiguration.class.isAssignableFrom(type)
+				|| BeanBuilderLoader.class.isAssignableFrom(type) || BeanBuilderLoaderChain.class.isAssignableFrom(type)
+				|| BeanDefinition.class.isAssignableFrom(type)) {
+			return false;
+		}
+
+		for (String name : DISABLE_PROXY_BEANS) {
+			if (DefaultStringMatcher.getInstance().match(name, type.getName())) {
+				return false;
+			}
+		}
+
+		AopEnable aopEnable = annotatedElement.getAnnotation(AopEnable.class);
+		if (aopEnable != null) {
+			return aopEnable.value();
+		}
+
+		// 如果是一个服务那么应该默认使用aop
+		Service service = annotatedElement.getAnnotation(Service.class);
+		if (service != null) {
+			return true;
+		}
+
+		Class<?> useClass = type;
+		while (useClass != null && useClass != Object.class) {
+			aopEnable = useClass.getAnnotation(AopEnable.class);
+			if (aopEnable != null) {
+				return aopEnable.value();
+			}
+
+			for (Class<?> interfaceClass : useClass.getInterfaces()) {
+				aopEnable = interfaceClass.getAnnotation(AopEnable.class);
+				if (aopEnable != null) {
+					return aopEnable.value();
+				}
+			}
+			useClass = useClass.getSuperclass();
+		}
+		return true;
 	}
 
 	/**

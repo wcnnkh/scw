@@ -3,7 +3,7 @@ package scw.sql.orm.cache;
 import java.util.Collection;
 import java.util.Map;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 
 @AopEnable(false)
 public interface CacheManager {

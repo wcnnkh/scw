@@ -12,7 +12,7 @@ import scw.http.server.ServerHttpResponseWrapper;
 
 /**
  * 使用结束后必须要调用close方法
- * @author asus1
+ * @author shuchaowen
  *
  */
 public class JsonpServerHttpResponse extends ServerHttpResponseWrapper {

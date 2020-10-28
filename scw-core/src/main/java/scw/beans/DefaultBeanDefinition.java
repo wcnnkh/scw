@@ -13,6 +13,7 @@ import scw.aop.MethodInterceptorChain;
 import scw.aop.MethodInterceptors;
 import scw.aop.MethodInvoker;
 import scw.aop.Proxy;
+import scw.aop.ProxyUtils;
 import scw.beans.annotation.Bean;
 import scw.beans.builder.LoaderContext;
 import scw.beans.event.BeanLifeCycleEvent;
@@ -116,7 +117,7 @@ public class DefaultBeanDefinition extends DefaultInstanceBuilder<Object>
 	}
 
 	protected boolean isProxy() {
-		return BeanUtils.isAopEnable(getTargetClass(), getTargetClass());
+		return ProxyUtils.isAopEnable(getTargetClass(), getTargetClass());
 	}
 
 	public boolean isSingleton() {

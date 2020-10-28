@@ -101,12 +101,7 @@ public abstract class AbstractExchange implements Exchange, Init {
 	}
 
 	public final void push(String routingKey, MethodMessage methodMessage) {
-		byte[] body;
-		try {
-			body = serializer.serialize(methodMessage.getArgs());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		byte[] body = serializer.serialize(methodMessage.getArgs());
 		push(routingKey, methodMessage, body);
 	}
 

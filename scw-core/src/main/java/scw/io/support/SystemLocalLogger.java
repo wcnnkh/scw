@@ -63,8 +63,6 @@ public final class SystemLocalLogger<T> {
 				return new Record<T>(record.getId(), data);
 			} catch (ClassNotFoundException e) {
 				logger.error(e, "deserialize for key: {}", record.getId());
-			} catch (IOException e) {
-				logger.error(e, "io error for key: {}", record.getId());
 			}
 			return null;
 		}

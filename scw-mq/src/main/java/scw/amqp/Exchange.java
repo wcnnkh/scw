@@ -1,7 +1,7 @@
 package scw.amqp;
 
 import scw.aop.MethodInvoker;
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 
 @AopEnable(false)
 public interface Exchange {

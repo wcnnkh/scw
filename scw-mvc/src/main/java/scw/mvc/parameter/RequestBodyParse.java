@@ -1,6 +1,6 @@
 package scw.mvc.parameter;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.beans.annotation.AutoImpl;
 import scw.core.parameter.ParameterDescriptor;
 import scw.json.JSONSupport;

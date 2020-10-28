@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.core.IteratorCallback;
 import scw.core.IteratorCallback.Row;
 import scw.sql.Sql;

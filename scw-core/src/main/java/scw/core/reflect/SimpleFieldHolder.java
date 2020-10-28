@@ -12,4 +12,9 @@ public final class SimpleFieldHolder implements FieldHolder {
 	public java.lang.reflect.Field getField() {
 		return field;
 	};
+	
+	@Override
+	public String toString() {
+		return field.toString();
+	}
 }

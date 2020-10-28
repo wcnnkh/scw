@@ -2,9 +2,9 @@ package scw.embed.servlet;
 
 import javax.servlet.Servlet;
 
+import scw.aop.annotation.AopEnable;
 import scw.application.MainArgs;
 import scw.beans.BeanFactory;
-import scw.beans.annotation.AopEnable;
 import scw.value.property.PropertyFactory;
 
 @AopEnable(false)

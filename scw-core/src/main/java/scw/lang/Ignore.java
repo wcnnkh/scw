@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 忽略
- * @author asus1
+ * @author shuchaowen
  *
  */
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER, ElementType.FIELD, ElementType.CONSTRUCTOR})

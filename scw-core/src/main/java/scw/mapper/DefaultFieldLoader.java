@@ -29,10 +29,10 @@ public class DefaultFieldLoader implements CacheLoader<Class<?>, FieldMetadata[]
 	protected Collection<Getter> getGetters(Class<?> currentClass, Field[] fields, Method[] methods) {
 		LinkedHashSet<Getter> getters = new LinkedHashSet<Getter>();
 		for (Field field : fields) {
-			if (Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers())) {
+			if(ReflectionUtils.isSerialVersionUIDField(field)){
 				continue;
 			}
-
+			
 			Method getterMethod = ReflectionUtils.getMethod(currentClass,
 					MapperUtils.getGetterMethodName(field));
 			if (getterMethod != null && Modifier.isStatic(getterMethod.getModifiers())
@@ -67,10 +67,10 @@ public class DefaultFieldLoader implements CacheLoader<Class<?>, FieldMetadata[]
 	protected Collection<Setter> getSetters(Class<?> currentClass, Field[] fields, Method[] methods) {
 		LinkedHashSet<Setter> setters = new LinkedHashSet<Setter>();
 		for (Field field : fields) {
-			if (Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers())) {
+			if(ReflectionUtils.isSerialVersionUIDField(field)){
 				continue;
 			}
-
+			
 			Method setterMethod = ReflectionUtils.getMethod(currentClass,
 					MapperUtils.getSetterMethodName(field), field.getType());
 			if (setterMethod != null && Modifier.isStatic(setterMethod.getModifiers())

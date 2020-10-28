@@ -1,6 +1,6 @@
 package scw.http.server.resource;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.io.Resource;
 import scw.net.MimeType;
 

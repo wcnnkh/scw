@@ -1,6 +1,6 @@
 package scw.mvc.action;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.mvc.HttpChannel;
 
 @AopEnable(false)

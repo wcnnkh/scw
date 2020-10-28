@@ -3,7 +3,7 @@ package scw.mvc.action;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.event.BasicEventRegister;
 import scw.event.EventListener;
 import scw.event.EventRegistration;

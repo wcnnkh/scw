@@ -3,7 +3,7 @@ package scw.upload.kind;
 import java.io.IOException;
 
 import scw.upload.UploadItem;
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.upload.UploadException;
 
 @AopEnable(false)

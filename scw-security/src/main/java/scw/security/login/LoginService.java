@@ -1,6 +1,6 @@
 package scw.security.login;
 
-import scw.beans.annotation.AopEnable;
+import scw.aop.annotation.AopEnable;
 import scw.beans.annotation.AutoImpl;
 
 @AutoImpl(DefaultLoginService.class)

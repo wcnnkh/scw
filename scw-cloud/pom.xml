@@ -13,6 +13,11 @@
 			<groupId>scw</groupId>
 			<artifactId>scw-core</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-registry</artifactId>
+		</dependency>
 
 		<!-- feign相关 -->
 		<!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-core -->
