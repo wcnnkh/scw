@@ -31,7 +31,6 @@ public final class HttpServerRpcHandler implements HttpServiceHandler, HttpServi
 		this.controllerDescriptor = new HttpControllerDescriptor(rpcPath, HttpMethod.POST);
 	}
 	
-	@Override
 	public HttpControllerDescriptor getHttpControllerDescriptor() {
 		return controllerDescriptor;
 	}

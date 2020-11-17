@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -17,11 +18,11 @@ import scw.aop.Aop;
 import scw.aop.DefaultAop;
 import scw.aop.MethodInterceptor;
 import scw.beans.annotation.AutoImpl;
+import scw.beans.annotation.Proxy;
 import scw.beans.builder.BeanBuilderLoader;
 import scw.beans.builder.IteratorBeanBuilderLoaderChain;
 import scw.beans.builder.LoaderContext;
-import scw.beans.event.BeanEvent;
-import scw.beans.event.DependenceRefreshEvent;
+import scw.beans.builder.ProxyBeanDefinition;
 import scw.beans.ioc.Ioc;
 import scw.beans.method.MethodBeanConfiguration;
 import scw.beans.service.ServiceBeanConfiguration;
@@ -50,26 +51,43 @@ import scw.util.JavaVersion;
 import scw.value.property.BasePropertyFactory;
 import scw.value.property.PropertyFactory;
 
-public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Class<?>> {
+public class DefaultBeanFactory extends BeanLifecycle implements BeanFactory, Accept<Class<?>> {
 	private static Logger logger = LoggerUtils.getLogger(DefaultBeanFactory.class);
 	protected volatile LinkedHashMap<String, Object> singletonMap = new LinkedHashMap<String, Object>();
 	private volatile Map<String, BeanDefinition> beanMap = new HashMap<String, BeanDefinition>();
 	private volatile Map<String, String> nameMappingMap = new HashMap<String, String>();
-	protected final PropertyFactory propertyFactory = new PropertyFactory(true, true);
-	private List<BeanFactoryLifeCycle> beanFactoryLifeCycles = new ArrayList<BeanFactoryLifeCycle>();
+	private final PropertyFactory propertyFactory;
 	private List<String> filterNameList = new ArrayList<String>();
 	private List<BeanBuilderLoader> beanBuilderLoaders = new ArrayList<BeanBuilderLoader>();
-	private final BasicEventDispatcher<BeanEvent> eventDispatcher = new DefaultBasicEventDispatcher<BeanEvent>(true);
+	private final DefaultBasicEventDispatcher<BeanLifeCycleEvent> beanLifeCycleEventDispatcher = new DefaultBasicEventDispatcher<BeanLifeCycleEvent>(
+			true);
+	private ClassLoader classLoader;
 
-	public DefaultBeanFactory() {
+	public DefaultBeanFactory(PropertyFactory propertyFactory) {
+		this.propertyFactory = propertyFactory;
+		afterStructure();
+	}
+
+	protected void afterStructure() {
 		propertyFactory.addFirstBasePropertyFactory(GlobalPropertyFactory.getInstance());
 		addInternalSingleton(BeanFactory.class, this, InstanceFactory.class.getName(),
 				NoArgsInstanceFactory.class.getName());
 		addInternalSingleton(PropertyFactory.class, propertyFactory);
-		eventDispatcher.registerListener(new DependenceRefreshEventListener());
 	}
 
-	protected BeanDefinition getDefinitionByCache(String name) {
+	public ClassLoader getClassLoader() {
+		return classLoader == null ? ClassUtils.getDefaultClassLoader() : classLoader;
+	}
+
+	public void setClassLoader(ClassLoader classLoader) {
+		this.classLoader = classLoader;
+	}
+
+	public final BasicEventDispatcher<BeanLifeCycleEvent> getBeanLifeCycleEventDispatcher() {
+		return beanLifeCycleEventDispatcher;
+	}
+
+	public BeanDefinition getDefinitionByCache(String name) {
 		BeanDefinition beanDefinition = beanMap.get(name);
 		if (beanDefinition == null) {
 			String v = nameMappingMap.get(name);
@@ -132,6 +150,23 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		return beanDefinition;
 	}
 
+	private static List<String> getProxyNames(Proxy proxy) {
+		if (proxy == null) {
+			return Collections.emptyList();
+		}
+
+		List<String> list = new ArrayList<String>();
+		for (String name : proxy.names()) {
+			list.add(name);
+		}
+
+		for (Class<? extends MethodInterceptor> c : proxy.value()) {
+			list.add(c.getName());
+		}
+
+		return Arrays.asList(list.toArray(new String[0]));
+	}
+
 	private BeanDefinition loading(LoaderContext context) {
 		if (!accept(context.getTargetClass())) {
 			return null;
@@ -169,6 +204,35 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 
 		BeanDefinition definition = new IteratorBeanBuilderLoaderChain(beanBuilderLoaders).loading(context);
 		if (definition == null) {
+			// 未注解service时接口默认实现
+			if (context.getTargetClass().isInterface()) {
+				String name = context.getTargetClass().getName() + "Impl";
+				if (ClassUtils.isPresent(name) && context.getBeanFactory().isInstance(name)) {
+					logger.info("{} reference {}", context.getTargetClass().getName(), name);
+					definition = new DefaultBeanDefinition(context.getBeanFactory(), context.getPropertyFactory(),
+							ClassUtils.forNameNullable(name));
+				} else {
+					int index = context.getTargetClass().getName().lastIndexOf(".");
+					name = index == -1 ? (context.getTargetClass().getName() + "Impl")
+							: (context.getTargetClass().getName().substring(0, index) + ".impl."
+									+ context.getTargetClass().getSimpleName() + "Impl");
+					if (ClassUtils.isPresent(name) && context.getBeanFactory().isInstance(name)) {
+						logger.info("{} reference {}", context.getTargetClass().getName(), name);
+						definition = context.getBeanFactory().getDefinition(name);
+					}
+				}
+			}
+		}
+
+		if (definition == null) {
+			if (context.getTargetClass().isInterface()
+					|| Modifier.isAbstract(context.getTargetClass().getModifiers())) {
+				Proxy proxy = context.getTargetClass().getAnnotation(Proxy.class);
+				if (proxy != null) {
+					definition = new ProxyBeanDefinition(context, getProxyNames(proxy));
+				}
+			}
+
 			if (context.getTargetClass().isInterface()
 					|| Modifier.isAbstract(context.getTargetClass().getModifiers())) {
 				// 如果是接口或抽象类
@@ -260,7 +324,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		return (T) object;
 	}
 
-	protected void init(long createTime, BeanDefinition definition, Object object) throws Exception {
+	protected void init(long createTime, BeanDefinition definition, Object object) throws Throwable {
 		if (definition.isSingleton()) {
 			singletonMap.put(definition.getId(), object);
 		}
@@ -283,7 +347,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		try {
 			obj = definition.create();
 			init(t, definition, obj);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new BeansException(definition.getId(), e);
 		}
 		return obj;
@@ -340,7 +404,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		try {
 			obj = definition.create(params);
 			init(t, definition, obj);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new BeansException(definition.getId(), e);
 		}
 		return obj;
@@ -384,7 +448,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		try {
 			obj = definition.create(parameterTypes, params);
 			init(t, definition, obj);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new BeansException(definition.getId(), e);
 		}
 		return obj;
@@ -394,10 +458,10 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		return getInstance(type.getName(), parameterTypes, params);
 	}
 
-	protected void addBeanDefinition(BeanDefinition beanDefinition, boolean throwExistError) {
+	public void addBeanDefinition(BeanDefinition beanDefinition, boolean throwExistError) {
 		BeanDefinition definition = getDefinitionByCache(beanDefinition.getId());
 		if (definition != null) {
-			logger.warn("Already exist definition:{}, cache:{}", JSONUtils.toJSONString(beanDefinition),
+			logger.warn("Already exist definition:\r\n{}\r\n---\r\n{}", JSONUtils.toJSONString(beanDefinition),
 					JSONUtils.toJSONString(definition));
 			if (throwExistError) {
 				throw new AlreadyExistsException("存在相同ID的映射:" + JSONUtils.toJSONString(beanDefinition));
@@ -411,7 +475,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		}
 	}
 
-	protected boolean addBeanNameMapping(Collection<String> names, String id, boolean throwExistError) {
+	public boolean addBeanNameMapping(Collection<String> names, String id, boolean throwExistError) {
 		if (CollectionUtils.isEmpty(names)) {
 			return true;
 		}
@@ -433,16 +497,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		return true;
 	}
 
-	protected void addBeanFactoryLifeCycle(BeanFactoryLifeCycle beanFactoryLifeCycle) throws Exception {
-		beanFactoryLifeCycles.add(beanFactoryLifeCycle);
-		beanFactoryLifeCycle.init(this, propertyFactory);
-	}
-
-	protected void beanFactoryLifeCycleDestroy(BeanFactoryLifeCycle beanFactoryLifeCycle) throws Exception {
-		beanFactoryLifeCycle.destroy(this, propertyFactory);
-	}
-
-	protected void addBeanConfiguration(BeanConfiguration beanConfiguration) throws Exception {
+	public void addBeanConfiguration(BeanConfiguration beanConfiguration) throws Exception {
 		beanConfiguration.init(this, propertyFactory);
 		Collection<BeanDefinition> beanDefinitions = beanConfiguration.getBeans();
 		if (!CollectionUtils.isEmpty(beanDefinitions)) {
@@ -463,7 +518,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		}
 	}
 
-	protected <T> void addInternalSingleton(Class<? extends T> type, T instance, String... names) {
+	public <T> void addInternalSingleton(Class<? extends T> type, T instance, String... names) {
 		singletonMap.put(type.getName(), instance);
 		addBeanDefinition(new InternalBeanDefinition(instance, type, Arrays.asList(names)), false);
 	}
@@ -474,17 +529,16 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 		return aop;
 	}
 
-	public void init() throws Exception {
+	@Override
+	protected void initInternal() throws Throwable {
 		for (Class<MethodInterceptor> filter : InstanceUtils.getConfigurationClassList(MethodInterceptor.class,
 				propertyFactory)) {
 			filterNameList.add(filter.getName());
 		}
-		filterNameList = Arrays.asList(filterNameList.toArray(new String[0]));
 
 		addBeanConfiguration(new MethodBeanConfiguration());
 		addBeanConfiguration(new ServiceBeanConfiguration());
 		beanBuilderLoaders.addAll(InstanceUtils.getConfigurationList(BeanBuilderLoader.class, this, propertyFactory));
-		beanBuilderLoaders = Arrays.asList(beanBuilderLoaders.toArray(new BeanBuilderLoader[0]));
 
 		propertyFactory.addLastBasePropertyFactory(
 				InstanceUtils.getConfigurationList(BasePropertyFactory.class, this, propertyFactory));
@@ -492,7 +546,12 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 				propertyFactory)) {
 			addBeanConfiguration(configuration);
 		}
+		super.initInternal();
+	}
 
+	@Override
+	public void afterInit() throws Throwable {
+		super.afterInit();
 		for (Class<?> clazz : ClassScanner.getInstance()
 				.getClasses(BeanUtils.getScanAnnotationPackageName(propertyFactory))) {
 			if (!accept(clazz)) {
@@ -504,20 +563,10 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 				ioc.getInit().process(null, null, this, propertyFactory);
 			}
 		}
-
-		for (BeanFactoryLifeCycle beanFactoryLifeCycle : InstanceUtils.getConfigurationList(BeanFactoryLifeCycle.class,
-				this, propertyFactory)) {
-			addBeanFactoryLifeCycle(beanFactoryLifeCycle);
-		}
-		beanFactoryLifeCycles = Arrays.asList(beanFactoryLifeCycles.toArray(new BeanFactoryLifeCycle[0]));
 	}
 
-	public void destroy() throws Exception {
-		ListIterator<BeanFactoryLifeCycle> iterator = beanFactoryLifeCycles.listIterator(beanFactoryLifeCycles.size());
-		while (iterator.hasPrevious()) {
-			beanFactoryLifeCycleDestroy(iterator.previous());
-		}
-
+	@Override
+	protected void destroyInternal() throws Throwable {
 		synchronized (singletonMap) {
 			List<String> beanKeyList = new ArrayList<String>();
 			for (Entry<String, Object> entry : singletonMap.entrySet()) {
@@ -539,16 +588,29 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 				}
 			}
 		}
+		super.destroyInternal();
+	}
 
+	@Override
+	public void afterDestroy() throws Throwable {
+		super.afterDestroy();
 		for (Class<?> clazz : ClassScanner.getInstance()
 				.getClasses(BeanUtils.getScanAnnotationPackageName(propertyFactory))) {
 			for (Ioc ioc : Ioc.forClass(clazz)) {
 				ioc.getDestroy().process(null, null, this, propertyFactory);
 			}
 		}
+
+		singletonMap.clear();
+		beanMap.clear();
+		nameMappingMap.clear();
+		propertyFactory.clear();
+		filterNameList.clear();
+		beanBuilderLoaders.clear();
+		afterStructure();
 	}
 
-	protected final class InternalBeanDefinition implements BeanDefinition {
+	private final class InternalBeanDefinition implements BeanDefinition {
 		private final Object instance;
 		private final Class<?> targetClass;
 		private final Collection<String> names;
@@ -591,10 +653,6 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 			throw new NotSupportedException(getId());
 		}
 
-		public boolean isProxy() {
-			return false;
-		}
-
 		public void dependence(Object instance) throws Exception {
 			if (instance != null) {
 				for (Ioc ioc : Ioc.forClass(instance.getClass())) {
@@ -625,7 +683,7 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 				continue;
 			}
 
-			name = context.getPropertyFactory().format(name, true);
+			name = context.getPropertyFactory().format(name);
 			Class<?> clz = ClassUtils.forNameNullable(name);
 			if (clz == null) {
 				continue;
@@ -651,31 +709,5 @@ public class DefaultBeanFactory implements BeanFactory, Init, Destroy, Accept<Cl
 			}
 		}
 		return list;
-	}
-
-	public final BasicEventDispatcher<BeanEvent> getEventDispatcher() {
-		return eventDispatcher;
-	}
-
-	private final class DependenceRefreshEventListener implements scw.event.EventListener<BeanEvent> {
-
-		public void onEvent(DependenceRefreshEvent event) {
-			for (Entry<String, BeanDefinition> entry : beanMap.entrySet()) {
-				Object instance = singletonMap.get(entry.getKey());
-				if (instance != null) {
-					try {
-						entry.getValue().dependence(instance);
-					} catch (Exception e) {
-						logger.error(e, "refresh Dependence error, id={}", entry.getKey());
-					}
-				}
-			}
-		}
-
-		public void onEvent(BeanEvent event) {
-			if (event instanceof DependenceRefreshEvent) {
-				onEvent((DependenceRefreshEvent) event);
-			}
-		}
 	}
 }

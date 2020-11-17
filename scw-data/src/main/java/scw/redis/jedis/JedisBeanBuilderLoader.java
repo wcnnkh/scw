@@ -66,7 +66,7 @@ public class JedisBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
 			super.destroy(instance);
 			if (instance instanceof JedisPool) {
 				if (!((JedisPool) instance).isClosed()) {

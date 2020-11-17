@@ -46,7 +46,7 @@ public class HibernateBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
 			if (instance instanceof SessionFactory) {
 				((SessionFactory) instance).close();
 			}

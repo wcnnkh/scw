@@ -14,9 +14,9 @@ public interface BeanDefinition extends InstanceBuilder<Object>{
 
 	AnnotatedElement getAnnotatedElement();
 
-	void dependence(Object instance) throws Exception;
+	void dependence(Object instance) throws Throwable;
 
-	void init(Object instance) throws Exception;
+	void init(Object instance) throws Throwable;
 
-	void destroy(Object instance) throws Exception;
+	void destroy(Object instance) throws Throwable;
 }

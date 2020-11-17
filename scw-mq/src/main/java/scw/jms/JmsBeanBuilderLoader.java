@@ -38,7 +38,7 @@ public class JmsBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
 			if (instance instanceof Connection) {
 				((Connection) instance).close();
 			}

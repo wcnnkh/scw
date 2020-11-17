@@ -13,42 +13,5 @@
 			<groupId>scw</groupId>
 			<artifactId>scw-core</artifactId>
 		</dependency>
-		
-		<dependency>
-			<groupId>scw</groupId>
-			<artifactId>scw-registry</artifactId>
-		</dependency>
-
-		<!-- feign相关 -->
-		<!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-core -->
-		<dependency>
-			<groupId>io.github.openfeign</groupId>
-			<artifactId>feign-core</artifactId>
-			<version>11.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.zookeeper</groupId>
-			<artifactId>zookeeper</artifactId>
-			<version>3.4.14</version>
-			<scope>provided</scope>
-		</dependency>
-
 	</dependencies>
-
-	<build>
-		<plugins>
-			<!-- java编译插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

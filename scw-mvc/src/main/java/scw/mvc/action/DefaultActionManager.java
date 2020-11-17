@@ -73,7 +73,7 @@ public class DefaultActionManager implements ActionManager {
 					continue;
 				}
 
-				Action action = builder(beanFactory, clz, method);
+				Action action = builder(beanFactory, propertyFactory, clz, method);
 				if (action != null) {
 					register(action);
 				}
@@ -81,9 +81,9 @@ public class DefaultActionManager implements ActionManager {
 		}
 	}
 
-	protected Action builder(BeanFactory beanFactory, Class<?> clazz, Method method) {
+	protected Action builder(BeanFactory beanFactory, PropertyFactory propertyFactory, Class<?> clazz, Method method) {
 		if (isSupport(beanFactory, clazz) && isSupport(method)) {
-			return new DefaultAction(beanFactory, clazz, method);
+			return new DefaultAction(beanFactory, propertyFactory, clazz, method);
 		}
 		return null;
 	}

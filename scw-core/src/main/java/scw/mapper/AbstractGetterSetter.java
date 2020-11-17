@@ -46,7 +46,7 @@ abstract class AbstractGetterSetter extends AbstractFieldDescriptor {
 			try {
 				method.invoke(Modifier.isStatic(method.getModifiers()) ? null : instance, value);
 			} catch (Exception e) {
-				throw new RuntimeException(toString(), NestedExceptionUtils.excludeInvalidNestedExcpetion(e));
+				throw new RuntimeException(toString() + " value [" + value + "]", NestedExceptionUtils.excludeInvalidNestedExcpetion(e));
 			}
 			return;
 		}
@@ -57,7 +57,7 @@ abstract class AbstractGetterSetter extends AbstractFieldDescriptor {
 			try {
 				field.set(Modifier.isStatic(field.getModifiers()) ? null : instance, value);
 			} catch (Exception e) {
-				throw new RuntimeException(toString(), NestedExceptionUtils.excludeInvalidNestedExcpetion(e));
+				throw new RuntimeException(toString() + " value [" + value + "]", NestedExceptionUtils.excludeInvalidNestedExcpetion(e));
 			}
 			return;
 		}

@@ -1,5 +1,5 @@
 package scw.event;
 
-public interface NamedEventDispatcher<T extends Event> extends NamedEventRegister<T> {
-	void publishEvent(Object name, T event);
+public interface NamedEventDispatcher<K, T extends Event> extends NamedEventRegistry<K, T> {
+	void publishEvent(K name, T event);
 }

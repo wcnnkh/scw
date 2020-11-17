@@ -7,6 +7,21 @@ package scw.util;
  *
  */
 public interface StringMatcher {
+	
+	/**
+	 * 前缀匹配
+	 */
+	static final StringMatcher PREFIX_MATCHER = new StringMatcher() {
+		
+		public boolean match(String pattern, String text) {
+			return text.startsWith(pattern);
+		}
+		
+		public boolean isPattern(String text) {
+			return true;
+		}
+	};
+	
 	/**
 	 * Does the given {@code text} represent a pattern that can be matched by an
 	 * implementation of this interface?

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -13,6 +14,7 @@ import scw.beans.ioc.IocProcessor;
 import scw.core.utils.ClassUtils;
 import scw.core.utils.CollectionUtils;
 import scw.core.utils.StringUtils;
+import scw.io.Resource;
 import scw.value.property.PropertyFactory;
 import scw.xml.XMLUtils;
 
@@ -31,16 +33,16 @@ public final class XmlBeanUtils {
 		Class<?> typeClass = StringUtils.isEmpty(type) ? null : ClassUtils
 				.forName(type);
 		if (!StringUtils.isEmpty(ref)) {
-			return new XmlBeanParameter(EParameterType.ref, typeClass, name,
+			return new XmlBeanParameter(XmlParameterType.ref, typeClass, name,
 					ref, node);
 		} else if (!StringUtils.isEmpty(property)) {
-			return new XmlBeanParameter(EParameterType.property, typeClass,
+			return new XmlBeanParameter(XmlParameterType.property, typeClass,
 					name, property, node);
 		} else {
 			if (StringUtils.isEmpty(value)) {
 				value = node.getNodeValue();
 			}
-			return new XmlBeanParameter(EParameterType.value, typeClass, name,
+			return new XmlBeanParameter(XmlParameterType.value, typeClass, name,
 					value, node);
 		}
 	}
@@ -82,21 +84,14 @@ public final class XmlBeanUtils {
 		return xmlBeanParameters;
 	}
 
-	public static NodeList getRootNodeList(String config) {
-		return XMLUtils.getChildNodes(getRootNode(config), true);
-	}
-
-	public static Node getRootNode(String config) {
-		try {
-			Node root = XMLUtils.getRootElement(config);
-			if (!"beans".equals(root.getNodeName())) {
-				throw new BeansException("root tag name error ["
-						+ root.getNodeName() + "]");
-			}
-			return root;
-		} catch (Exception e) {
-			throw new BeansException(e);
+	public static NodeList getRootNodeList(Resource resource) {
+		Document document = XMLUtils.getDocument(resource);
+		Node node = document.getDocumentElement();
+		if (!"beans".equals(node.getNodeName())) {
+			throw new BeansException("root tag name error ["
+					+ node.getNodeName() + "]");
 		}
+		return XMLUtils.getChildNodes(node, true);
 	}
 
 	public static String getPackageName(PropertyFactory propertyFactory,

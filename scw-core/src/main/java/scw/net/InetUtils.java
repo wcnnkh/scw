@@ -238,12 +238,12 @@ public final class InetUtils {
 		};
 	};
 
-	public static Set<InetAddress> getLocalIpAddresses() {
-		return getLocalIpAddresses(LOCAL_IP_NETWORK_INTERFACE_ACCEPT, true);
+	public static Set<InetAddress> getLocalIpAddresses(boolean ipv4) {
+		return getLocalIpAddresses(ipv4? IPV4_INET_ADDRESS_ACCEPT : null);
 	}
-
-	public static Set<InetAddress> getLocalIpAddresses(Accept<NetworkInterface> networkInterfaceAccept, boolean ipv4) {
-		return getLocalIpAddresses(networkInterfaceAccept, ipv4 ? IPV4_INET_ADDRESS_ACCEPT : null);
+	
+	public static Set<InetAddress> getLocalIpAddresses(Accept<InetAddress> accept) {
+		return getLocalIpAddresses(LOCAL_IP_NETWORK_INTERFACE_ACCEPT, accept);
 	}
 
 	public static Set<InetAddress> getLocalIpAddresses(Accept<NetworkInterface> networkInterfaceAccept,

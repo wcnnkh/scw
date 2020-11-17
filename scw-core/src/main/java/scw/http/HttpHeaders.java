@@ -36,8 +36,8 @@ import scw.net.message.Headers;
 import scw.servlet.http.ServletServerHttpRequest;
 import scw.util.DefaultStringMatcher;
 import scw.value.Value;
-import scw.value.property.DynamicMap;
-import scw.value.property.DynamicMap.ValueCreator;
+import scw.value.property.DynamicProperties;
+import scw.value.property.DynamicProperties.ValueCreator;
 
 /**
  * A data structure representing HTTP request or response headers, mapping
@@ -514,7 +514,7 @@ public class HttpHeaders extends Headers {
 
 	public static final String X_FORWARDED_FOR = "X-Forwarded-For";
 
-	private static final DynamicMap AJAX_HEADERS = new DynamicMap(false);
+	private static final DynamicProperties AJAX_HEADERS = new DynamicProperties(false);
 
 	static {
 		AJAX_HEADERS.loadProperties("/scw/net/headers/ajax.headers.properties", ValueCreator.CREATOR);

@@ -20,7 +20,6 @@ public class TccMethodInterceptor implements MethodInterceptor, MethodIntercepto
 		this.instanceFactory = instanceFactory;
 	}
 	
-	@Override
 	public boolean isAccept(MethodInvoker invoker, Object[] args) {
 		return invoker.getMethod().getAnnotation(Tcc.class) != null;
 	}

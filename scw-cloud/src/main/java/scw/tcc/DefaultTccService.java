@@ -3,9 +3,9 @@ package scw.tcc;
 import java.lang.reflect.Method;
 
 import scw.aop.MethodInvoker;
-import scw.beans.BeanDefinition;
 import scw.beans.BeanFactory;
 import scw.beans.BeanUtils;
+import scw.beans.RuntimeBean;
 import scw.complete.Complete;
 import scw.complete.CompleteService;
 import scw.core.instance.annotation.Configuration;
@@ -40,12 +40,12 @@ public class DefaultTccService implements TccService {
 			return null;
 		}
 		
-		BeanDefinition definition = BeanUtils.getBeanDefinition(invoker.getInstance());
-		if(definition == null){
+		RuntimeBean runtimeBean = BeanUtils.getRuntimeBean(invoker.getInstance());
+		if(runtimeBean == null){
 			return null;
 		}
 
-		return createStage(new TryInfo(invoker, args, tryResult), tcc, tcc.confirm(), definition.getId());
+		return createStage(new TryInfo(invoker, args, tryResult), tcc, tcc.confirm(), runtimeBean.getBeanDefinition().getId());
 	}
 
 	public Stage createCancel(MethodInvoker invoker, Object[] args, Object tryResult, Tcc tcc) {
@@ -53,12 +53,12 @@ public class DefaultTccService implements TccService {
 			return null;
 		}
 		
-		BeanDefinition definition = BeanUtils.getBeanDefinition(invoker.getInstance());
-		if(definition == null){
+		RuntimeBean runtimeBean = BeanUtils.getRuntimeBean(invoker.getInstance());
+		if(runtimeBean == null){
 			return null;
 		}
 
-		return createStage(new TryInfo(invoker, args, tryResult), tcc, tcc.cancel(), definition.getId());
+		return createStage(new TryInfo(invoker, args, tryResult), tcc, tcc.cancel(), runtimeBean.getBeanDefinition().getId());
 	}
 
 	public Complete registerComplete(Stage stage) throws Exception {

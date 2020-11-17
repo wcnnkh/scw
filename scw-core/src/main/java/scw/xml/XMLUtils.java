@@ -54,6 +54,16 @@ import scw.value.property.PropertyFactory;
 public final class XMLUtils {
 	private static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
 	private static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
+	public static final NodeList EMPTY_NODE_LIST = new NodeList() {
+
+		public Node item(int index) {
+			return null;
+		}
+
+		public int getLength() {
+			return 0;
+		}
+	};
 
 	static {
 		DOCUMENT_BUILDER_FACTORY.setIgnoringElementContentWhitespace(true);

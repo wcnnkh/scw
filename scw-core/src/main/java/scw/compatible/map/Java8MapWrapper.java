@@ -19,7 +19,7 @@ public class Java8MapWrapper implements MapCompatible {
 
 		@Override
 		public V putIfAbsent(K key, V value) {
-			return getSourceMap().putIfAbsent(key, value);
+			return getTargetMap().putIfAbsent(key, value);
 		}
 	}
 }

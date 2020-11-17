@@ -51,11 +51,11 @@ public class ExecutorBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
+			super.destroy(instance);
 			if (instance instanceof ScheduledExecutorService) {
 				((ScheduledExecutorService) instance).shutdownNow();
 			}
-			super.destroy(instance);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class ExecutorBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
 			if (instance instanceof ThreadPoolExecutor) {
 				((ThreadPoolExecutor) instance).shutdownNow();
 			}

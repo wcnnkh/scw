@@ -3,18 +3,36 @@ package scw.application;
 import scw.beans.BeanFactory;
 import scw.beans.Destroy;
 import scw.beans.Init;
+import scw.event.BasicEventDispatcher;
+import scw.logger.Logger;
+import scw.util.concurrent.CountLatch;
 import scw.value.property.PropertyFactory;
 
-public interface Application extends Init, Destroy{
-	public void init();
+public interface Application extends Init, Destroy, BasicEventDispatcher<ApplicationEvent> {
+	void init();
 	
-	public void destroy();
+	void destroy();
 	
+	BeanFactory getBeanFactory();
+
+	PropertyFactory getPropertyFactory();
+
 	/**
-	 * 获取实例工厂
+	 * 是否已经初始化了
+	 * 
 	 * @return
 	 */
-	BeanFactory getBeanFactory();
+	boolean isInitialized();
 	
-	PropertyFactory getPropertyFactory();
+	/**
+	 * 初始化时的计数锁，仅在未初始化完时有效
+	 * @see #init()
+	 * @see #isInitialized()
+	 * @return
+	 */
+	CountLatch getInitializationLatch();
+
+	Logger getLogger();
+
+	ClassLoader getClassLoader();
 }

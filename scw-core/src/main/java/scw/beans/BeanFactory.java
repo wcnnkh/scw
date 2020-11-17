@@ -1,7 +1,6 @@
 package scw.beans;
 
 import scw.aop.Aop;
-import scw.beans.event.BeanEvent;
 import scw.core.instance.InstanceFactory;
 import scw.event.BasicEventDispatcher;
 
@@ -13,9 +12,9 @@ public interface BeanFactory extends InstanceFactory {
 	Aop getAop();
 
 	/**
-	 * bean的事件派发
+	 * bean的生命周期事件
 	 * 
 	 * @return
 	 */
-	BasicEventDispatcher<BeanEvent> getEventDispatcher();
+	BasicEventDispatcher<BeanLifeCycleEvent> getBeanLifeCycleEventDispatcher();
 }

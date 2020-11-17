@@ -42,7 +42,7 @@ public class XMemcachedBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
 			super.destroy(instance);
 			if (instance instanceof MemcachedClient) {
 				((MemcachedClient) instance).shutdown();

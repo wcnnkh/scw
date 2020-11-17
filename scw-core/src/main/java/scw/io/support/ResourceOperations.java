@@ -51,7 +51,7 @@ public class ResourceOperations extends DefaultResourceLoader {
 	 */
 	public List<String> getEnvironmentalResourceNameList(String resourceName) {
 		String[] suffixs = getResourceEnvironmentalNames();
-		String resourceNameToUse = GlobalPropertyFactory.getInstance().format(resourceName, true);
+		String resourceNameToUse = GlobalPropertyFactory.getInstance().format(resourceName);
 		if (ArrayUtils.isEmpty(suffixs)) {
 			return Arrays.asList(resourceNameToUse);
 		}

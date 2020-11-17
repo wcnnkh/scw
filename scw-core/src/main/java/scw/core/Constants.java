@@ -6,11 +6,17 @@ import scw.asm.Opcodes;
 import scw.core.utils.StringUtils;
 
 public class Constants {
-	public static final Charset ISO_8859_1 = Charset.forName("iso-8859-1");
+	public static final String ISO_8859_1_NAME = "ISO-8859-1";
+	
+	public static final Charset ISO_8859_1 = Charset.forName(ISO_8859_1_NAME);
 
-	public static final Charset UTF_8 = Charset.forName("UTF-8");
-
-	public static final Charset US_ASCII = Charset.forName("US-ASCII");
+	public static final String UTF_8_NAME = "UTF-8";
+	
+	public static final Charset UTF_8 = Charset.forName(UTF_8_NAME);
+	
+	public static final String US_ASCII_NAME = "US-ASCII";
+	
+	public static final Charset US_ASCII = Charset.forName(US_ASCII_NAME);
 
 	/**
 	 * 系统包名
@@ -21,7 +27,7 @@ public class Constants {
 	 * 默认的字符集
 	 */
 	public static final String DEFAULT_CHARSET_NAME = GlobalPropertyFactory.getInstance()
-			.getValue("constants.default.charsetName", String.class, UTF_8.name());
+			.getValue("constants.default.charsetName", String.class, UTF_8_NAME);
 
 	public static final Charset DEFAULT_CHARSET = Charset.forName(DEFAULT_CHARSET_NAME);
 

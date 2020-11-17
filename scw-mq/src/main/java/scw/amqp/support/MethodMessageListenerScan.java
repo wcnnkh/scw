@@ -4,26 +4,26 @@ import java.lang.reflect.Method;
 
 import scw.amqp.Exchange;
 import scw.amqp.QueueDeclare;
-import scw.beans.AbstractBeanFactoryLifeCycle;
-import scw.beans.BeanFactory;
+import scw.application.Application;
+import scw.application.ApplicationInitialization;
 import scw.beans.BeanUtils;
 import scw.core.annotation.AnnotationUtils;
 import scw.core.instance.annotation.Configuration;
 import scw.util.ClassScanner;
 import scw.value.ValueFactory;
-import scw.value.property.PropertyFactory;
 
 @Configuration(order = Integer.MIN_VALUE)
-public final class MethodMessageListenerScan extends AbstractBeanFactoryLifeCycle {
+public final class MethodMessageListenerScan implements ApplicationInitialization {
 
 	@SuppressWarnings("unchecked")
-	public void init(BeanFactory beanFactory, PropertyFactory propertyFactory) throws Exception {
-		for (Class<?> clazz : ClassScanner.getInstance().getClasses(getScanAnnotationPackageName(propertyFactory))) {
+	public void init(Application application) throws Throwable {
+		for (Class<?> clazz : ClassScanner.getInstance()
+				.getClasses(getScanAnnotationPackageName(application.getPropertyFactory()))) {
 			if (scw.amqp.MessageListener.class.isAssignableFrom(clazz)) {
 				MessageListener messageListener = clazz.getAnnotation(MessageListener.class);
 				if (messageListener != null) {
-					Exchange exchange = beanFactory.getInstance(messageListener.exchange());
-					scw.amqp.MessageListener listener = beanFactory
+					Exchange exchange = application.getBeanFactory().getInstance(messageListener.exchange());
+					scw.amqp.MessageListener listener = application.getBeanFactory()
 							.getInstance((Class<scw.amqp.MessageListener>) clazz);
 					exchange.bind(messageListener.routingKey(), createQueueDeclare(messageListener), listener);
 				}
@@ -31,9 +31,9 @@ public final class MethodMessageListenerScan extends AbstractBeanFactoryLifeCycl
 
 			for (Method method : AnnotationUtils.getAnnoationMethods(clazz, true, true, MessageListener.class)) {
 				MessageListener messageListener = method.getAnnotation(MessageListener.class);
-				Exchange exchange = beanFactory.getInstance(messageListener.exchange());
-				exchange.bind(messageListener.routingKey(), createQueueDeclare(messageListener),
-						beanFactory.getAop().getProxyMethod(beanFactory, clazz, method));
+				Exchange exchange = application.getBeanFactory().getInstance(messageListener.exchange());
+				exchange.bind(messageListener.routingKey(), createQueueDeclare(messageListener), application
+						.getBeanFactory().getAop().getProxyMethod(application.getBeanFactory(), clazz, method));
 			}
 		}
 	}
@@ -48,8 +48,5 @@ public final class MethodMessageListenerScan extends AbstractBeanFactoryLifeCycl
 
 	public String getScanAnnotationPackageName(ValueFactory<String> propertyFactory) {
 		return BeanUtils.getScanAnnotationPackageName(propertyFactory);
-	}
-
-	public void destroy(BeanFactory beanFactory, PropertyFactory propertyFactory) {
 	}
 }

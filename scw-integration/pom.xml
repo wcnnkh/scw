@@ -35,7 +35,7 @@
 
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-embed</artifactId>
+			<artifactId>scw-tomcat</artifactId>
 		</dependency>
 		
 		<dependency>

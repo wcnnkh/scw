@@ -3,6 +3,7 @@ package scw.compatible;
 import java.util.Iterator;
 
 import scw.lang.RequiredJavaVersion;
+import scw.util.ServiceLoader;
 
 @RequiredJavaVersion(6)
 public class DefaultSPI implements SPI {

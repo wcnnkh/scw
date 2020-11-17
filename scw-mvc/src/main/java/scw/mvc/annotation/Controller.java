@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 
 import scw.http.HttpMethod;
 import scw.mvc.action.ActionInterceptor;
+import scw.mvc.action.DefaultAction;
+import scw.util.PropertyPlaceholderHelper;
 
 @Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
@@ -15,7 +17,9 @@ import scw.mvc.action.ActionInterceptor;
 public @interface Controller {
 	/**
 	 * 行为的值，作用视请求分发器决定
-	 * 
+	 * 在类上的注解支持使用${name:value}
+	 * @see DefaultAction
+	 * @see PropertyPlaceholderHelper
 	 * @return
 	 */
 	public String value() default "";

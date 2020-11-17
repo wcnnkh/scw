@@ -132,7 +132,7 @@ public abstract class AbstractDB extends AbstractEntityOperations
 				try {
 					definition.dependence(asyncExecute);
 					definition.init(asyncExecute);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					logger.error(e, "dependence {} error", clazz);
 				}
 			}

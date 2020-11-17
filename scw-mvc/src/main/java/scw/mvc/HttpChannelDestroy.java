@@ -68,7 +68,7 @@ public class HttpChannelDestroy implements Destroy, ServerHttpAsyncListener {
 		if (!httpChannel.isCompleted()) {
 			try {
 				BeanUtils.destroy(httpChannel);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				logger.error(e, "destroy channel error: " + httpChannel.toString());
 			}
 			log();

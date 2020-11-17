@@ -17,7 +17,7 @@ public abstract class AbstractExpireCacheFactory implements ExpiredCacheFactory,
 		if (cache == null) {
 			try {
 				BeanUtils.init(create);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 			cache = create;
@@ -29,7 +29,7 @@ public abstract class AbstractExpireCacheFactory implements ExpiredCacheFactory,
 		for (Entry<Integer, ExpiredCache> entry : cacheMap.entrySet()) {
 			try {
 				BeanUtils.destroy(entry.getValue());
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}

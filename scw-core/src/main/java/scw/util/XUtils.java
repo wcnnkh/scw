@@ -198,4 +198,25 @@ public final class XUtils {
 			}
 		};
 	}
+
+	/**
+	 * 获取名称
+	 * 
+	 * @see Named#getName()
+	 * @param instance
+	 * @param defaultName
+	 * @return
+	 */
+	public static String getName(Object instance, String defaultName) {
+		if (instance == null) {
+			return defaultName;
+		}
+
+		if (instance instanceof Named) {
+			String name = ((Named) instance).getName();
+			return name == null ? defaultName : name;
+		}
+
+		return defaultName;
+	}
 }

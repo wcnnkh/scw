@@ -4,14 +4,14 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import scw.aop.annotation.AopEnable;
-import scw.event.BasicEventRegister;
+import scw.event.BasicEventRegistry;
 import scw.event.EventListener;
 import scw.event.EventRegistration;
 import scw.event.ObjectEvent;
 import scw.http.server.ServerHttpRequest;
 
 @AopEnable(false)
-public interface ActionManager extends BasicEventRegister<ObjectEvent<Action>> {
+public interface ActionManager extends BasicEventRegistry<ObjectEvent<Action>> {
 	Action getAction(Method method);
 
 	Collection<Action> getActions();

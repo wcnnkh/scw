@@ -51,11 +51,11 @@ public class RabbitmqBeanBuilderLoader implements BeanBuilderLoader {
 		}
 
 		@Override
-		public void destroy(Object instance) throws Exception {
+		public void destroy(Object instance) throws Throwable {
+			super.destroy(instance);
 			if (instance instanceof Connection) {
 				((Connection) instance).close();
 			}
-			super.destroy(instance);
 		}
 	}
 

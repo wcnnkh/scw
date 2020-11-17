@@ -8,26 +8,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import scw.aop.annotation.AopEnable;
 import scw.application.Application;
-import scw.application.CommonApplication;
+import scw.application.ApplicationAware;
+import scw.core.instance.annotation.Configuration;
+import scw.http.HttpStatus;
 import scw.logger.Logger;
 import scw.logger.LoggerUtils;
+import scw.servlet.ServletApplicationStartup.StartUp;
 import scw.servlet.http.HttpServletService;
 
-public class DispatcherServlet extends HttpServlet {
+@Configuration(order = Integer.MIN_VALUE)
+@AopEnable(false)
+public class DispatcherServlet extends HttpServlet implements ApplicationAware {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerUtils.getLogger(DispatcherServlet.class);
 	private Application application;
 	private HttpServletService httpServletService;
-	private boolean reference = false;
+	private boolean reference = true;
+	private volatile boolean initialized = false;
+
+	public void setApplication(Application application) {
+		reference = true;
+		this.application = application;
+		application.getInitializationLatch().countUp();
+	}
 
 	public Application getApplication() {
 		return application;
-	}
-
-	public void setApplication(Application application) {
-		this.reference = true;
-		this.application = application;
 	}
 
 	public HttpServletService getServletService() {
@@ -40,43 +48,64 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if(httpServletService == null){
-			//未初始化或初始化错误 
-			resp.sendError(500, "Uninitialized or initialization error");
-			return ;
+		if (httpServletService == null) {
+			//服务未初始化或初始化失败
+			resp.sendError(HttpStatus.SERVICE_UNAVAILABLE.value(), "Uninitialized or initialization error");
+			return;
 		}
 		getServletService().service(req, resp);
 	}
 
 	@Override
-	public final void init(ServletConfig servletConfig) throws ServletException {
-		logger.info("Servlet context realPath / in {}", servletConfig.getServletContext().getRealPath("/"));
-		ServletConfigPropertyFactory propertyFactory = new ServletConfigPropertyFactory(servletConfig);
-		try {
-			if (getApplication() == null) {
-				reference = false;
-				this.application = new CommonApplication(propertyFactory.getConfigXml());
+	public void init(ServletConfig servletConfig) throws ServletException {
+		if (initialized) {
+			return;
+		}
+
+		synchronized (this) {
+			if (initialized) {
+				return;
 			}
 
-			getApplication().getPropertyFactory().addLastBasePropertyFactory(propertyFactory);
+			initialized = true;
+			try {
+				if(application == null){
+					StartUp startUp = ServletUtils.getServletApplicationStartup().start(servletConfig.getServletContext());
+					this.application = startUp.getApplication();
+					if(startUp.isNew()){
+						reference = false;
+					}
+				}
 
-			if (!reference) {
-				getApplication().init();
+				if (httpServletService == null && application != null) {
+					this.httpServletService = application.getBeanFactory().getInstance(HttpServletService.class);
+				}
+				
+				if(reference){
+					application.getInitializationLatch().countDown();
+				}
+			} catch (Throwable e) {
+				logger.error(e, "Initialization error");
 			}
-
-			if (httpServletService == null && getApplication() != null) {
-				this.httpServletService = getApplication().getBeanFactory().getInstance(HttpServletService.class);
-			}
-		} catch (Exception e) {
-			logger.error(e, "初始化异常");
 		}
 	}
 
 	@Override
 	public void destroy() {
-		if (!reference && getApplication() != null) {
-			getApplication().destroy();
+		if (!initialized) {
+			return;
 		}
-		super.destroy();
+
+		synchronized (this) {
+			if (!initialized) {
+				return;
+			}
+
+			initialized = false;
+			if (application != null && !reference) {
+				application.destroy();
+			}
+			super.destroy();
+		}
 	}
 }

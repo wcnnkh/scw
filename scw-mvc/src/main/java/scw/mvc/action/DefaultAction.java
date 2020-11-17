@@ -21,6 +21,7 @@ import scw.logger.LoggerFactory;
 import scw.mvc.annotation.ActionInterceptors;
 import scw.mvc.annotation.Controller;
 import scw.mvc.annotation.Methods;
+import scw.value.property.PropertyFactory;
 
 public class DefaultAction extends BeanAction {
 	private static Logger logger = LoggerFactory.getLogger(DefaultAction.class);
@@ -32,18 +33,22 @@ public class DefaultAction extends BeanAction {
 			8);
 	private Iterable<ActionInterceptor> actionInterceptors;
 	
-	public DefaultAction(BeanFactory beanFactory, Class<?> targetClass,
+	public DefaultAction(BeanFactory beanFactory, PropertyFactory propertyFactory, Class<?> targetClass,
 			Method method) {
 		super(beanFactory, targetClass, method);
 		Controller classController = getSourceClass()
 				.getAnnotation(Controller.class);
 		Controller methodController = getAnnotatedElement()
 				.getAnnotation(Controller.class);
+		
+		String controller = classController.value();
+		controller = propertyFactory.resolvePlaceholders(controller);
+		
 		httpHttpControllerDescriptors.addAll(createHttpControllerDescriptors(
-				StringUtils.mergePath("/", classController.value(),
+				StringUtils.mergePath("/", controller,
 						methodController.value()), getControllerHttpMethods()));
 		sourceClassHttpControllerDescriptors.addAll(createHttpControllerDescriptors(
-				StringUtils.mergePath("/", classController.value()),
+				StringUtils.mergePath("/", controller),
 				Arrays.asList(classController.methods())));
 		methodHttpControllerDescriptors.addAll(createHttpControllerDescriptors(
 				methodController.value(),

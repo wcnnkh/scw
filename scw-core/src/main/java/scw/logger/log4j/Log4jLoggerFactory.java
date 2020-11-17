@@ -1,7 +1,5 @@
 package scw.logger.log4j;
 
-import org.apache.log4j.LogManager;
-
 import scw.logger.AbstractILoggerFactory;
 import scw.logger.Logger;
 import scw.logger.LoggerLevelManager;
@@ -14,7 +12,7 @@ public class Log4jLoggerFactory extends AbstractILoggerFactory {
 	}
 
 	public void destroy() {
-		LogManager.shutdown();
+		//LogManager.shutdown();
 	}
 
 	public Logger getLogger(String name, String placeholder) {

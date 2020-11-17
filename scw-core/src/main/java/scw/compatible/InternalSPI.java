@@ -18,7 +18,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.ServiceConfigurationError;
 
+import scw.core.instance.NoArgsInstanceFactory;
 import scw.core.utils.ClassUtils;
+import scw.util.ServiceLoader;
 
 public class InternalSPI implements SPI {
 
@@ -40,6 +42,16 @@ public class InternalSPI implements SPI {
 
 		// The current lazy-lookup iterator
 		private LazyIterator lookupIterator;
+		
+		private NoArgsInstanceFactory instanceFactory;
+
+		public NoArgsInstanceFactory getInstanceFactory() {
+			return instanceFactory;
+		}
+
+		public void setInstanceFactory(NoArgsInstanceFactory instanceFactory) {
+			this.instanceFactory = instanceFactory;
+		}
 
 		/**
 		 * Clear this loader's provider cache so that all providers will be
@@ -209,7 +221,8 @@ public class InternalSPI implements SPI {
 					fail(service, "Provider " + cn + " not a subtype");
 				}
 				try {
-					S p = service.cast(c.newInstance());
+					Object instance = instanceFactory == null? c.newInstance():instanceFactory.getInstance(c);
+					S p = service.cast(instance);
 					providers.put(cn, p);
 					return p;
 				} catch (Throwable x) {
@@ -336,15 +349,15 @@ public class InternalSPI implements SPI {
 		}
 	}
 
-	public <S> scw.compatible.ServiceLoader<S> load(Class<S> service, ClassLoader loader) {
+	public <S> InternalServiceLoader<S> load(Class<S> service, ClassLoader loader) {
 		return new InternalServiceLoader<S>(service, loader);
 	}
 
-	public <S> scw.compatible.ServiceLoader<S> load(Class<S> service) {
+	public <S> InternalServiceLoader<S> load(Class<S> service) {
 		return load(service, ClassUtils.getDefaultClassLoader());
 	}
 
-	public <S> scw.compatible.ServiceLoader<S> loadInstalled(Class<S> service) {
+	public <S> InternalServiceLoader<S> loadInstalled(Class<S> service) {
 		ClassLoader cl = ClassLoader.getSystemClassLoader();
 		ClassLoader prev = null;
 		while (cl != null) {

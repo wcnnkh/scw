@@ -33,8 +33,8 @@ public final class GlobalPropertyFactory extends PropertyFactory {
 	private GlobalPropertyFactory() {
 		super(true, false);
 		addFirstBasePropertyFactory(SystemPropertyFactory.getInstance());
-		FormatUtils.info(GlobalPropertyFactory.class, "using classes directory {}", getClassesDirectory());
-		FormatUtils.info(GlobalPropertyFactory.class, "using work path {}", getWorkPath());
+		FormatUtils.info(GlobalPropertyFactory.class, "using classes directory:{}", getClassesDirectory());
+		FormatUtils.info(GlobalPropertyFactory.class, "using work path:{}", getWorkPath());
 	}
 
 	public String getClassesDirectory() {

@@ -9,11 +9,11 @@ public interface InstanceBuilder<T> extends Iterable<ParameterDescriptors>{
 	
 	boolean isInstance();
 	
-	T create() throws Exception;
+	T create() throws Throwable;
 
-	T create(Object... params) throws Exception;
+	T create(Object... params) throws Throwable;
 
-	T create(Class<?>[] parameterTypes, Object... params) throws Exception;
+	T create(Class<?>[] parameterTypes, Object... params) throws Throwable;
 	
 	Iterator<ParameterDescriptors> iterator();
 }

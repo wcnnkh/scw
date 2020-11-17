@@ -24,4 +24,6 @@ public interface NoArgsInstanceFactory {
 	boolean isSingleton(String name);
 
 	boolean isSingleton(Class<?> clazz);
+	
+	ClassLoader getClassLoader();
 }

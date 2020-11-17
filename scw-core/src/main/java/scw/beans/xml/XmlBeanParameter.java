@@ -22,12 +22,12 @@ import scw.value.property.PropertyFactory;
 
 public final class XmlBeanParameter implements Cloneable, ParameterDescriptor, Serializable {
 	private static final long serialVersionUID = 1L;
-	private final EParameterType parameterType;
+	private final XmlParameterType parameterType;
 	private Class<?> type;
 	private final String name;// 可能为空
 	private final XmlValue xmlValue;
 
-	public XmlBeanParameter(EParameterType parameterType, Class<?> type, String name, String value, Node node) {
+	public XmlBeanParameter(XmlParameterType parameterType, Class<?> type, String name, String value, Node node) {
 		this.parameterType = parameterType;
 		this.type = type;
 		this.name = name;
@@ -44,7 +44,7 @@ public final class XmlBeanParameter implements Cloneable, ParameterDescriptor, S
 		return null;
 	}
 
-	public EParameterType getParameterType() {
+	public XmlParameterType getParameterType() {
 		return parameterType;
 	}
 

@@ -4,5 +4,9 @@ import scw.lang.Ignore;
 
 @Ignore
 public interface Init {
-	void init() throws Exception;
+	/**
+	 * 初始化时执行
+	 * @throws Throwable
+	 */
+	void init() throws Throwable;
 }

@@ -46,7 +46,7 @@ public final class BeanUtils {
 		return null;
 	}
 
-	public static void init(Object init) throws Exception {
+	public static void init(Object init) throws Throwable {
 		if (init == null) {
 			return;
 		}
@@ -56,7 +56,7 @@ public final class BeanUtils {
 		}
 	}
 
-	public static void destroy(Object destroy) throws Exception {
+	public static void destroy(Object destroy) throws Throwable {
 		if (destroy == null) {
 			return;
 		}
@@ -76,20 +76,13 @@ public final class BeanUtils {
 		}
 	}
 
-	/**
-	 * 获取实例中的BeanDefinition定义
-	 * 
-	 * @param instance
-	 * @return
-	 * @see BeanDefinitionAccessor#getBeanDefinition()
-	 */
-	public static BeanDefinition getBeanDefinition(Object instance) {
+	public static RuntimeBean getRuntimeBean(Object instance) {
 		if (instance == null) {
 			return null;
 		}
 
-		if (instance instanceof BeanDefinitionAccessor) {
-			return ((BeanDefinitionAccessor) instance).getBeanDefinition();
+		if (instance instanceof RuntimeBean) {
+			return ((RuntimeBean) instance);
 		}
 
 		return null;

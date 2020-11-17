@@ -24,15 +24,11 @@ public final class MultiIterable<E> implements Iterable<E> {
 		private Iterator<? extends E> valueIterator;
 
 		public boolean hasNext() {
-			if (iterator == null) {
-				return false;
-			}
-
 			if (valueIterator != null && valueIterator.hasNext()) {
 				return true;
 			}
 
-			while (iterator.hasNext()) {
+			while (iterator != null && iterator.hasNext()) {
 				Iterable<? extends E> iterable = iterator.next();
 				if(iterable == null){
 					continue;

@@ -4,5 +4,9 @@ import scw.lang.Ignore;
 
 @Ignore
 public interface Destroy {
-	void destroy() throws Exception;
+	/**
+	 * 销毁时执行
+	 * @throws Throwable
+	 */
+	void destroy() throws Throwable;
 }

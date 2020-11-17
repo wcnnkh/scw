@@ -1,11 +1,11 @@
 package scw.value.property;
 
-import java.util.Collections;
-import java.util.Enumeration;
+import java.util.Iterator;
 
+import scw.core.utils.CollectionUtils;
 import scw.core.utils.StringUtils;
 import scw.util.EnumerationConvert;
-import scw.util.MultiEnumeration;
+import scw.util.MultiIterator;
 
 public final class SystemPropertyFactory extends ExtendPropertyFactory {
 	public static final String PROPERTY_MAVEN_HOME = "maven.home";
@@ -28,10 +28,11 @@ public final class SystemPropertyFactory extends ExtendPropertyFactory {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Enumeration<String> enumerationKeys() {
-		Enumeration<String> e1 = EnumerationConvert.convertToStringEnumeration(System.getProperties().keys());
-		Enumeration<String> e2 = Collections.enumeration(System.getenv().keySet());
-		return new MultiEnumeration<String>(e1, e2, super.enumerationKeys());
+	public Iterator<String> iterator() {
+		return new MultiIterator<String>(
+				CollectionUtils
+						.toIterator(EnumerationConvert.convertToStringEnumeration(System.getProperties().keys())),
+				System.getenv().keySet().iterator(), super.iterator());
 	}
 
 	@Override

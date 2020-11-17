@@ -29,7 +29,7 @@
 				<artifactId>scw-core</artifactId>
 				<version>1.0.0</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-cloud</artifactId>
@@ -41,19 +41,13 @@
 				<artifactId>scw-search</artifactId>
 				<version>1.0.0</version>
 			</dependency>
-			
-			<dependency>
-				<groupId>scw</groupId>
-				<artifactId>scw-netflix</artifactId>
-				<version>1.0.0</version>
-			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-websocket</artifactId>
 				<version>1.0.0</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-dubbo</artifactId>
@@ -125,7 +119,7 @@
 				<artifactId>scw-freemarker</artifactId>
 				<version>1.0.0</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-mq</artifactId>
@@ -143,16 +137,40 @@
 				<artifactId>scw-upload</artifactId>
 				<version>1.0.0</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>scw</groupId>
-				<artifactId>scw-registry</artifactId>
+				<artifactId>scw-zookeeper</artifactId>
 				<version>1.0.0</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
-				<artifactId>scw-embed</artifactId>
+				<artifactId>scw-netflix-eureka-client</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-netflix-eureka-server</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-netflix-hystrix</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-feign</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-tomcat</artifactId>
 				<version>1.0.0</version>
 			</dependency>
 
@@ -415,7 +433,6 @@
 		<module>scw-freemarker</module>
 		<module>scw-tencent</module>
 		<module>scw-apple</module>
-		<module>scw-embed</module>
 		<module>scw-timer</module>
 		<module>scw-db</module>
 		<module>scw-data</module>
@@ -427,7 +444,11 @@
 		<module>scw-microsoft</module>
 		<module>scw-dubbo</module>
 		<module>scw-mq</module>
-		<module>scw-netflix</module>
-		<module>scw-registry</module>
+		<module>scw-zookeeper</module>
+		<module>scw-netflix-eureka-client</module>
+		<module>scw-netflix-eureka-server</module>
+		<module>scw-netflix-hystrix</module>
+		<module>scw-feign</module>
+		<module>scw-tomcat</module>
 	</modules>
 </project>

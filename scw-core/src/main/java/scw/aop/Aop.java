@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import scw.core.instance.InstanceIterable;
 import scw.core.instance.NoArgsInstanceFactory;
+import scw.core.utils.ArrayUtils;
 import scw.lang.NotSupportedException;
 import scw.util.MultiIterable;
 
@@ -68,7 +69,7 @@ public abstract class Aop implements ProxyFactory {
 		MethodInterceptors interceptors = new MethodInterceptors();
 		interceptors.addLast(new InstanceMethodInterceptor(instance));
 		interceptors.addLast(filters);
-		return getProxy(clazz, interfaces, interceptors);
+		return getProxy(clazz, ArrayUtils.merge(interfaces, ProxyInstanceTarget.CLASSES), interceptors);
 	}
 
 	public final <T> Proxy getProxyInstance(Class<? extends T> clazz, T instance, Class<?>[] interfaces,
@@ -177,6 +178,9 @@ public abstract class Aop implements ProxyFactory {
 
 		public Object intercept(MethodInvoker invoker, Object[] args, MethodInterceptorChain filterChain)
 				throws Throwable {
+			if(ArrayUtils.isEmpty(args) && invoker.getMethod().getName().equals(ProxyInstanceTarget.class)){
+				return instance;
+			}
 			MethodInvoker proxyInvoker = new DefaultMethodInvoker(instance, invoker.getSourceClass(),
 					invoker.getMethod(), true);
 			return filterChain.intercept(proxyInvoker, args);

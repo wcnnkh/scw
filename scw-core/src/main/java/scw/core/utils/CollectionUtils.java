@@ -62,8 +62,8 @@ public abstract class CollectionUtils {
 		if (iterable == null) {
 			return true;
 		}
-		
-		if(iterable instanceof Collection){
+
+		if (iterable instanceof Collection) {
 			return ((Collection) iterable).isEmpty();
 		}
 
@@ -411,8 +411,21 @@ public abstract class CollectionUtils {
 	 *            the enumeration
 	 * @return the iterator
 	 */
-	public static <E> Iterator<E> toIterator(Enumeration<E> enumeration) {
+	public static <E> Iterator<E> toIterator(Enumeration<? extends E> enumeration) {
 		return new EnumerationIterator<E>(enumeration);
+	}
+
+	public static <E> Enumeration<E> toEnumeration(final Iterator<? extends E> iterator) {
+		return new Enumeration<E>() {
+
+			public boolean hasMoreElements() {
+				return iterator.hasNext();
+			}
+
+			public E nextElement() {
+				return iterator.next();
+			}
+		};
 	}
 
 	/**
@@ -467,9 +480,9 @@ public abstract class CollectionUtils {
 	 */
 	private static class EnumerationIterator<E> extends scw.util.AbstractIterator<E> {
 
-		private Enumeration<E> enumeration;
+		private Enumeration<? extends E> enumeration;
 
-		public EnumerationIterator(Enumeration<E> enumeration) {
+		public EnumerationIterator(Enumeration<? extends E> enumeration) {
 			this.enumeration = enumeration;
 		}
 

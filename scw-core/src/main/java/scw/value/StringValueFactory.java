@@ -58,8 +58,8 @@ public class StringValueFactory extends DefaultValueFactory<String> {
 		}
 	}
 
-	public String format(String text, boolean supportEL) {
-		return FormatUtils.format(text, this, supportEL);
+	public String format(String text) {
+		return resolvePlaceholders(FormatUtils.format(text, this, true), true);
 	}
 
 	public String format(String text, String prefix, String suffix) {
@@ -79,7 +79,7 @@ public class StringValueFactory extends DefaultValueFactory<String> {
 			}
 
 			if (value instanceof String) {
-				props.put(entry.getKey(), format((String) value, true));
+				props.put(entry.getKey(), format((String) value));
 			} else {
 				props.put(entry.getKey(), entry.getValue());
 			}

@@ -5,7 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import scw.aop.Invoker;
-import scw.beans.AbstractBeanFactoryLifeCycle;
+import scw.application.Application;
+import scw.application.ApplicationInitialization;
 import scw.beans.BeanFactory;
 import scw.beans.BeanUtils;
 import scw.core.annotation.AnnotationUtils;
@@ -18,25 +19,26 @@ import scw.timer.support.SimpleCrontabConfig;
 import scw.timer.support.SimpleTimerTaskConfig;
 import scw.util.ClassScanner;
 import scw.value.ValueFactory;
-import scw.value.property.PropertyFactory;
 
 @Configuration(order = Integer.MIN_VALUE)
-public final class TimerAnnotationScan extends AbstractBeanFactoryLifeCycle {
-	public void init(BeanFactory beanFactory, PropertyFactory propertyFactory) {
-		Timer timer = beanFactory.getInstance(Timer.class);
-		for (Class<?> clz : ClassScanner.getInstance().getClasses(getScanAnnotationPackageName(propertyFactory))) {
+public final class TimerAnnotationScan implements ApplicationInitialization {
+
+	public void init(Application application) throws Throwable {
+		Timer timer = application.getBeanFactory().getInstance(Timer.class);
+		for (Class<?> clz : ClassScanner.getInstance()
+				.getClasses(getScanAnnotationPackageName(application.getPropertyFactory()))) {
 			if (!ReflectionUtils.isPresent(clz)) {
 				continue;
 			}
 
 			for (Method method : AnnotationUtils.getAnnoationMethods(clz, true, true, Schedule.class)) {
 				Schedule schedule = method.getAnnotation(Schedule.class);
-				schedule(beanFactory, clz, method, timer, schedule);
+				schedule(application.getBeanFactory(), clz, method, timer, schedule);
 			}
 
 			for (Method method : AnnotationUtils.getAnnoationMethods(clz, true, true, Crontab.class)) {
 				Crontab c = method.getAnnotation(Crontab.class);
-				crontab(beanFactory, clz, method, timer, c);
+				crontab(application.getBeanFactory(), clz, method, timer, c);
 			}
 		}
 	}
@@ -91,8 +93,5 @@ public final class TimerAnnotationScan extends AbstractBeanFactoryLifeCycle {
 				invoker.invoke(value);
 			}
 		}
-	}
-
-	public void destroy(BeanFactory beanFactory, PropertyFactory propertyFactory) throws Exception {
 	}
 }

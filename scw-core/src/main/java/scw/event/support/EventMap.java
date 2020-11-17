@@ -13,19 +13,22 @@ import scw.core.utils.CollectionUtils;
 import scw.event.NamedEventDispatcher;
 
 public class EventMap<K, V> extends DefaultCompatibleMap<K, V> {
-	private NamedEventDispatcher<ValueEvent<V>> eventDispatcher;
+	private DefaultNamedEventDispatcher<K, ValueEvent<V>> eventDispatcher;
 
 	public EventMap(boolean concurrent) {
-		this(new DefaultNamedEventDispatcher<ValueEvent<V>>(concurrent),
-				concurrent ? new ConcurrentHashMap<K, V>() : new HashMap<K, V>());
+		this(concurrent ? new ConcurrentHashMap<K, V>() : new HashMap<K, V>(), concurrent);
 	}
 
-	public EventMap(NamedEventDispatcher<ValueEvent<V>> eventDispatcher, Map<K, V> targetMap) {
+	public EventMap(Map<K, V> targetMap, boolean concurrent) {
 		super(targetMap);
-		this.eventDispatcher = eventDispatcher == null ? new EmptyEventDispatcher<ValueEvent<V>>() : eventDispatcher;
+		this.eventDispatcher = createDefaultNamedEventDispatcher(concurrent);
 	}
 
-	public NamedEventDispatcher<ValueEvent<V>> getEventDispatcher() {
+	protected DefaultNamedEventDispatcher<K, ValueEvent<V>> createDefaultNamedEventDispatcher(boolean concurrent) {
+		return new DefaultNamedEventDispatcher<K, ValueEvent<V>>(concurrent);
+	}
+
+	public NamedEventDispatcher<K, ValueEvent<V>> getEventDispatcher() {
 		return eventDispatcher;
 	}
 
@@ -86,7 +89,7 @@ public class EventMap<K, V> extends DefaultCompatibleMap<K, V> {
 		}
 
 		if (v != null) {
-			getEventDispatcher().publishEvent(key, new ValueEvent<V>(EventType.DELETE, v));
+			eventDispatcher.publishEventByObjectName(key, new ValueEvent<V>(EventType.DELETE, v));
 		}
 		return v;
 	}

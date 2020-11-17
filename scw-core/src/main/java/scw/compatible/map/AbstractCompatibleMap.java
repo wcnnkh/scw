@@ -68,7 +68,31 @@ public abstract class AbstractCompatibleMap<K, V> implements CompatibleMap<K, V>
 		return v;
 	}
 
-	public Map<K, V> getSourceMap() {
-		return getTargetMap();
+	@Override
+	public String toString() {
+		return getTargetMap().toString();
+	}
+	
+	@Override
+	public int hashCode() {
+		return getTargetMap().hashCode();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null){
+			return false;
+		}
+		
+		if(obj == this){
+			return true;
+		}
+		
+		if(obj instanceof AbstractCompatibleMap){
+			return ((AbstractCompatibleMap) obj).getTargetMap().equals(getTargetMap());
+		}
+		
+		return false;
 	}
 }

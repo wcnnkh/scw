@@ -1,19 +1,3 @@
-/*
- * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package scw.util;
 
 import java.util.HashMap;
@@ -35,10 +19,6 @@ import scw.logger.LoggerUtils;
  * <p>
  * Values for substitution can be supplied using a {@link Properties} instance
  * or using a {@link PlaceholderResolver}.
- *
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @since 3.0
  */
 public class PropertyPlaceholderHelper {
 	private static final Logger logger = LoggerUtils.getLogger(PropertyPlaceholderHelper.class);
@@ -46,10 +26,10 @@ public class PropertyPlaceholderHelper {
 	private static final Map<String, String> wellKnownSimplePrefixes = new HashMap<String, String>(4);
 
 	/** Prefix for system property placeholders: "${" */
-	private static final String PLACEHOLDER_PREFIX = "${";
+	public static final String PLACEHOLDER_PREFIX = "${";
 
 	/** Suffix for system property placeholders: "}" */
-	private static final String PLACEHOLDER_SUFFIX = "}";
+	public static final String PLACEHOLDER_SUFFIX = "}";
 
 	/** Value separator for system property placeholders: ":" */
 	private static final String VALUE_SEPARATOR = ":";

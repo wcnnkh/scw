@@ -1,27 +1,28 @@
 package scw.core.instance;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import scw.compatible.CompatibleUtils;
-import scw.compatible.ServiceLoader;
+import scw.compatible.SPI;
 import scw.core.Constants;
 import scw.core.GlobalPropertyFactory;
-import scw.core.parameter.ParameterUtils;
 import scw.core.reflect.ReflectionUtils;
-import scw.core.utils.ArrayUtils;
 import scw.core.utils.ClassUtils;
 import scw.core.utils.CollectionUtils;
 import scw.lang.NotSupportedException;
 import scw.logger.Logger;
 import scw.logger.LoggerUtils;
+import scw.util.ClassScanner;
 import scw.util.JavaVersion;
+import scw.util.ServiceLoader;
 import scw.value.ValueFactory;
+import scw.value.property.PropertyFactory;
 
 @SuppressWarnings("rawtypes")
 public final class InstanceUtils {
@@ -55,131 +56,46 @@ public final class InstanceUtils {
 		}
 	}
 
-	public static <T> T loadService(Class<? extends T> clazz, String... names) {
-		return loadService(clazz, INSTANCE_FACTORY, GlobalPropertyFactory.getInstance(), names);
+	public static <T> T loadService(Class<? extends T> clazz, String... defaultNames) {
+		return loadService(clazz, INSTANCE_FACTORY, GlobalPropertyFactory.getInstance(), defaultNames);
 	}
 
-	public static <T> List<T> loadAllService(Class<? extends T> clazz, String... names) {
-		return loadAllService(clazz, INSTANCE_FACTORY, GlobalPropertyFactory.getInstance(), names);
+	public static <T> List<T> loadAllService(Class<? extends T> clazz, String... defaultNames) {
+		ServiceLoader<T> serviceLoader = getServiceLoader(clazz, INSTANCE_FACTORY, GlobalPropertyFactory.getInstance(),
+				defaultNames);
+		return Collections.list(CollectionUtils.toEnumeration(serviceLoader.iterator()));
 	}
 
-	/**
-	 * 使用java spi机制
-	 * 
-	 * @param clazz
-	 * @param names
-	 * @return
-	 */
 	public static <T> T loadService(Class<? extends T> clazz, NoArgsInstanceFactory instanceFactory,
-			ValueFactory<String> propertyFactory, String... names) {
-		String[] configNames = propertyFactory.getObject(clazz.getName(), String[].class);
-		if (!ArrayUtils.isEmpty(configNames)) {
-			for (String name : configNames) {
-				if (instanceFactory.isInstance(name)) {
-					return instanceFactory.getInstance(name);
-				}
-			}
+			ValueFactory<String> propertyFactory, String... defaultNames) {
+		ServiceLoader<T> serviceLoader = getServiceLoader(clazz, instanceFactory, propertyFactory, defaultNames);
+		Iterator<T> iterator = serviceLoader.iterator();
+		while (iterator.hasNext()) {
+			return iterator.next();
 		}
+		return null;
+	}
 
-		T service = null;
-		ServiceLoader<? extends T> serviceLoader = CompatibleUtils.getSpi().load(clazz);
-		for (T s : serviceLoader) {
-			service = s;
-			break;
-		}
-
-		if (service == null && !ArrayUtils.isEmpty(names)) {
-			for (String name : names) {
-				if (instanceFactory.isInstance(name)) {
-					service = instanceFactory.getInstance(name);
-					break;
-				}
-			}
-		}
-		return service;
+	public static <S> ServiceLoader<S> getServiceLoader(Class<? extends S> clazz, NoArgsInstanceFactory instanceFactory,
+			ValueFactory<String> propertyFactory, SPI spi, String... defaultNames) {
+		return new ConfigurableServiceLoader<S>(spi == null? null:new SpiServiceLoader<S>(clazz, instanceFactory), clazz, instanceFactory, propertyFactory,
+				defaultNames);
+	}
+	
+	public static <S> ServiceLoader<S> getServiceLoader(Class<? extends S> clazz, NoArgsInstanceFactory instanceFactory,
+			ValueFactory<String> propertyFactory, String... defaultNames) {
+		return getServiceLoader(clazz, instanceFactory, propertyFactory, clazz.getName().startsWith(Constants.SYSTEM_PACKAGE_NAME)? CompatibleUtils.getSpi():null, defaultNames);
 	}
 
 	public static <T> List<T> loadAllService(Class<? extends T> clazz, NoArgsInstanceFactory instanceFactory,
-			ValueFactory<String> propertyFactory, String... names) {
-		List<T> list = new ArrayList<T>();
-		String[] configNames = propertyFactory.getObject(clazz.getName(), String[].class);
-		if (!ArrayUtils.isEmpty(configNames)) {
-			for (String name : configNames) {
-				if (instanceFactory.isInstance(name)) {
-					T t = instanceFactory.getInstance(name);
-					list.add(t);
-				}
-			}
-		}
-
-		ServiceLoader<? extends T> serviceLoader = CompatibleUtils.getSpi().load(clazz);
-		for (T s : serviceLoader) {
-			list.add(s);
-		}
-
-		if (!ArrayUtils.isEmpty(names)) {
-			for (String name : names) {
-				if (instanceFactory.isInstance(name)) {
-					T t = instanceFactory.getInstance(name);
-					list.add(t);
-				}
-			}
-		}
-		return list;
-	}
-
-	/**
-	 * 根据参数名来调用构造方法
-	 * 
-	 * @param type
-	 * @param isPublic
-	 * @param parameterMap
-	 * @return
-	 * @throws NoSuchMethodException
-	 */
-	public static <T> T newInstance(InstanceFactory instanceFactory, Class<T> type, boolean isPublic,
-			Map<String, Object> parameterMap) throws NoSuchMethodException {
-		if (CollectionUtils.isEmpty(parameterMap)) {
-			try {
-				return ReflectionUtils.getConstructor(type, isPublic).newInstance();
-			} catch (InstantiationException e) {
-				throw new RuntimeException(e);
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			} catch (IllegalArgumentException e) {
-				throw new RuntimeException(e);
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		int size = parameterMap.size();
-		for (Constructor<?> constructor : isPublic ? type.getConstructors() : type.getDeclaredConstructors()) {
-			if (size == constructor.getParameterTypes().length) {
-				String[] names = ParameterUtils.getParameterNames(constructor);
-				Object[] args = new Object[size];
-				boolean find = true;
-				for (int i = 0; i < names.length; i++) {
-					if (!parameterMap.containsKey(names[i])) {
-						find = false;
-						break;
-					}
-
-					args[i] = parameterMap.get(names[i]);
-				}
-
-				if (find) {
-					return instanceFactory.getInstance(type, constructor.getParameterTypes(), args);
-				}
-			}
-		}
-		throw new NoSuchMethodException(type.getName());
+			ValueFactory<String> propertyFactory, String... defaultNames) {
+		ServiceLoader<T> serviceLoader = getServiceLoader(clazz, instanceFactory, propertyFactory, defaultNames);
+		return Collections.list(CollectionUtils.toEnumeration(serviceLoader.iterator()));
 	}
 
 	public static <T> Collection<Class<T>> getConfigurationClassList(Class<? extends T> type,
 			ValueFactory<String> propertyFactory, Collection<? extends Class> excludeTypes) {
-		return getConfigurationClassList(type, excludeTypes,
-				Arrays.asList(Constants.SYSTEM_PACKAGE_NAME, getScanAnnotationPackageName(propertyFactory)));
+		return getConfigurationClassList(type, excludeTypes, getScannerClassPackages(propertyFactory));
 	}
 
 	public static <T> Collection<Class<T>> getConfigurationClassList(Class<? extends T> type,
@@ -194,8 +110,7 @@ public final class InstanceUtils {
 
 	public static <T> List<T> getConfigurationList(Class<? extends T> type, NoArgsInstanceFactory instanceFactory,
 			ValueFactory<String> propertyFactory, Collection<? extends Class> excludeTypes) {
-		return getConfigurationList(type, instanceFactory, excludeTypes,
-				Arrays.asList(Constants.SYSTEM_PACKAGE_NAME, getScanAnnotationPackageName(propertyFactory)));
+		return getConfigurationList(type, instanceFactory, excludeTypes, getScannerClassPackages(propertyFactory));
 	}
 
 	public static <T> List<T> getConfigurationList(Class<? extends T> type, NoArgsInstanceFactory instanceFactory,
@@ -237,8 +152,7 @@ public final class InstanceUtils {
 
 	public static <T> T getConfiguration(Class<? extends T> type, NoArgsInstanceFactory instanceFactory,
 			ValueFactory<String> propertyFactory, Collection<? extends Class> excludeTypes) {
-		return getConfiguration(type, instanceFactory, excludeTypes,
-				Arrays.asList(Constants.SYSTEM_PACKAGE_NAME, getScanAnnotationPackageName(propertyFactory)));
+		return getConfiguration(type, instanceFactory, excludeTypes, getScannerClassPackages(propertyFactory));
 	}
 
 	public static <T> T getConfiguration(Class<? extends T> type, NoArgsInstanceFactory instanceFactory,
@@ -249,5 +163,26 @@ public final class InstanceUtils {
 	public static boolean isSupport(Class<?> clazz) {
 		return !ClassUtils.isPrimitiveOrWrapper(clazz) && JavaVersion.isSupported(clazz)
 				&& ReflectionUtils.isPresent(clazz);
+	}
+
+	public static <T> ServiceLoader<T> getConfigurationServiceLoader(Class<? extends T> serviceClass,
+			NoArgsInstanceFactory instanceFactory, Collection<? extends Class> excludeTypes,
+			Collection<String> packageNames) {
+		return new AnnotationServiceLoader<T>(serviceClass, instanceFactory, excludeTypes, packageNames);
+	}
+
+	public static <T> ServiceLoader<T> getConfigurationServiceLoader(Class<? extends T> serviceClass,
+			NoArgsInstanceFactory instanceFactory, ValueFactory<String> propertyFactory,
+			Collection<? extends Class> excludeTypes) {
+		return getConfigurationServiceLoader(serviceClass, instanceFactory, excludeTypes,
+				getScannerClassPackages(propertyFactory));
+	}
+	
+	private static Collection<String> getScannerClassPackages(ValueFactory<String> propertyFactory){
+		return Arrays.asList(Constants.SYSTEM_PACKAGE_NAME, getScanAnnotationPackageName(propertyFactory));
+	}
+	
+	public static Set<Class<?>> getClasses(PropertyFactory propertyFactory){
+		return ClassScanner.getInstance().getClasses(getScannerClassPackages(propertyFactory));
 	}
 }

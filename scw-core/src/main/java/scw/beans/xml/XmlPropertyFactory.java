@@ -5,16 +5,10 @@ import org.w3c.dom.NodeList;
 
 import scw.core.utils.StringUtils;
 import scw.http.HttpUtils;
-import scw.io.ResourceUtils;
 import scw.value.property.PropertyFactory;
 import scw.xml.XMLUtils;
 
 public class XmlPropertyFactory extends PropertyFactory {
-
-	public XmlPropertyFactory(PropertyFactory propertyFactory, String beanXml) {
-		this(propertyFactory,
-				ResourceUtils.getResourceOperations().isExist(beanXml) ? XmlBeanUtils.getRootNodeList(beanXml) : null);
-	}
 
 	public XmlPropertyFactory(PropertyFactory propertyFactory, NodeList nodeList) {
 		super(true, false);

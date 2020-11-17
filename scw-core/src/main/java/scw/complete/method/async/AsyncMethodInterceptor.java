@@ -4,8 +4,8 @@ import scw.aop.MethodInterceptor;
 import scw.aop.MethodInterceptorAccept;
 import scw.aop.MethodInterceptorChain;
 import scw.aop.MethodInvoker;
-import scw.beans.BeanDefinition;
 import scw.beans.BeanUtils;
+import scw.beans.RuntimeBean;
 import scw.core.instance.NoArgsInstanceFactory;
 import scw.core.instance.annotation.Configuration;
 import scw.lang.NotSupportedException;
@@ -55,8 +55,8 @@ public final class AsyncMethodInterceptor implements MethodInterceptor, MethodIn
 			return filterChain.intercept(invoker, args);
 		}
 		
-		BeanDefinition beanDefinition = BeanUtils.getBeanDefinition(invoker.getInstance());
-		if(beanDefinition == null){
+		RuntimeBean runtimeBean = BeanUtils.getRuntimeBean(invoker.getInstance());
+		if(runtimeBean == null){
 			throw new NotSupportedException("not support async: " + invoker.getMethod());
 		}
 
@@ -65,7 +65,7 @@ public final class AsyncMethodInterceptor implements MethodInterceptor, MethodIn
 		}
 
 		AsyncMethodCompleteTask asyncMethodCompleteTask = new AsyncMethodCompleteTask(
-				invoker.getMethod(), beanDefinition.getId(), args);
+				invoker.getMethod(), runtimeBean.getBeanDefinition().getId(), args);
 		AsyncMethodService asyncService = instanceFactory.getInstance(async.service());
 		startAsync();
 		try {

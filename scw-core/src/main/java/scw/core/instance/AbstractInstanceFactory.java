@@ -25,7 +25,7 @@ public abstract class AbstractInstanceFactory implements InstanceFactory {
 
 		try {
 			return instanceBuilder.create();
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new InstanceException(name, e);
 		}
 	}
@@ -59,7 +59,7 @@ public abstract class AbstractInstanceFactory implements InstanceFactory {
 
 		try {
 			return instanceBuilder.create(params);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new InstanceException(name, e);
 		}
 	}
@@ -76,7 +76,7 @@ public abstract class AbstractInstanceFactory implements InstanceFactory {
 
 		try {
 			return instanceBuilder.create(parameterTypes, params);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new InstanceException(name, e);
 		}
 	}
