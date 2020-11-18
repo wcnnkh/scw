@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>scw</groupId>
+		<artifactId>scw</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>scw-web</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-security</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

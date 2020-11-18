@@ -12,15 +12,5 @@
 			<groupId>scw</groupId>
 			<artifactId>scw-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.googlecode.xmemcached/xmemcached -->
-		<dependency>
-			<groupId>com.googlecode.xmemcached</groupId>
-			<artifactId>xmemcached</artifactId>
-		</dependency>
 	</dependencies>
 </project>

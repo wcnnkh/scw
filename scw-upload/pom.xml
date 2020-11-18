@@ -12,12 +12,11 @@
 		<dependency>
 			<groupId>scw</groupId>
 			<artifactId>scw-core</artifactId>
-			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
+			<groupId>scw</groupId>
+			<artifactId>scw-web</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

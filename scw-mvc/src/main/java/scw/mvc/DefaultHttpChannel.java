@@ -33,7 +33,6 @@ import scw.core.utils.NumberUtils;
 import scw.core.utils.StringUtils;
 import scw.core.utils.TypeUtils;
 import scw.http.HttpMethod;
-import scw.http.HttpUtils;
 import scw.http.server.ServerHttpRequest;
 import scw.http.server.ServerHttpResponse;
 import scw.json.JSONSupport;
@@ -59,6 +58,7 @@ import scw.value.AbstractStringValue;
 import scw.value.EmptyValue;
 import scw.value.StringValue;
 import scw.value.Value;
+import scw.web.WebUtils;
 
 public class DefaultHttpChannel extends AbstractParameterFactory implements HttpChannel, Destroy, Target {
 	private static Logger logger = LoggerUtils.getLogger(DefaultHttpChannel.class);
@@ -222,7 +222,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 
 	@SuppressWarnings("unchecked")
 	public <E> E[] getArray(String name, Class<? extends E> type) {
-		Value[] values = HttpUtils.getParameterValues(getRequest(), name);
+		Value[] values = WebUtils.getParameterValues(getRequest(), name);
 		Object array = Array.newInstance(type, values.length);
 		for (int i = 0, len = values.length; i < len; i++) {
 			Array.set(array, i, values[i].getAsObject(type));
@@ -389,7 +389,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 	}
 
 	protected String getStringValue(String name) {
-		Value value = HttpUtils.getParameter(getRequest(), name);
+		Value value = WebUtils.getParameter(getRequest(), name);
 		String v = value.getAsString();
 		if (v == null && request instanceof RestfulParameterMapAware) {
 			v = request.getRestfulParameterMap().getFirst(name);
@@ -438,7 +438,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 				return getBean(type);
 			}
 
-			Value value = HttpUtils.getParameter(getRequest(), name);
+			Value value = WebUtils.getParameter(getRequest(), name);
 			if (!value.isEmpty()) {
 				return value.getAsObject(type);
 			}
@@ -459,7 +459,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 
 		@Override
 		protected Object getAsObjectNotSupport(Type type) {
-			Value value = HttpUtils.getParameter(getRequest(), name);
+			Value value = WebUtils.getParameter(getRequest(), name);
 			if (!value.isEmpty()) {
 				return value.getAsObject(type);
 			}

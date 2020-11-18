@@ -41,6 +41,24 @@
 				<artifactId>scw-search</artifactId>
 				<version>1.0.0</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-web</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-serializer</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-sql-orm</artifactId>
+				<version>1.0.0</version>
+			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
@@ -75,6 +93,18 @@
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-data</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-memcached</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-redis</artifactId>
 				<version>1.0.0</version>
 			</dependency>
 
@@ -450,5 +480,10 @@
 		<module>scw-netflix-hystrix</module>
 		<module>scw-feign</module>
 		<module>scw-tomcat</module>
+		<module>scw-sql-orm</module>
+		<module>scw-web</module>
+		<module>scw-memcached</module>
+		<module>scw-redis</module>
+		<module>scw-serializer</module>
 	</modules>
 </project>

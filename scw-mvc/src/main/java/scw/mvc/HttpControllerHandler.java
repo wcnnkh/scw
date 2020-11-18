@@ -8,7 +8,6 @@ import scw.core.annotation.AnnotationUtils;
 import scw.core.instance.InstanceUtils;
 import scw.core.instance.annotation.Configuration;
 import scw.core.utils.ClassUtils;
-import scw.http.HttpUtils;
 import scw.http.MediaType;
 import scw.http.server.HttpServiceHandler;
 import scw.http.server.HttpServiceHandlerAccept;
@@ -27,8 +26,8 @@ import scw.mvc.action.ActionInterceptor;
 import scw.mvc.action.ActionInterceptorChain;
 import scw.mvc.action.ActionManager;
 import scw.mvc.action.ActionParameters;
-import scw.mvc.annotation.Jsonp;
 import scw.mvc.annotation.FactoryResult;
+import scw.mvc.annotation.Jsonp;
 import scw.mvc.exception.ExceptionHandler;
 import scw.mvc.view.View;
 import scw.net.FileMimeTypeUitls;
@@ -42,6 +41,7 @@ import scw.net.message.converter.MultiMessageConverter;
 import scw.result.Result;
 import scw.util.MultiIterable;
 import scw.value.property.PropertyFactory;
+import scw.web.WebUtils;
 
 @Configuration(order = Integer.MIN_VALUE, value = HttpServiceHandler.class)
 public class HttpControllerHandler implements HttpServiceHandler, HttpServiceHandlerAccept {
@@ -193,7 +193,7 @@ public class HttpControllerHandler implements HttpServiceHandler, HttpServiceHan
 		} else if (message instanceof Resource) {
 			Resource resource = (Resource) message;
 			MimeType mimeType = FileMimeTypeUitls.getMimeType(resource);
-			HttpUtils.writeStaticResource(httpChannel.getRequest(), httpChannel.getResponse(), resource, mimeType);
+			WebUtils.writeStaticResource(httpChannel.getRequest(), httpChannel.getResponse(), resource, mimeType);
 		} else if (message instanceof Entity) {
 			@SuppressWarnings("rawtypes")
 			Entity entity = (Entity) message;

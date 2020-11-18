@@ -10,12 +10,18 @@
 	<dependencies>
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-core</artifactId>
+			<artifactId>scw-sql-orm</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-data</artifactId>
+			<artifactId>scw-memcached</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-redis</artifactId>
 			<scope>provided</scope>
 		</dependency>
 

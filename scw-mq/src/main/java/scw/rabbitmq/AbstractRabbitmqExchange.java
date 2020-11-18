@@ -10,7 +10,7 @@ import scw.amqp.QueueDeclare;
 import scw.amqp.support.AbstractExchange;
 import scw.compatible.CompatibleUtils;
 import scw.core.Constants;
-import scw.io.serialzer.NoTypeSpecifiedSerializer;
+import scw.io.NoTypeSpecifiedSerializer;
 import scw.json.JSONUtils;
 
 public abstract class AbstractRabbitmqExchange extends AbstractExchange {

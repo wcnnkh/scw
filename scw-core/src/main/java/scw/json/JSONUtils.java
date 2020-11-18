@@ -19,7 +19,7 @@ public final class JSONUtils {
 	public static final JSONSupport JSON_SUPPORT;
 
 	static {
-		JSONSupport jsonSupport = InstanceUtils.loadService(JSONSupport.class, "scw.json.support.FastJsonSupport");
+		JSONSupport jsonSupport = InstanceUtils.loadService(JSONSupport.class);
 		JSON_SUPPORT = jsonSupport == null ? BuiltinGsonSupport.INSTANCE : jsonSupport;
 		FormatUtils.info(JSONUtils.class, "using json support：{}", JSON_SUPPORT.getClass().getName());
 	}

@@ -15,29 +15,10 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-import scw.core.instance.InstanceUtils;
 import scw.core.utils.ClassUtils;
 import scw.core.utils.StringUtils;
-import scw.lang.NotSupportedException;
-import scw.sql.orm.ObjectRelationalMapping;
-import scw.sql.orm.dialect.SqlDialect;
-import scw.sql.orm.dialect.SqlTypeFactory;
-import scw.sql.orm.enums.OperationType;
 
 public final class SqlUtils {
-	private static final SqlTypeFactory SQL_TYPE_FACTORY = InstanceUtils.loadService(SqlTypeFactory.class, "scw.sql.orm.dialect.DefaultSqlTypeFactory");
-	private static final ObjectRelationalMapping OBJECT_RELATIONAL_MAPPING = InstanceUtils.loadService(ObjectRelationalMapping.class, "scw.sql.orm.ObjectRelationalMapping");
-
-	private SqlUtils() {
-	};
-
-	public static ObjectRelationalMapping getObjectRelationalMapping() {
-		return OBJECT_RELATIONAL_MAPPING;
-	}
-
-	public static SqlTypeFactory getSqlTypeFactory() {
-		return SQL_TYPE_FACTORY;
-	}
 
 	public static String getSqlId(Sql sql) {
 		Object[] params = sql.getParams();
@@ -225,21 +206,5 @@ public final class SqlUtils {
 				|| Array.class.isAssignableFrom(type) || Blob.class.isAssignableFrom(type)
 				|| Clob.class.isAssignableFrom(type) || BigDecimal.class.isAssignableFrom(type)
 				|| Reader.class.isAssignableFrom(type) || NClob.class.isAssignableFrom(type);
-	}
-
-	public static Sql toSql(OperationType operationType, SqlDialect sqlDialect, Class<?> clazz, Object bean,
-			String tableName) {
-		switch (operationType) {
-		case SAVE:
-			return sqlDialect.toInsertSql(bean, clazz, tableName);
-		case DELETE:
-			return sqlDialect.toDeleteSql(bean, clazz, tableName);
-		case SAVE_OR_UPDATE:
-			return sqlDialect.toSaveOrUpdateSql(bean, clazz, tableName);
-		case UPDATE:
-			return sqlDialect.toUpdateSql(bean, clazz, tableName);
-		default:
-			throw new NotSupportedException(operationType.name());
-		}
 	}
 }

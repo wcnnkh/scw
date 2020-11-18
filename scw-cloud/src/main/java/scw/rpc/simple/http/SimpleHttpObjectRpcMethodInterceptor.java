@@ -8,7 +8,7 @@ import scw.aop.MethodInvoker;
 import scw.http.HttpUtils;
 import scw.http.MediaType;
 import scw.io.Bytes;
-import scw.io.serialzer.Serializer;
+import scw.io.Serializer;
 import scw.rpc.simple.SimpleObjectRequestMessage;
 import scw.rpc.simple.SimpleResponseMessage;
 import scw.security.SignatureUtils;

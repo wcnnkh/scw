@@ -10,12 +10,15 @@ import scw.io.FileSystemResource;
 import scw.io.IOUtils;
 import scw.io.Resource;
 import scw.lang.NotSupportedException;
+import scw.logger.Logger;
+import scw.logger.LoggerUtils;
 import scw.net.FileMimeTypeUitls;
 import scw.net.MimeType;
 import scw.net.message.InputMessage;
 import scw.net.message.OutputMessage;
 
 public class ResourceMessageConverter extends AbstractMessageConverter<Resource> {
+	private static Logger logger = LoggerUtils.getLogger(ResourceMessageConverter.class);
 
 	public ResourceMessageConverter() {
 		supportMimeTypes.add(MediaType.ALL);

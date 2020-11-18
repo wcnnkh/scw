@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import scw.http.HttpHeaders;
-import scw.http.multipart.FileItem;
+import scw.net.message.multipart.FileItem;
 
 public class UploadFileItem implements UploadItem {
 	private final FileItem fileItem;

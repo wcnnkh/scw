@@ -8,7 +8,7 @@ import org.apache.zookeeper.ZooKeeper;
 
 import scw.discovery.ServiceInstance;
 import scw.discovery.SimpleDiscoveryClient;
-import scw.io.serialzer.JavaSerializer;
+import scw.io.JavaSerializer;
 import scw.logger.Logger;
 import scw.logger.LoggerFactory;
 

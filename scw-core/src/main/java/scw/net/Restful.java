@@ -5,7 +5,6 @@ import java.io.Serializable;
 import scw.core.Assert;
 import scw.core.utils.CollectionUtils;
 import scw.core.utils.StringUtils;
-import scw.http.server.ServerHttpRequest;
 import scw.util.DefaultStringMatcher;
 import scw.util.LinkedMultiValueMap;
 import scw.util.MultiValueMap;
@@ -115,15 +114,6 @@ public final class Restful {
 
 	public RestfulMatchingResult matching(String requestPath) {
 		return matching(StringUtils.split(requestPath, PATH_SPLIT));
-	}
-
-	public RestfulMatchingResult matching(ServerHttpRequest request) {
-		RestfulMatchingResult result = matching(request.getPath());
-		if (result.isSuccess()) {
-			ServerHttpRequest targetRequest = request;
-			restfulParameterMapAware(targetRequest, result.getParameterMap());
-		}
-		return result;
 	}
 
 	@Override

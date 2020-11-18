@@ -9,7 +9,7 @@ import scw.amqp.ExchangeDeclare;
 import scw.amqp.QueueDeclare;
 import scw.core.Assert;
 import scw.core.utils.StringUtils;
-import scw.io.serialzer.NoTypeSpecifiedSerializer;
+import scw.io.NoTypeSpecifiedSerializer;
 
 public class RabbitmqExchange extends AbstractRabbitmqExchange {
 	private static final String DIX_PREFIX = "scw.dix.";

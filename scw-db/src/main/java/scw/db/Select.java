@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 
 import scw.lang.ParameterException;
 import scw.sql.Sql;
-import scw.sql.SqlUtils;
 import scw.sql.orm.Column;
+import scw.sql.orm.OrmUtils;
 import scw.sql.orm.ResultMapping;
 import scw.sql.orm.ResultSet;
 import scw.sql.orm.dialect.DialectHelper;
@@ -155,8 +155,8 @@ public abstract class Select extends DialectSql {
 			associationWhereMap = new HashMap<String, String>();
 		}
 
-		Collection<Column> t1 = SqlUtils.getObjectRelationalMapping().getColumns(tableClass1).getPrimaryKeys();
-		Collection<Column> t2 = SqlUtils.getObjectRelationalMapping().getColumns(tableClass2).getPrimaryKeys();
+		Collection<Column> t1 = OrmUtils.getObjectRelationalMapping().getColumns(tableClass1).getPrimaryKeys();
+		Collection<Column> t2 = OrmUtils.getObjectRelationalMapping().getColumns(tableClass2).getPrimaryKeys();
 		String tName1 = getTableName(tableClass1);
 		String tName2 = getTableName(tableClass2);
 		if (table2Columns == null || table2Columns.length == 0) {

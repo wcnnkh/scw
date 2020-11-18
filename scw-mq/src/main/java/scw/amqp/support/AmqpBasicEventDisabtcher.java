@@ -11,8 +11,8 @@ import scw.event.Event;
 import scw.event.EventListener;
 import scw.event.EventRegistration;
 import scw.event.support.DefaultBasicEventDispatcher;
-import scw.io.serialzer.Serializer;
-import scw.io.serialzer.SerializerUtils;
+import scw.io.Serializer;
+import scw.io.SerializerUtils;
 
 public class AmqpBasicEventDisabtcher<T extends Event> extends DefaultBasicEventDispatcher<T>
 		implements MessageListener {

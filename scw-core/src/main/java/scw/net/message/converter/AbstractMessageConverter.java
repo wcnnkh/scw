@@ -10,8 +10,6 @@ import scw.http.HttpHeaders;
 import scw.io.IOUtils;
 import scw.json.JSONSupport;
 import scw.json.JSONUtils;
-import scw.logger.Logger;
-import scw.logger.LoggerUtils;
 import scw.net.MimeType;
 import scw.net.MimeTypeUtils;
 import scw.net.MimeTypes;
@@ -21,7 +19,6 @@ import scw.net.message.Message;
 import scw.net.message.OutputMessage;
 
 public abstract class AbstractMessageConverter<T> implements MessageConverter {
-	protected final transient Logger logger = LoggerUtils.getLogger(getClass());
 	public static final MimeType TEXT_ALL = new MimeType("text", "*");
 	private Charset defaultCharset = Constants.DEFAULT_CHARSET;
 	private JSONSupport jsonSupport = JSONUtils.getJsonSupport();

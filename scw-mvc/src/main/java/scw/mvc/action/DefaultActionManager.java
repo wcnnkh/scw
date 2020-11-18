@@ -21,7 +21,6 @@ import scw.event.EventRegistration;
 import scw.event.ObjectEvent;
 import scw.event.support.DefaultBasicEventDispatcher;
 import scw.http.HttpMethod;
-import scw.http.HttpUtils;
 import scw.http.server.HttpControllerDescriptor;
 import scw.http.server.ServerHttpRequest;
 import scw.lang.AlreadyExistsException;
@@ -34,6 +33,7 @@ import scw.net.Restful.RestfulMatchingResult;
 import scw.util.ClassScanner;
 import scw.value.Value;
 import scw.value.property.PropertyFactory;
+import scw.web.WebUtils;
 
 @Configuration(order = Integer.MIN_VALUE)
 public class DefaultActionManager implements ActionManager {
@@ -164,7 +164,7 @@ public class DefaultActionManager implements ActionManager {
 			return null;
 		}
 
-		Value action = HttpUtils.getParameter(request, actionParameterName);
+		Value action = WebUtils.getParameter(request, actionParameterName);
 		if (action == null || action.isEmpty()) {
 			return null;
 		}

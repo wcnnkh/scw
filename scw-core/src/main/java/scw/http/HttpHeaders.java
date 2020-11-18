@@ -33,7 +33,6 @@ import scw.net.InetUtils;
 import scw.net.MimeType;
 import scw.net.MimeTypeUtils;
 import scw.net.message.Headers;
-import scw.servlet.http.ServletServerHttpRequest;
 import scw.util.DefaultStringMatcher;
 import scw.value.Value;
 import scw.value.property.DynamicProperties;

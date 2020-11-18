@@ -32,6 +32,11 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-serializer</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>scw</groupId>
@@ -55,7 +60,12 @@
 
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-data</artifactId>
+			<artifactId>scw-memcached</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-redis</artifactId>
 		</dependency>
 
 		<dependency>

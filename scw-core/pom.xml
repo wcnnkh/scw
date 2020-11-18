@@ -8,64 +8,6 @@
 	</parent>
 	<artifactId>scw-core</artifactId>
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
-		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.esotericsoftware/kryo -->
-		<dependency>
-			<groupId>com.esotericsoftware</groupId>
-			<artifactId>kryo</artifactId>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.esotericsoftware</groupId>
-					<artifactId>reflectasm</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.esotericsoftware</groupId>
-					<artifactId>minlog</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.objenesis</groupId>
-					<artifactId>objenesis</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-core -->
-		<dependency>
-			<groupId>com.dyuproject.protostuff</groupId>
-			<artifactId>protostuff-core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-runtime -->
-		<dependency>
-			<groupId>com.dyuproject.protostuff</groupId>
-			<artifactId>protostuff-runtime</artifactId>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.dyuproject.protostuff</groupId>
-					<artifactId>protostuff-collectionschema</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.dyuproject.protostuff</groupId>
-					<artifactId>protostuff-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
@@ -83,18 +25,5 @@
 			<artifactId>commons-fileupload</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- begin 可以不强制依赖, 但默认使用 -->
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.caucho/hessian -->
-		<dependency>
-			<groupId>com.caucho</groupId>
-			<artifactId>hessian</artifactId>
-		</dependency>
-		<!-- end 可以不强制依赖, 但默认使用 -->
 	</dependencies>
 </project>

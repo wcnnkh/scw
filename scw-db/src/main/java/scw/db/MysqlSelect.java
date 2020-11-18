@@ -9,8 +9,8 @@ import scw.core.utils.CollectionUtils;
 import scw.lang.ParameterException;
 import scw.sql.SimpleSql;
 import scw.sql.Sql;
-import scw.sql.SqlUtils;
 import scw.sql.orm.Column;
+import scw.sql.orm.OrmUtils;
 import scw.sql.orm.ResultSet;
 import scw.sql.orm.dialect.UpdateSQL;
 
@@ -46,7 +46,7 @@ public final class MysqlSelect extends Select {
 
 	@Override
 	public Select whereAndValue(Class<?> tableClass, String name, Object value) {
-		if (!SqlUtils.getObjectRelationalMapping().isTable(tableClass)) {
+		if (!OrmUtils.getObjectRelationalMapping().isTable(tableClass)) {
 			throw new ParameterException(tableClass.getName() + "not found @Table");
 		}
 
@@ -66,7 +66,7 @@ public final class MysqlSelect extends Select {
 
 	@Override
 	public Select whereOrValue(Class<?> tableClass, String name, Object value) {
-		if (!SqlUtils.getObjectRelationalMapping().isTable(tableClass)) {
+		if (!OrmUtils.getObjectRelationalMapping().isTable(tableClass)) {
 			throw new ParameterException(tableClass.getName() + "not found @Table");
 		}
 
@@ -89,7 +89,7 @@ public final class MysqlSelect extends Select {
 			throw new NullPointerException();
 		}
 
-		if (!SqlUtils.getObjectRelationalMapping().isTable(tableClass)) {
+		if (!OrmUtils.getObjectRelationalMapping().isTable(tableClass)) {
 			throw new ParameterException(tableClass.getName() + "not found @Table");
 		}
 
@@ -115,7 +115,7 @@ public final class MysqlSelect extends Select {
 	}
 
 	public Column getColumn(Class<?> tableClass, String name) {
-		return SqlUtils.getObjectRelationalMapping().getColumns(tableClass).find(name);
+		return OrmUtils.getObjectRelationalMapping().getColumns(tableClass).find(name);
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public final class MysqlSelect extends Select {
 			throw new NullPointerException();
 		}
 
-		if (!SqlUtils.getObjectRelationalMapping().isTable(tableClass)) {
+		if (!OrmUtils.getObjectRelationalMapping().isTable(tableClass)) {
 			throw new ParameterException(tableClass.getName() + "not found @Table");
 		}
 
@@ -150,7 +150,7 @@ public final class MysqlSelect extends Select {
 	}
 
 	public boolean isTable(Class<?> tableClass) {
-		return SqlUtils.getObjectRelationalMapping().isTable(tableClass);
+		return OrmUtils.getObjectRelationalMapping().isTable(tableClass);
 	}
 
 	@Override

@@ -26,8 +26,6 @@ import javax.net.ssl.SSLSocketFactory;
 
 import scw.core.instance.InstanceUtils;
 import scw.core.utils.StringUtils;
-import scw.http.HttpUtils;
-import scw.http.multipart.MultipartMessageConverter;
 import scw.net.message.Headers;
 import scw.net.message.Message;
 import scw.net.message.OutputMessage;
@@ -39,6 +37,9 @@ import scw.net.message.converter.MultiMessageConverter;
 import scw.net.message.converter.ResourceMessageConverter;
 import scw.net.message.converter.StringMessageConverter;
 import scw.net.message.converter.XmlMessageConverter;
+import scw.net.message.multipart.FileItemParser;
+import scw.net.message.multipart.MultipartMessageWriter;
+import scw.net.message.multipart.apache.MultipartMessageConverter;
 import scw.net.ssl.TrustAllManager;
 import scw.util.Accept;
 
@@ -66,6 +67,9 @@ public final class InetUtils {
 	public static final SSLSocketFactory TRUSE_ALL_SSL_SOCKET_FACTORY;
 
 	private static final MultiMessageConverter MESSAGE_CONVERTER = new MultiMessageConverter();
+	
+	private static final FileItemParser FILE_ITEM_PARSER = InstanceUtils.loadService(FileItemParser.class,
+			"scw.net.message.multipart.apache.ApacheFileItemParser");
 
 	static {
 		// 创建一个信任所有的
@@ -88,13 +92,22 @@ public final class InetUtils {
 		MESSAGE_CONVERTER.add(new ByteArrayMessageConverter());
 		MESSAGE_CONVERTER.add(new XmlMessageConverter());
 		MESSAGE_CONVERTER.add(new HttpFormMessageConveter());
-
-		if (HttpUtils.isSupportMultiPart()) {
-			MESSAGE_CONVERTER.add(new MultipartMessageConverter());
+		MESSAGE_CONVERTER.add(new MultipartMessageWriter());
+		
+		if (FILE_ITEM_PARSER != null) {
+			MESSAGE_CONVERTER.add(new MultipartMessageConverter(FILE_ITEM_PARSER));
 		}
 
 		MESSAGE_CONVERTER.add(new ResourceMessageConverter());
 		MESSAGE_CONVERTER.addAll(InstanceUtils.loadAllService(MessageConverter.class));
+	}
+	
+	public static FileItemParser getFileItemParser() {
+		return FILE_ITEM_PARSER;
+	}
+
+	public static boolean isSupportMultiPart() {
+		return FILE_ITEM_PARSER != null;
 	}
 
 	public static MessageConverter getMessageConverter() {

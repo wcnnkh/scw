@@ -10,7 +10,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-core</artifactId>
+			<artifactId>scw-web</artifactId>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-api -->

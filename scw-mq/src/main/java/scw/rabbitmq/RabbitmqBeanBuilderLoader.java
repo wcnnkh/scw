@@ -16,7 +16,7 @@ import scw.beans.builder.LoaderContext;
 import scw.complete.CompleteService;
 import scw.core.instance.annotation.Configuration;
 import scw.io.ResourceUtils;
-import scw.io.serialzer.SerializerUtils;
+import scw.io.SerializerUtils;
 import scw.util.ConfigUtils;
 
 @Configuration(order = Integer.MIN_VALUE)
