@@ -1,12 +1,10 @@
 package scw.application;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import scw.compatible.CompatibleUtils;
-import scw.core.Constants;
+import scw.beans.BeanUtils;
 import scw.core.GlobalPropertyFactory;
-import scw.core.instance.InstanceUtils;
+import scw.util.ServiceLoader;
 import scw.util.concurrent.ListenableFuture;
 import scw.value.property.PropertyFactory;
 
@@ -34,22 +32,11 @@ public final class ApplicationUtils {
 	}
 	
 	public static <T> List<T> loadAllService(Class<? extends T> clazz, Application application){
-		return loadAllService(clazz, application, clazz.getName().startsWith(Constants.SYSTEM_PACKAGE_NAME));
+		return BeanUtils.loadAllService(clazz, application.getBeanFactory(), application.getPropertyFactory());
 	}
-
-	public static <T> List<T> loadAllService(Class<? extends T> clazz, Application application, boolean spi) {
-		List<T> list = new ArrayList<T>();
-		for (T instance : InstanceUtils.getServiceLoader(clazz, application.getBeanFactory(),
-				application.getPropertyFactory(), spi? CompatibleUtils.getSpi():null)) {
-			list.add(instance);
-		}
-
-		for (T instance : InstanceUtils.getConfigurationList(clazz, application.getBeanFactory(),
-				application.getPropertyFactory())) {
-			list.add(instance);
-		}
-
-		return list;
+	
+	public static <T> ServiceLoader<T> getServiceLoader(Class<? extends T> clazz, Application application){
+		return BeanUtils.getServiceLoader(clazz, application.getBeanFactory(), application.getPropertyFactory());
 	}
 	
 	public static String getApplicatoinName(PropertyFactory propertyFactory){

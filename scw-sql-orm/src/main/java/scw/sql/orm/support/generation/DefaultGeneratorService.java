@@ -1,6 +1,7 @@
 package scw.sql.orm.support.generation;
 
 import scw.aop.ProxyUtils;
+import scw.core.instance.annotation.Configuration;
 import scw.data.Counter;
 import scw.data.generator.SequenceId;
 import scw.data.generator.SequenceIdGenerator;
@@ -10,6 +11,7 @@ import scw.locks.JdkLockFactory;
 import scw.locks.Lock;
 import scw.locks.LockFactory;
 
+@Configuration(order=Integer.MIN_VALUE)
 public class DefaultGeneratorService extends AbstractGeneratorService {
 	private final SequenceIdGenerator sequeueIdGenerator;
 	private final Counter counter;

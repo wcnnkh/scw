@@ -13,15 +13,12 @@ import scw.beans.BeanFactory;
 import scw.beans.BeanFactoryAware;
 import scw.beans.Destroy;
 import scw.core.utils.CollectionUtils;
-import scw.core.utils.StringUtils;
 import scw.db.AbstractDB.AsyncExecuteEvent;
 import scw.event.EventListener;
 import scw.event.support.BasicEvent;
 import scw.event.support.DefaultAsyncBasicEventDispatcher;
 import scw.logger.Logger;
-import scw.logger.LoggerUtils;
-import scw.memcached.Memcached;
-import scw.redis.Redis;
+import scw.logger.LoggerFactory;
 import scw.sql.ConnectionFactory;
 import scw.sql.Sql;
 import scw.sql.orm.Column;
@@ -29,49 +26,112 @@ import scw.sql.orm.TableChange;
 import scw.sql.orm.annotation.Table;
 import scw.sql.orm.cache.CacheManager;
 import scw.sql.orm.cache.DefaultCacheManager;
-import scw.sql.orm.cache.TemporaryCacheManager;
+import scw.sql.orm.dialect.SqlDialect;
+import scw.sql.orm.dialect.mysql.MySqlSqlDialect;
 import scw.sql.orm.enums.OperationType;
 import scw.sql.orm.support.AbstractEntityOperations;
 import scw.sql.orm.support.generation.DefaultGeneratorService;
 import scw.sql.orm.support.generation.GeneratorService;
 import scw.sql.transaction.SqlTransactionUtils;
 import scw.util.ClassScanner;
-import scw.value.property.PropertyFactory;
 
 public abstract class AbstractDB extends AbstractEntityOperations
 		implements DB, EventListener<AsyncExecuteEvent>, BeanFactoryAware, Destroy, ConnectionFactory {
-	protected final Logger logger = LoggerUtils.getLogger(getClass());
+	private static Logger logger = LoggerFactory.getLogger(AbstractDB.class);
 	private final DefaultAsyncBasicEventDispatcher<AsyncExecuteEvent> asyncBasicEventDispatcher = new DefaultAsyncBasicEventDispatcher<AsyncExecuteEvent>(
 			false, getClass().getName(), true);
-	private static final String DEFAULT_CACHE_PREFIX = "db:";
-
+	private volatile CacheManager cacheManager;
+	private volatile GeneratorService generatorService;
 	private BeanFactory beanFactory;
-	private CacheManager cacheManager;
-	private GeneratorService generatorService;
 	private boolean checkTableChange = true;
+	private volatile SqlDialect sqlDialect;
 
 	{
 		asyncBasicEventDispatcher.registerListener(this);
 	}
 
-	public AbstractDB() {
-		this.cacheManager = new DefaultCacheManager();
-		this.generatorService = new DefaultGeneratorService();
+	protected CacheManager createDefaultCacheManager() {
+		if (beanFactory != null) {
+			if (beanFactory.isInstance(CacheManager.class)) {
+				return beanFactory.getInstance(CacheManager.class);
+			}
+		}
+		return null;
 	}
 
-	public AbstractDB(PropertyFactory propertyFactory, Memcached memcached) {
-		this.cacheManager = new TemporaryCacheManager(memcached, true, getCachePrefix(propertyFactory));
-		this.generatorService = new MemcachedGeneratorService(memcached);
+	public CacheManager getCacheManager() {
+		if (cacheManager == null) {
+			synchronized (this) {
+				if (cacheManager == null) {
+					cacheManager = createDefaultCacheManager();
+					if (cacheManager == null) {
+						cacheManager = new DefaultCacheManager();
+					}
+					logger.info("Create default cache management: {}", cacheManager);
+				}
+			}
+		}
+		return cacheManager;
 	}
 
-	public AbstractDB(PropertyFactory propertyFactory, Redis redis) {
-		this.cacheManager = new TemporaryCacheManager(redis, true, getCachePrefix(propertyFactory));
-		this.generatorService = new RedisGeneratorService(redis);
-	}
-
-	public AbstractDB(CacheManager cacheManager, GeneratorService generatorService) {
+	public void setCacheManager(CacheManager cacheManager) {
 		this.cacheManager = cacheManager;
+	}
+
+	protected GeneratorService createDefaultGeneratorService() {
+		if (beanFactory != null) {
+			if (beanFactory.isInstance(GeneratorService.class)) {
+				return beanFactory.getInstance(GeneratorService.class);
+			}
+		}
+		return null;
+	}
+
+	public GeneratorService getGeneratorService() {
+		if (generatorService == null) {
+			synchronized (this) {
+				if (generatorService == null) {
+					generatorService = createDefaultGeneratorService();
+					if (generatorService == null) {
+						generatorService = new DefaultGeneratorService();
+					}
+					logger.info("Create default generator service: {}", generatorService);
+				}
+			}
+		}
+		return generatorService;
+	}
+
+	public void setGeneratorService(GeneratorService generatorService) {
 		this.generatorService = generatorService;
+	}
+
+	protected SqlDialect createDefaultSqlDialect() {
+		if (beanFactory != null) {
+			if (beanFactory.isInstance(SqlDialect.class)) {
+				return beanFactory.getInstance(SqlDialect.class);
+			}
+		}
+		return null;
+	}
+
+	public SqlDialect getSqlDialect() {
+		if (sqlDialect == null) {
+			synchronized (this) {
+				if (sqlDialect == null) {
+					this.sqlDialect = createDefaultSqlDialect();
+					if (sqlDialect == null) {
+						sqlDialect = new MySqlSqlDialect();
+					}
+					logger.info("Create default sql dialect: {}", sqlDialect);
+				}
+			}
+		}
+		return sqlDialect;
+	}
+
+	public void setSqlDialect(SqlDialect sqlDialect) {
+		this.sqlDialect = sqlDialect;
 	}
 
 	public boolean isCheckTableChange() {
@@ -86,34 +146,12 @@ public abstract class AbstractDB extends AbstractEntityOperations
 		processing(event.getAsyncExecute(), false);
 	}
 
-	protected String getCachePrefix(PropertyFactory propertyFactory) {
-		return StringUtils.toString(propertyFactory.getString("cache.prefix"), "") + DEFAULT_CACHE_PREFIX;
-	}
-
-	protected void createTableByProperties(PropertyFactory propertyFactory) {
-		if (propertyFactory == null) {
-			return;
-		}
-
-		setCheckTableChange(propertyFactory.getValue("check.table.change", boolean.class, true));
-		String create = StringUtils.toString(propertyFactory.getString("create"), null);
-		if (StringUtils.isNotEmpty(create)) {
-			createTable(create, propertyFactory.getValue("table.register.manager", boolean.class, true));
-		}
-	}
-
-	@Override
-	public GeneratorService getGeneratorService() {
-		return generatorService;
-	}
-
-	@Override
-	public CacheManager getCacheManager() {
-		return cacheManager;
-	}
-
 	public boolean createTable(Class<?> tableClass, boolean registerManager) {
 		return createTable(tableClass, null, registerManager);
+	}
+
+	public final BeanFactory getBeanFactory() {
+		return beanFactory;
 	}
 
 	public void setBeanFactory(BeanFactory beanFactory) {

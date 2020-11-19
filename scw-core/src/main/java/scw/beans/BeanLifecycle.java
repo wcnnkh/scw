@@ -1,121 +1,81 @@
 package scw.beans;
 
-import scw.util.Lifecycle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class BeanLifecycle implements Lifecycle, Init, Destroy {
-	private volatile boolean initialized = false;
-	private Lifecycle synchronization;
-
-	public Lifecycle getSynchronization() {
-		return synchronization;
-	}
-
-	public void setSynchronization(Lifecycle synchronization) {
-		this.synchronization = synchronization;
-	}
+public class BeanLifecycle implements Init, Destroy {
+	private final AtomicBoolean initializing = new AtomicBoolean(false);
+	private final AtomicBoolean initialized = new AtomicBoolean(false);
 
 	public void init() throws Throwable {
-		if (initialized) {
+		if (isInitialized() || isInitializing()) {
 			throw new BeansException("Already initialized");
 		}
 
-		synchronized (this) {
-			if (initialized) {
-				throw new BeansException("Already initialized");
-			}
-
+		if (initializing.compareAndSet(false, true)) {
 			try {
 				beforeInit();
-				initInternal();
 				afterInit();
 			} finally {
-				initComplete();
-			}
-			initialized = true;
-		}
-	}
-
-	protected void initInternal() throws Throwable {
-		if (synchronization != null) {
-			if (synchronization instanceof BeanLifecycle) {
-				BeanLifecycle beanLifeCycle = (BeanLifecycle) synchronization;
-				if (!beanLifeCycle.isInitialized()) {
-					beanLifeCycle.init();
+				try {
+					initComplete();
+				} catch (Exception e) {
+					initialized.set(true);
 				}
 			}
+		} else {
+			throw new BeansException("Already initialized");
 		}
 	}
 
 	public void destroy() throws Throwable {
-		if (!initialized) {
+		if (!isInitializing() && !isInitialized()) {
 			throw new BeansException("Not yet initialized");
 		}
 
-		synchronized (this) {
-			if (!initialized) {
-				throw new BeansException("Not yet initialized");
-			}
-
+		if (initializing.compareAndSet(true, false)) {
 			try {
 				beforeDestroy();
-				destroyInternal();
 				afterDestroy();
 			} finally {
-				destroyComplete();
-			}
-			initialized = false;
-		}
-	}
-
-	protected void destroyInternal() throws Throwable {
-		if (synchronization != null) {
-			if (synchronization instanceof BeanLifecycle) {
-				BeanLifecycle beanLifeCycle = (BeanLifecycle) synchronization;
-				if (beanLifeCycle.isInitialized()) {
-					beanLifeCycle.destroy();
+				try {
+					destroyComplete();
+				} finally {
+					initialized.set(false);
 				}
 			}
+		} else {
+			throw new BeansException("Not yet initialized");
 		}
 	}
 
+	/**
+	 * 是否已经初始化完毕
+	 * 
+	 * @return
+	 */
 	public boolean isInitialized() {
-		return initialized;
+		return initialized.get();
+	}
+
+	public boolean isInitializing() {
+		return initializing.get();
 	}
 
 	public void beforeInit() throws Throwable {
-		if (synchronization != null && !(synchronization instanceof BeanLifecycle)) {
-			synchronization.beforeInit();
-		}
 	}
 
 	public void afterInit() throws Throwable {
-		if (synchronization != null && !(synchronization instanceof BeanLifecycle)) {
-			synchronization.afterInit();
-		}
 	}
 
 	public void initComplete() throws Throwable {
-		if (synchronization != null && !(synchronization instanceof BeanLifecycle)) {
-			synchronization.initComplete();
-		}
 	}
 
 	public void beforeDestroy() throws Throwable {
-		if (synchronization != null && !(synchronization instanceof BeanLifecycle)) {
-			synchronization.beforeDestroy();
-		}
 	}
 
 	public void afterDestroy() throws Throwable {
-		if (synchronization != null && !(synchronization instanceof BeanLifecycle)) {
-			synchronization.afterDestroy();
-		}
 	}
 
 	public void destroyComplete() throws Throwable {
-		if (synchronization != null && !(synchronization instanceof BeanLifecycle)) {
-			synchronization.destroyComplete();
-		}
 	}
-
 }

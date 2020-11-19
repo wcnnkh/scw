@@ -3,6 +3,7 @@ package scw.tomcat;
 import java.lang.reflect.Method;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContainerInitializer;
@@ -21,8 +22,6 @@ import scw.application.Application;
 import scw.application.ApplicationUtils;
 import scw.application.Main;
 import scw.application.MainApplication;
-import scw.application.MainArgs;
-import scw.beans.BeanFactory;
 import scw.beans.Destroy;
 import scw.core.Constants;
 import scw.core.GlobalPropertyFactory;
@@ -35,7 +34,7 @@ import scw.core.utils.StringUtils;
 import scw.http.HttpMethod;
 import scw.http.server.HttpControllerDescriptor;
 import scw.logger.Logger;
-import scw.logger.LoggerUtils;
+import scw.logger.LoggerFactory;
 import scw.mvc.action.Action;
 import scw.mvc.action.ActionManager;
 import scw.servlet.ApplicationServletContainerInitializer;
@@ -46,24 +45,8 @@ import scw.value.property.PropertyFactory;
 
 @Configuration(order = -1)
 public class TomcatStart implements Main, Destroy {
-	private static Logger logger = LoggerUtils.getLogger(TomcatStart.class);
+	private static Logger logger = LoggerFactory.getLogger(TomcatStart.class);
 	private Tomcat tomcat;
-
-	protected Tomcat createTomcat(BeanFactory beanFactory, PropertyFactory propertyFactory, MainArgs args) {
-		Tomcat tomcat = new Tomcat();
-		Value value = args.getInstruction("-p");
-		int port = value == null ? TomcatUtils.getPort(propertyFactory) : value.getAsInteger();
-		tomcat.setPort(port);
-
-		String basedir = TomcatUtils.getBaseDir(propertyFactory);
-		if (StringUtils.isNotEmpty(basedir)) {
-			tomcat.setBaseDir(basedir);
-		}
-
-		configureConnector(tomcat, port, beanFactory, propertyFactory);
-		tomcat.getHost().setAutoDeploy(false);
-		return tomcat;
-	}
 
 	protected String getDocBase(PropertyFactory propertyFactory) {
 		return GlobalPropertyFactory.getInstance().getWorkPath();
@@ -128,34 +111,24 @@ public class TomcatStart implements Main, Destroy {
 		return StringUtils.startsWithIgnoreCase(ServerInfo.getServerNumber(), version);
 	}
 
-	protected void configureConnector(Tomcat tomcat, int port, BeanFactory beanFactory,
-			PropertyFactory propertyFactory) {
+	protected void configureConnector(Tomcat tomcat, int port, MainApplication application) {
 		Connector connector = null;
-		String connectorName = TomcatUtils.getTomcatConnectorName(propertyFactory);
+		String connectorName = TomcatUtils.getTomcatConnectorName(application.getPropertyFactory());
 		if (!StringUtils.isEmpty(connectorName)) {
-			connector = beanFactory.getInstance(connectorName);
+			connector = application.getBeanFactory().getInstance(connectorName);
 		} else {
-			String protocol = TomcatUtils.getTomcatProtocol(propertyFactory);
-			if (!StringUtils.isEmpty(protocol)) {
-				connector = new Connector(protocol);
-			} else {
-				if (isVersion("9.0")) {
-					connector = new Connector();
-				}
-			}
+			connector = new Connector(TomcatUtils.getTomcatProtocol(application.getPropertyFactory()));
 		}
 
-		if (connector != null) {
-			connector.setPort(port);
-			tomcat.setConnector(connector);
-		}
+		connector.setPort(port);
+		tomcat.setConnector(connector);
 	}
 
 	protected void configureJSP(Context context, MainApplication application) throws Exception {
 		if (application.getBeanFactory().isInstance(JspConfigDescriptor.class)) {
 			context.setJspConfigDescriptor(application.getBeanFactory().getInstance(JspConfigDescriptor.class));
 		}
-		
+
 		if (ClassUtils.isPresent("org.apache.jasper.servlet.JspServlet")) {
 			ServletContainerInitializer containerInitializer = InstanceUtils.INSTANCE_FACTORY
 					.getInstance("org.apache.jasper.servlet.JasperInitializer");
@@ -178,14 +151,15 @@ public class TomcatStart implements Main, Destroy {
 		method.invoke(context, pattern, servletName);
 	}
 
-	protected void configureServlet(Context context, Servlet servlet, MainApplication application) throws Exception {
+	protected void configureServlet(Context context, MainApplication application) throws Exception {
 		String servletName = application.getMainClass().getSimpleName();
+		Servlet servlet = application.getBeanFactory().getInstance(Servlet.class);
 		Wrapper wrapper = Tomcat.addServlet(context, servletName, servlet);
 		Properties properties = TomcatUtils.getServletInitParametersConfig(servletName, true);
 		for (Entry<Object, Object> entry : properties.entrySet()) {
 			wrapper.addInitParameter(entry.getKey().toString(), entry.getValue().toString());
 		}
-		
+
 		addServletMapping(context, "/", servletName);
 		String sourceMapping = TomcatUtils.getDefaultServletMapping(application.getPropertyFactory());
 		if (!StringUtils.isEmpty(sourceMapping)) {
@@ -216,29 +190,47 @@ public class TomcatStart implements Main, Destroy {
 	}
 
 	public void main(final MainApplication application) throws Throwable {
-		Servlet servlet = application.getBeanFactory().getInstance(Servlet.class);
+		if(application.getPropertyFactory().getValue("tomcat.log.enable", boolean.class, true)){
+			java.util.logging.Logger.getLogger("org.apache").setLevel(Level.WARNING);
+		}
+		
 		try {
 			tomcat8(application.getClassLoader());
 		} catch (Throwable e1) {
 		}
+
+		this.tomcat = new Tomcat();
+		Value value = application.getMainArgs().getInstruction("-p");
+		int port = (value != null && value.isNumber()) ? value.getAsIntValue()
+				: TomcatUtils.getPort(application.getPropertyFactory());
+		tomcat.setPort(port);
+		logger.info("The boot port is {}", port);
+
+		String basedir = TomcatUtils.getBaseDir(application.getPropertyFactory());
+		if (StringUtils.isNotEmpty(basedir)) {
+			tomcat.setBaseDir(basedir);
+		}
+
+		configureConnector(tomcat, port, application);
+		tomcat.getHost().setAutoDeploy(false);
 		
-		this.tomcat = createTomcat(application.getBeanFactory(), application.getPropertyFactory(),
-				application.getMainArgs());
 		final Context context = createContext(application);
 		if (AprLifecycleListener.isAprAvailable()) {
 			context.addLifecycleListener(new AprLifecycleListener());
 		}
-		
+
 		configureJSP(context, application);
-		configureServlet(context, servlet, application);
+		configureServlet(context, application);
 
 		for (TomcatContextConfiguration configuration : ApplicationUtils
 				.loadAllService(TomcatContextConfiguration.class, application)) {
 			configuration.configuration(application, context);
 		}
-		
+
 		ServletUtils.setApplication(context.getServletContext(), application);
-		context.addServletContainerInitializer(new ApplicationServletContainerInitializer(), ClassScanner.getInstance().getClasses(Constants.SYSTEM_PACKAGE_NAME, InstanceUtils.getScanAnnotationPackageName(application.getPropertyFactory())));
+		context.addServletContainerInitializer(new ApplicationServletContainerInitializer(),
+				ClassScanner.getInstance().getClasses(Constants.SYSTEM_PACKAGE_NAME,
+						InstanceUtils.getScanAnnotationPackageName(application.getPropertyFactory())));
 		tomcat.start();
 		addErrorPage(context, application);
 	}

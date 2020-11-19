@@ -1,9 +1,11 @@
 package scw.db;
 
+import scw.aop.annotation.AopEnable;
 import scw.sql.Sql;
 import scw.sql.SqlOperations;
 import scw.sql.orm.EntityOperations;
 
+@AopEnable(false)
 public interface DB extends EntityOperations, SqlOperations {
 	/**
 	 * 创建表

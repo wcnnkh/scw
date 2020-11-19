@@ -70,7 +70,7 @@
 
 		<dependency>
 			<groupId>scw</groupId>
-			<artifactId>scw-db</artifactId>
+			<artifactId>scw-druid</artifactId>
 		</dependency>
 		
 		<dependency>

@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import scw.compatible.CompatibleUtils;
-import scw.compatible.SPI;
 import scw.core.Constants;
 import scw.core.GlobalPropertyFactory;
 import scw.core.reflect.ReflectionUtils;
@@ -77,14 +75,9 @@ public final class InstanceUtils {
 	}
 
 	public static <S> ServiceLoader<S> getServiceLoader(Class<? extends S> clazz, NoArgsInstanceFactory instanceFactory,
-			ValueFactory<String> propertyFactory, SPI spi, String... defaultNames) {
-		return new ConfigurableServiceLoader<S>(spi == null? null:new SpiServiceLoader<S>(clazz, instanceFactory), clazz, instanceFactory, propertyFactory,
-				defaultNames);
-	}
-	
-	public static <S> ServiceLoader<S> getServiceLoader(Class<? extends S> clazz, NoArgsInstanceFactory instanceFactory,
 			ValueFactory<String> propertyFactory, String... defaultNames) {
-		return getServiceLoader(clazz, instanceFactory, propertyFactory, clazz.getName().startsWith(Constants.SYSTEM_PACKAGE_NAME)? CompatibleUtils.getSpi():null, defaultNames);
+		return new ConfigurableServiceLoader<S>(clazz.getName().startsWith(Constants.SYSTEM_PACKAGE_NAME)? new SpiServiceLoader<S>(clazz, instanceFactory):null, clazz, instanceFactory, propertyFactory,
+				defaultNames);
 	}
 
 	public static <T> List<T> loadAllService(Class<? extends T> clazz, NoArgsInstanceFactory instanceFactory,

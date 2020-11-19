@@ -107,6 +107,30 @@
 				<artifactId>scw-redis</artifactId>
 				<version>1.0.0</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-druid</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-hikaricp</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-hibernate</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>scw</groupId>
+				<artifactId>scw-ibatis</artifactId>
+				<version>1.0.0</version>
+			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
@@ -485,5 +509,9 @@
 		<module>scw-memcached</module>
 		<module>scw-redis</module>
 		<module>scw-serializer</module>
+		<module>scw-hibernate</module>
+		<module>scw-ibatis</module>
+		<module>scw-druid</module>
+		<module>scw-hikaricp</module>
 	</modules>
 </project>

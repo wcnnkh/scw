@@ -6,8 +6,8 @@ import scw.aop.MethodInterceptor;
 import scw.aop.MethodInterceptorChain;
 import scw.aop.MethodInvoker;
 import scw.beans.BeanFactory;
+import scw.beans.BeanUtils;
 import scw.core.Constants;
-import scw.core.instance.InstanceUtils;
 import scw.http.client.ClientHttpRequest;
 import scw.http.client.ClientHttpResponse;
 import scw.lang.NotSupportedException;
@@ -26,8 +26,7 @@ public class HttpRpcProxyMethodInterceptor implements MethodInterceptor {
 				: new RestfulHttpRpcProxyRequestFactory(propertyFactory, Constants.DEFAULT_CHARSET_NAME);
 		MultiMessageConverter messageConverter = new MultiMessageConverter();
 		messageConverter.add(InetUtils.getMessageConverter());
-		messageConverter
-				.addAll(InstanceUtils.getConfigurationList(MessageConverter.class, beanFactory, propertyFactory));
+		messageConverter.addAll(BeanUtils.loadAllService(MessageConverter.class, beanFactory, propertyFactory));
 		this.messageConverter = messageConverter;
 	}
 

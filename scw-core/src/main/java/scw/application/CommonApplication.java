@@ -130,11 +130,6 @@ public class CommonApplication extends XmlBeanFactory implements Application, Ev
 		super.beforeDestroy();
 	}
 
-	@Override
-	public void destroyComplete() throws Throwable {
-		super.destroyComplete();
-	}
-
 	public void publishEvent(ApplicationEvent event) {
 		initDefaultApplicationEventDispathcer();
 		applicationEventDispathcer.publishEvent(event);

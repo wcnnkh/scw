@@ -16,5 +16,16 @@
 			<groupId>scw</groupId>
 			<artifactId>scw-data</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-redis</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>scw</groupId>
+			<artifactId>scw-memcached</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import scw.beans.BeanFactory;
+import scw.beans.BeanUtils;
 import scw.core.annotation.AnnotationUtils;
-import scw.core.instance.InstanceUtils;
 import scw.core.instance.annotation.Configuration;
 import scw.core.utils.ClassUtils;
 import scw.http.MediaType;
@@ -65,10 +65,8 @@ public class HttpControllerHandler implements HttpServiceHandler, HttpServiceHan
 		this.exceptionHandler = beanFactory.isInstance(ExceptionHandler.class)
 				? beanFactory.getInstance(ExceptionHandler.class) : null;
 
-		this.actionInterceptor
-				.addAll(InstanceUtils.getConfigurationList(ActionInterceptor.class, beanFactory, propertyFactory));
-		messageConverter
-				.addAll(InstanceUtils.getConfigurationList(MessageConverter.class, beanFactory, propertyFactory));
+		this.actionInterceptor.addAll(BeanUtils.loadAllService(ActionInterceptor.class, beanFactory, propertyFactory));
+		messageConverter.addAll(BeanUtils.loadAllService(MessageConverter.class, beanFactory, propertyFactory));
 	}
 
 	public MultiMessageConverter getMessageConverter() {
