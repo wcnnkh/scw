@@ -285,7 +285,6 @@ public class MethodParameter {
 	 * same parameter but one nesting level deeper. This is effectively the
 	 * same as {@link #increaseNestingLevel()}, just with an independent
 	 * {@code MethodParameter} object (e.g. in case of the original being cached).
-	 * @since 4.3
 	 */
 	public MethodParameter nested() {
 		if (this.nestedMethodParameter != null) {
@@ -300,7 +299,6 @@ public class MethodParameter {
 	/**
 	 * Return whether this method parameter is declared as optional
 	 * in the form of Java 8's {@link java.util.Optional}.
-	 * @since 4.3
 	 */
 	public boolean isOptional() {
 		return (getParameterType() == javaUtilOptionalClass);
@@ -310,7 +308,6 @@ public class MethodParameter {
 	 * Return a variant of this {@code MethodParameter} which points to
 	 * the same parameter but one nesting level deeper in case of a
 	 * {@link java.util.Optional} declaration.
-	 * @since 4.3
 	 * @see #isOptional()
 	 * @see #nested()
 	 */
@@ -366,7 +363,6 @@ public class MethodParameter {
 	/**
 	 * Return the generic type of the method/constructor parameter.
 	 * @return the parameter type (never {@code null})
-	 * @since 3.0
 	 */
 	public Type getGenericParameterType() {
 		Type paramType = this.genericParameterType;
@@ -398,7 +394,6 @@ public class MethodParameter {
 	/**
 	 * Return the nested type of the method/constructor parameter.
 	 * @return the parameter type (never {@code null})
-	 * @since 3.1
 	 * @see #getNestingLevel()
 	 */
 	public Class<?> getNestedParameterType() {
@@ -431,7 +426,6 @@ public class MethodParameter {
 	/**
 	 * Return the nested generic type of the method/constructor parameter.
 	 * @return the parameter type (never {@code null})
-	 * @since 4.2
 	 * @see #getNestingLevel()
 	 */
 	public Type getNestedGenericParameterType() {
@@ -470,7 +464,6 @@ public class MethodParameter {
 	/**
 	 * Return whether the method/constructor is annotated with the given type.
 	 * @param annotationType the annotation type to look for
-	 * @since 4.3
 	 * @see #getMethodAnnotation(Class)
 	 */
 	public <A extends Annotation> boolean hasMethodAnnotation(Class<A> annotationType) {
@@ -571,7 +564,6 @@ public class MethodParameter {
 	 * <p>The default implementation simply returns the given annotation as-is.
 	 * @param annotation the annotation about to be returned
 	 * @return the post-processed annotation (or simply the original one)
-	 * @since 4.2
 	 */
 	protected <A extends Annotation> A adaptAnnotation(A annotation) {
 		return annotation;
@@ -583,7 +575,6 @@ public class MethodParameter {
 	 * <p>The default implementation simply returns the given annotation array as-is.
 	 * @param annotations the annotation array about to be returned
 	 * @return the post-processed annotation array (or simply the original one)
-	 * @since 4.2
 	 */
 	protected Annotation[] adaptAnnotationArray(Annotation[] annotations) {
 		return annotations;

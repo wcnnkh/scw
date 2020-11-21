@@ -72,7 +72,6 @@ public class TaskExecutorAdapter implements AsyncListenableTaskExecutor {
 	 * The primary use case is to set some execution context around the task's
 	 * invocation, or to provide some monitoring/statistics for task execution.
 	 * 
-	 * @since 4.3
 	 */
 	public final void setTaskDecorator(TaskDecorator taskDecorator) {
 		this.taskDecorator = taskDecorator;
@@ -160,7 +159,6 @@ public class TaskExecutorAdapter implements AsyncListenableTaskExecutor {
 	 *            the runnable to execute
 	 * @throws RejectedExecutionException
 	 *             if the given runnable cannot be accepted
-	 * @since 4.3
 	 */
 	protected void doExecute(Executor concurrentExecutor, TaskDecorator taskDecorator, Runnable runnable)
 			throws RejectedExecutionException {

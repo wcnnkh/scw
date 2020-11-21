@@ -1,12 +1,18 @@
 package scw.json;
 
-import java.util.Collection;
+import java.util.Set;
 
-public interface JsonObject extends Json<String> {
+import scw.util.KeyValuePair;
 
-	void put(String key, Object value);
+public interface JsonObject extends Json<String>, Iterable<KeyValuePair<String, JsonElement>>{
+	static final String PREFIX = "{";
+	static final String SUFFIX = "}";
+	
+	Set<String> keySet();
 
 	boolean containsKey(String key);
-
-	Collection<String> keys();
+	
+	boolean remove(String key);
+	
+	boolean put(String key, Object value);
 }

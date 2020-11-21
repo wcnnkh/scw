@@ -10,15 +10,15 @@ public abstract class ExtendPropertyFactory extends PropertyFactory {
 	}
 	
 	@Override
-	public final Value get(String key) {
+	public final Value getValue(String key) {
 		if(isPriorityOfUseSelf()){
 			Object value = getExtendValue(key);
 			if (value != null) {
 				return new AnyValue(value, getDefaultValue(key));
 			}
-			return super.get(key);
+			return super.getValue(key);
 		}else{
-			Value value = super.get(key);
+			Value value = super.getValue(key);
 			if(value == null){
 				Object v = getExtendValue(key);
 				if (v != null) {

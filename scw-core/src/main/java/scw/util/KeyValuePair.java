@@ -57,8 +57,8 @@ public class KeyValuePair<K, V> implements Serializable {
 		}
 
 		if (obj instanceof KeyValuePair) {
-			return ObjectUtils.equals(((KeyValuePair) obj).getKey(), getKey())
-					&& ObjectUtils.equals(((KeyValuePair) obj).getValue(), getValue());
+			return ObjectUtils.nullSafeEquals(((KeyValuePair) obj).getKey(), getKey())
+					&& ObjectUtils.nullSafeEquals(((KeyValuePair) obj).getValue(), getValue());
 		}
 		return false;
 	}

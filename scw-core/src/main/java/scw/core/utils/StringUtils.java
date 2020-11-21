@@ -149,6 +149,23 @@ public final class StringUtils {
 	public static boolean hasText(String str) {
 		return hasText((CharSequence) str);
 	}
+	
+	public static boolean hasText(String text, int fromIndex, int endIndex){
+		if(fromIndex == endIndex){
+			return false;
+		}
+		
+		if (!hasLength(text)) {
+			return false;
+		}
+		
+		for (int i = fromIndex, end = Math.min(text.length(), endIndex); i < end; i++) {
+			if (!Character.isWhitespace(text.charAt(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Check whether the given CharSequence contains any whitespace characters.
@@ -2474,7 +2491,11 @@ public final class StringUtils {
 	 * @return
 	 */
 	public static KeyValuePair<Integer, Integer> indexOf(String text, String prefix, String suffix) {
-		return indexOf(text.toCharArray(), prefix.toCharArray(), suffix.toCharArray(), 0, text.length());
+		return indexOf(text, prefix, suffix, 0);
+	}
+	
+	public static KeyValuePair<Integer, Integer> indexOf(String text, String prefix, String suffix, int fromIndex) {
+		return indexOf(text.toCharArray(), prefix.toCharArray(), suffix.toCharArray(), fromIndex, text.length());
 	}
 
 	/**

@@ -59,7 +59,7 @@ public class AutomaticResource extends ResourceWrapper {
 							resource.getEventDispatcher().registerListener(new EventListener<ResourceEvent>() {
 								public void onEvent(ResourceEvent event) {
 									currentResource = getCurrentResource();
-									if (ObjectUtils.equals(event.getResource(), currentResource)) {
+									if (ObjectUtils.nullSafeEquals(event.getResource(), currentResource)) {
 										eventDispatcher.publishEvent(event);
 									}else{
 										eventDispatcher.publishEvent(new ResourceEvent(EventType.UPDATE, currentResource));

@@ -100,7 +100,7 @@ public class PropertyFactory extends StringValueFactory implements BasePropertyF
 	 */
 	public Map<String, Value> getByMatcher(String pattern, StringMatcher stringMatcher) {
 		if(!stringMatcher.isPattern(pattern)){
-			Value value = get(pattern);
+			Value value = getValue(pattern);
 			if(value == null){
 				return Collections.emptyMap();
 			}
@@ -120,7 +120,7 @@ public class PropertyFactory extends StringValueFactory implements BasePropertyF
 				}
 
 				if(stringMatcher.match(pattern, key)){
-					Value value = basePropertyFactory.get(key);
+					Value value = basePropertyFactory.getValue(key);
 					if(value == null){
 						continue;
 					}
@@ -136,7 +136,7 @@ public class PropertyFactory extends StringValueFactory implements BasePropertyF
 	}
 
 	@Override
-	public Value get(String key) {
+	public Value getValue(String key) {
 		if (priorityOfUseSelf) {
 			Value value = dynamicProperties.get(key);
 			if (value != null) {
@@ -145,13 +145,13 @@ public class PropertyFactory extends StringValueFactory implements BasePropertyF
 		}
 
 		for (BasePropertyFactory basePropertyFactory : basePropertyFactories) {
-			Value value = basePropertyFactory.get(key);
+			Value value = basePropertyFactory.getValue(key);
 			if (value != null) {
 				return value;
 			}
 		}
 
-		Value value = super.get(key);
+		Value value = super.getValue(key);
 		if (value == null && !priorityOfUseSelf) {
 			value = dynamicProperties.get(key);
 		}

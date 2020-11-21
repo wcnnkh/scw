@@ -2,6 +2,8 @@ package scw.security.session;
 
 import java.util.Enumeration;
 
+import scw.core.utils.ObjectUtils;
+
 public class SessionWrapper implements Session {
 	private final Session session;
 
@@ -52,5 +54,31 @@ public class SessionWrapper implements Session {
 	public boolean isNew() {
 		return session.isNew();
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this){
+			return true;
+		}
+		
+		if(obj == null){
+			return false;
+		}
+		
+		if(obj instanceof SessionWrapper){
+			return ObjectUtils.nullSafeEquals(session, ((SessionWrapper) obj).session);
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return session.hashCode();
+	}
 
+	@Override
+	public String toString() {
+		return session.toString();
+	}
 }

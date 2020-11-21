@@ -7,8 +7,6 @@ package scw.io;
  * custom protocols to be handled without subclassing the loader
  * implementation (or application context implementation).
  *
- * @author Juergen Hoeller
- * @since 4.3
  * @see DefaultResourceLoader#addProtocolResolver
  */
 public interface ProtocolResolver {

@@ -179,7 +179,6 @@ public abstract class UriComponents implements Serializable{
 
 	/**
 	 * Set all components of the given UriComponentsBuilder.
-	 * @since 4.2
 	 */
 	protected abstract void copyToUriComponentsBuilder(UriComponentsBuilder builder);
 

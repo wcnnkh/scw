@@ -52,7 +52,7 @@ public abstract class DefaultParameterFactory extends AbstractParameterFactory {
 
 	protected Value getProperty(ParameterDescriptors parameterDescriptors, ParameterDescriptor parameterDescriptor) {
 		String name = getParameterName(parameterDescriptors, parameterDescriptor);
-		Value value = getPropertyFactory().get(name);
+		Value value = getPropertyFactory().getValue(name);
 		if (value == null) {
 			value = ParameterUtils.getDefaultValue(parameterDescriptor);
 		}

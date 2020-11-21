@@ -7,6 +7,7 @@ import scw.core.utils.CollectionUtils;
 import scw.http.HttpCookie;
 import scw.http.HttpMethod;
 import scw.http.HttpStatus;
+import scw.http.server.DefaultHttpService;
 import scw.http.server.HttpServiceConfigAccessor;
 import scw.http.server.JsonServerHttpRequest;
 import scw.http.server.MultiPartServerHttpRequest;
@@ -32,6 +33,7 @@ import scw.value.ValueUtils;
 
 public final class WebUtils {
 	private static Logger logger = LoggerFactory.getLogger(WebUtils.class);
+	private static ThreadLocal<ServerHttpRequest> SERVER_HTTP_REQUEST_LOCAL = new ThreadLocal<ServerHttpRequest>();
 	
 	/**
 	 * 缓存是否过期,如果未过期那么返回304，如果已过期则setLastModified
@@ -103,7 +105,7 @@ public final class WebUtils {
 		if (jsonServerHttpRequest != null) {
 			JsonObject jsonObject = jsonServerHttpRequest.getJsonObject();
 			if (jsonObject != null) {
-				JsonElement element = jsonObject.get(name);
+				JsonElement element = jsonObject.getValue(name);
 				if (element != null) {
 					return element;
 				}
@@ -134,7 +136,7 @@ public final class WebUtils {
 		if (jsonServerHttpRequest != null) {
 			JsonObject jsonObject = jsonServerHttpRequest.getJsonObject();
 			if (jsonObject != null) {
-				JsonElement jsonElement = jsonObject.get(name);
+				JsonElement jsonElement = jsonObject.getValue(name);
 				if (jsonElement.isJsonArray()) {
 					JsonArray jsonArray = jsonElement.getAsJsonArray();
 					Value[] values = new Value[jsonArray.size()];
@@ -236,5 +238,28 @@ public final class WebUtils {
 			Restful.restfulParameterMapAware(targetRequest, result.getParameterMap());
 		}
 		return result;
+	}
+	
+	/**
+	 * 将一个ServerhttpRequest保存在ThreadLocal中
+	 * @see DefaultHttpService#service(ServerHttpRequest, ServerHttpResponse)
+	 * @param request
+	 */
+	public static void setLocalServerHttpRequest(ServerHttpRequest request){
+		if(request == null){
+			SERVER_HTTP_REQUEST_LOCAL.remove();
+		}else{
+			SERVER_HTTP_REQUEST_LOCAL.set(request);
+		}
+	}
+	
+	/**
+	 * 获取一个存储在ThreadLocal中的ServerHttpRequest
+	 * @see #setLocalServerHttpRequest(ServerHttpRequest)
+	 * @see #SERVER_HTTP_REQUEST_LOCAL
+	 * @return
+	 */
+	public static ServerHttpRequest getLocalServerHttpRequest(){
+		return SERVER_HTTP_REQUEST_LOCAL.get();
 	}
 }

@@ -75,7 +75,7 @@ public class SimpleAttributes<K, V> implements Attributes<K, V>, Serializable {
 		}
 
 		if (obj instanceof SimpleAttributes) {
-			return ObjectUtils.equals(attributeMap, ((SimpleAttributes) obj).attributeMap);
+			return ObjectUtils.nullSafeEquals(attributeMap, ((SimpleAttributes) obj).attributeMap);
 		}
 
 		return false;

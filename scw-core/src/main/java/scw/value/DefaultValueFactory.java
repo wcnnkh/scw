@@ -10,13 +10,13 @@ import scw.core.utils.CollectionUtils;
 public class DefaultValueFactory<K> extends AbstractValueFactory<K> implements ValueFactory<K> {
 	private volatile List<BaseValueFactory<K>> baseValueFactories;
 
-	public Value get(K key) {
+	public Value getValue(K key) {
 		if (baseValueFactories == null) {
 			return null;
 		}
 
 		for (BaseValueFactory<K> baseValueFactory : baseValueFactories) {
-			Value value = baseValueFactory.get(key);
+			Value value = baseValueFactory.getValue(key);
 			if (value != null) {
 				return value;
 			}

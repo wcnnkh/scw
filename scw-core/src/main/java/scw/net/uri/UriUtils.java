@@ -181,7 +181,6 @@ public class UriUtils {
 	 * @param path
 	 *            the URI path (e.g. "/products/index.html")
 	 * @return the extracted file extension (e.g. "html")
-	 * @since 4.3.2
 	 */
 	public static String extractFileExtension(String path) {
 		int end = path.indexOf('?');

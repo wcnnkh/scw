@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpSession;
 
+import scw.core.utils.ObjectUtils;
 import scw.security.session.Session;
 
 public class ServletHttpSession implements Session {
@@ -56,5 +57,30 @@ public class ServletHttpSession implements Session {
 	public boolean isNew() {
 		return httpSession.isNew();
 	}
+	
+	@Override
+	public int hashCode() {
+		return httpSession.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null){
+			return false;
+		}
+		
+		if(obj == this){
+			return true;
+		}
+		
+		if(obj instanceof ServletHttpSession){
+			return ObjectUtils.nullSafeEquals(((ServletHttpSession) obj).httpSession, httpSession);
+		}
+		return false;
+	}
 
+	@Override
+	public String toString() {
+		return httpSession.toString();
+	}
 }

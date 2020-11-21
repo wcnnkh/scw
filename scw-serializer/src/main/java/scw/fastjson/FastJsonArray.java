@@ -39,9 +39,14 @@ public final class FastJsonArray extends AbstractJson<Integer> implements JsonAr
 		return new IteratorConverter<Object, JsonElement>(jsonArray.iterator(), this);
 	}
 
-	public JsonElement get(Integer index) {
+	public JsonElement getValue(Integer index) {
 		String text = jsonArray.getString(index);
 		return text == null ? null : new FastJsonElement(text, getDefaultValue(index));
+	}
+	
+	public boolean remove(int index) {
+		Object object = jsonArray.remove(index);
+		return object != null;
 	}
 
 	public JsonObject getJsonObject(int index) {
@@ -54,8 +59,9 @@ public final class FastJsonArray extends AbstractJson<Integer> implements JsonAr
 		return jarr == null ? null : new FastJsonArray(jarr);
 	}
 
-	public void add(Object value) {
+	public boolean add(Object value) {
 		jsonArray.add(value);
+		return true;
 	}
 
 	public int size() {

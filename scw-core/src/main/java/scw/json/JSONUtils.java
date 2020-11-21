@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import scw.core.instance.InstanceUtils;
-import scw.json.support.BuiltinGsonSupport;
-import scw.util.FormatUtils;
+import scw.json.parser.DefaultJSONSupport;
+import scw.logger.LoggerFactory;
 
 public final class JSONUtils {
 	private JSONUtils() {
@@ -20,8 +20,9 @@ public final class JSONUtils {
 
 	static {
 		JSONSupport jsonSupport = InstanceUtils.loadService(JSONSupport.class);
-		JSON_SUPPORT = jsonSupport == null ? BuiltinGsonSupport.INSTANCE : jsonSupport;
-		FormatUtils.info(JSONUtils.class, "using json support：{}", JSON_SUPPORT.getClass().getName());
+		//TODO
+		JSON_SUPPORT = jsonSupport == null ? new DefaultJSONSupport() : jsonSupport;
+		LoggerFactory.getLogger(JSONUtils.class).info("The JSON support used is {}", JSON_SUPPORT);
 	}
 
 	public static JSONSupport getJsonSupport() {

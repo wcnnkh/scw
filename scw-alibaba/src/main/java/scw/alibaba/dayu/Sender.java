@@ -80,7 +80,7 @@ public class Sender {
 		
 		response = response.getJsonObject("result");
 		if (response.containsKey("err_code") && response.getIntValue("err_code") == 0) {
-			return resultFactory.success(response.toJsonString());
+			return resultFactory.success(response.toJSONString());
 		}
 		
 		logger.error(response);
@@ -89,7 +89,7 @@ public class Sender {
 		if (StringUtils.isEmpty(msg)) {
 			msg = errorResponse.getString("msg");
 		}
-		return resultFactory.error(msg, response.toJsonString());
+		return resultFactory.error(msg, response.toJSONString());
 	}
 
 	/**

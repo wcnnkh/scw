@@ -227,7 +227,7 @@ public abstract class AbstractStringValue extends SupportDefaultValue {
 		}
 
 		if (obj instanceof Value) {
-			return ObjectUtils.equals(getAsString(), ((Value) obj).getAsString());
+			return ObjectUtils.nullSafeEquals(getAsString(), ((Value) obj).getAsString());
 		}
 
 		return super.equals(obj);

@@ -32,8 +32,6 @@ import scw.util.StringValueResolver;
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
  * implementations.
  *
- * @author Juergen Hoeller
- * @since 2.5.2
  */
 public class SimpleAliasRegistry implements AliasRegistry {
 
@@ -78,7 +76,6 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 *            the name to check
 	 * @param alias
 	 *            the alias to look for
-	 * @since 4.2.1
 	 */
 	public boolean hasAlias(String name, String alias) {
 		for (Map.Entry<String, String> entry : this.aliasMap.entrySet()) {

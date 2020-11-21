@@ -3,10 +3,7 @@ package scw.core.utils;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Miscellaneous object utility methods.
@@ -964,51 +961,5 @@ public abstract class ObjectUtils {
 		}
 		sb.append(ARRAY_END);
 		return sb.toString();
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static boolean equals(Object a, Object b) {
-		if (a == b) {
-			return true;
-		}
-
-		if (a == null || b == null) {
-			return a == b;
-		}
-
-		if (a instanceof Collection && b instanceof Collection) {
-			if (((Collection) a).size() != ((Collection) b).size()) {
-				return false;
-			}
-
-			Iterator iteratorA = ((Collection) a).iterator();
-			Iterator iteratorB = ((Collection) b).iterator();
-			while (iteratorA.hasNext() && iteratorB.hasNext()) {
-				if (!equals(iteratorA.next(), iteratorB.next())) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		if (a instanceof Map && b instanceof Map) {
-			if (((Map) a).size() != ((Map) b).size()) {
-				return false;
-			}
-
-			Set<Entry> set = ((Map) a).entrySet();
-			for (Entry entry : set) {
-				Object k = entry.getKey();
-				if (!((Map) b).containsKey(k)) {
-					return false;
-				}
-
-				if (!equals(entry.getValue(), ((Map) b).get(k))) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return a.equals(b);
 	}
 }

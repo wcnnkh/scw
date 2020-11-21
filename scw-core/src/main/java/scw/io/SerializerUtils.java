@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import scw.core.instance.InstanceUtils;
 import scw.core.utils.ClassUtils;
-import scw.util.FormatUtils;
+import scw.logger.LoggerUtils;
 
 public final class SerializerUtils {
 	/**
@@ -18,7 +18,7 @@ public final class SerializerUtils {
 	static {
 		Serializer serializer = InstanceUtils.loadService(Serializer.class);
 		DEFAULT_SERIALIZER = serializer == null? JavaSerializer.INSTANCE:serializer;
-		FormatUtils.info(SerializerUtils.class, "using serializer：" + DEFAULT_SERIALIZER.getClass().getName());
+		LoggerUtils.getLogger(SerializerUtils.class).info("The serializer used is " + DEFAULT_SERIALIZER);
 	}
 
 	private SerializerUtils() {

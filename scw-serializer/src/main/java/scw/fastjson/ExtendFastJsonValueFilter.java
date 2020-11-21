@@ -5,8 +5,7 @@ import com.alibaba.fastjson.serializer.ValueFilter;
 import scw.aop.ProxyUtils;
 import scw.aop.support.FieldSetterListen;
 import scw.aop.support.FieldSetterListenImpl;
-import scw.cglib.proxy.Factory;
-import scw.json.JsonAware;
+import scw.json.JSONAware;
 import scw.mapper.Copy;
 
 public class ExtendFastJsonValueFilter implements ValueFilter {
@@ -20,11 +19,12 @@ public class ExtendFastJsonValueFilter implements ValueFilter {
 			return value;
 		}
 		
-		if(value instanceof JsonAware){
-			return ((JsonAware) value).toJsonString();
+		if(value instanceof JSONAware){
+			return ((JSONAware) value).toJSONString();
 		}
 
-		if (object instanceof Factory && "callbacks".equals(name)) {
+		//这是应该还想办法屏蔽Gson的Factory对象
+		if ("callbacks".equals(name)) {
 			return null;
 		}
 

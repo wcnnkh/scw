@@ -59,11 +59,6 @@ import scw.value.property.DynamicProperties.ValueCreator;
  * Note that {@code HttpHeaders} generally treats header names in a
  * case-insensitive manner.
  *
- * @author Arjen Poutsma
- * @author Sebastien Deleuze
- * @author Brian Clozel
- * @author Juergen Hoeller
- * @author Josh Long
  */
 public class HttpHeaders extends Headers {
 	private static Logger logger = LoggerUtils.getLogger(HttpHeaders.class);

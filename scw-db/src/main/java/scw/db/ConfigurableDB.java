@@ -129,7 +129,14 @@ public abstract class ConfigurableDB extends AbstractDB {
 
 	protected void initConfig() {
 		if (dataBase != null) {
-			dataBase.create();
+			boolean create = true;
+			if(propertyFactory != null){
+				create = propertyFactory.getValue("create.database", boolean.class, create);
+			}
+			
+			if(create){
+				dataBase.create();
+			}
 		}
 
 		if (propertyFactory == null) {

@@ -16,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import scw.cglib.core.ReflectUtils;
 import scw.core.Assert;
 import scw.core.annotation.Order;
 import scw.core.parameter.ParameterUtils;
@@ -1152,7 +1151,7 @@ public abstract class ReflectionUtils {
 		if (TypeUtils.isBoolean(field.getType())) {
 			String methodNameSuffix = field.getName();
 			if (methodNameSuffix.startsWith("is")) {
-				FormatUtils.warn(ReflectUtils.class, "Boolean类型的字段不应该以is开头,class:{},field:{}", clz.getName(),
+				FormatUtils.warn(ReflectionUtils.class, "Boolean类型的字段不应该以is开头,class:{},field:{}", clz.getName(),
 						methodNameSuffix);
 				methodNameSuffix = methodNameSuffix.substring(2);
 			}
@@ -1188,7 +1187,7 @@ public abstract class ReflectionUtils {
 		if (TypeUtils.isBoolean(field.getType())) {
 			String methodNameSuffix = field.getName();
 			if (methodNameSuffix.startsWith("is")) {
-				FormatUtils.warn(ReflectUtils.class, "Boolean类型的字段不应该以is开头,class:{},field:{}", clz.getName(),
+				FormatUtils.warn(ReflectionUtils.class, "Boolean类型的字段不应该以is开头,class:{},field:{}", clz.getName(),
 						methodNameSuffix);
 				methodNameSuffix = methodNameSuffix.substring(2);
 			}

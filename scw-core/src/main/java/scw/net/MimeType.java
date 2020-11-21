@@ -129,7 +129,6 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 	 *            the character set
 	 * @throws IllegalArgumentException
 	 *             if any of the parameters contains illegal characters
-	 * @since 4.3
 	 */
 	public MimeType(MimeType other, Charset charset) {
 		this(other.getType(), other.getSubtype(), addCharsetParameter(
@@ -295,7 +294,6 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 	 * any.
 	 * 
 	 * @return the character set, or {@code null} if not available
-	 * @since 4.3
 	 */
 	public Charset getCharset() {
 		String charset = getCharsetName();
@@ -441,7 +439,6 @@ public class MimeType implements Comparable<MimeType>, Serializable {
 	 * {@code MimeType} are equal, performing case-insensitive comparisons for
 	 * {@link Charset}s.
 	 * 
-	 * @since 4.2
 	 */
 	private boolean parametersAreEqual(MimeType other) {
 		if (this.parameters.size() != other.parameters.size()) {

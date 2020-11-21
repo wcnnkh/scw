@@ -122,7 +122,6 @@ public class AntPathMatcher implements PathMatcher {
 	/**
 	 * Specify whether to perform pattern matching in a case-sensitive fashion.
 	 * <p>Default is {@code true}. Switch this to {@code false} for case-insensitive matching.
-	 * @since 4.2
 	 */
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;

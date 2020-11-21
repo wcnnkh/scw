@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import scw.asm.Type;
+import org.objectweb.asm.Type;
+
 import scw.core.annotation.AnnotationAttributes;
 import scw.core.annotation.AnnotationUtils;
 import scw.core.utils.ObjectUtils;
@@ -94,7 +95,6 @@ abstract class AnnotationReadingVisitorUtils {
 	 * type to look for
 	 * @return the merged annotation attributes, or {@code null} if no
 	 * matching annotation is present in the {@code attributesMap}
-	 * @since 4.0.3
 	 */
 	public static AnnotationAttributes getMergedAnnotationAttributes(
 			LinkedMultiValueMap<String, AnnotationAttributes> attributesMap,

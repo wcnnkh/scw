@@ -521,7 +521,7 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 		}
 
 		if (obj instanceof AnyValue) {
-			return ObjectUtils.equals(value, ((AnyValue) obj).value);
+			return ObjectUtils.nullSafeEquals(value, ((AnyValue) obj).value);
 		}
 
 		return obj.equals(value);

@@ -10,14 +10,14 @@ import com.alibaba.fastjson.parser.Feature;
 import scw.core.utils.StringUtils;
 import scw.json.AbstractJsonElement;
 import scw.json.JsonArray;
+import scw.json.JsonElement;
 import scw.json.JsonObject;
-import scw.value.Value;
 
 public final class FastJsonElement extends AbstractJsonElement implements JSONAware, Serializable {
 	private static final long serialVersionUID = 1L;
 	private String text;
 
-	public FastJsonElement(String text, Value defaultValue) {
+	public FastJsonElement(String text, JsonElement defaultValue) {
 		super(defaultValue);
 		this.text = text;
 	}

@@ -21,10 +21,6 @@ import scw.core.Assert;
  *
  * <p>Mainly for use within the framework, but also useful for application code.
  *
- * @author Juergen Hoeller
- * @author Phillip Webb
- * @author Brian Clozel
- * @since 3.2.2
  * @see FileCopyUtils
  */
 public abstract class StreamUtils {
@@ -139,7 +135,6 @@ public abstract class StreamUtils {
 	 * @param end the position to end copying
 	 * @return the number of bytes copied
 	 * @throws IOException in case of I/O errors
-	 * @since 4.3
 	 */
 	public static long copyRange(InputStream in, OutputStream out, long start, long end) throws IOException {
 		Assert.notNull(in, "No InputStream specified");
@@ -175,7 +170,6 @@ public abstract class StreamUtils {
 	 * @param in the InputStream to drain
 	 * @return the number of bytes read
 	 * @throws IOException in case of I/O errors
-	 * @since 4.3
 	 */
 	public static int drain(InputStream in) throws IOException {
 		Assert.notNull(in, "No InputStream specified");
@@ -191,7 +185,6 @@ public abstract class StreamUtils {
 	/**
 	 * Return an efficient empty {@link InputStream}.
 	 * @return a {@link ByteArrayInputStream} based on an empty byte array
-	 * @since 4.2.2
 	 */
 	public static InputStream emptyInput() {
 		return new ByteArrayInputStream(EMPTY_CONTENT);

@@ -34,7 +34,6 @@ import java.security.cert.X509Certificate;
  * configured in the actual SSL context. This interface can be used to override the standard
  * JSSE certificate verification process.
  *
- * @since 4.4
  */
 public interface TrustStrategy {
 

@@ -1,5 +1,5 @@
 package scw.value;
 
 public interface BaseValueFactory<K> {
-	Value get(K key);
+	Value getValue(K key);
 }

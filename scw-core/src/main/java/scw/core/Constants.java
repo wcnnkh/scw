@@ -2,7 +2,8 @@ package scw.core;
 
 import java.nio.charset.Charset;
 
-import scw.asm.Opcodes;
+import org.objectweb.asm.Opcodes;
+
 import scw.core.utils.StringUtils;
 
 public class Constants {

@@ -174,8 +174,6 @@ import java.lang.annotation.Target;
  * attribute aliases. Consult the Javadoc for individual annotations as well
  * as the reference manual for details.
  *
- * @author Sam Brannen
- * @since 4.2
  * @see AnnotatedElementUtils
  * @see AnnotationUtils
  * @see AnnotationUtils#synthesizeAnnotation(Annotation, java.lang.reflect.AnnotatedElement)

@@ -30,9 +30,6 @@ import java.util.Map;
  * designed for data structures exposed from request objects, for use in a
  * single thread only.
  *
- * @author Arjen Poutsma
- * @author Juergen Hoeller
- * @since 3.0
  */
 public class LinkedMultiValueMap<K, V> extends AbstractMultiValueMap<K, V> {
 

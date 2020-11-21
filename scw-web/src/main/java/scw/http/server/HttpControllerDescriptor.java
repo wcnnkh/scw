@@ -44,7 +44,7 @@ public final class HttpControllerDescriptor {
 
 		if (obj instanceof HttpControllerDescriptor) {
 			HttpControllerDescriptor descriptor = (HttpControllerDescriptor) obj;
-			if(!ObjectUtils.equals(descriptor.method, method)){
+			if(!ObjectUtils.nullSafeEquals(descriptor.method, method)){
 				return false;
 			}
 			
@@ -53,7 +53,7 @@ public final class HttpControllerDescriptor {
 			}else if(descriptor.restful.isRestful()){
 				return descriptor.restful.matching(path).isSuccess();
 			}else{
-				return ObjectUtils.equals(path, descriptor.path);
+				return ObjectUtils.nullSafeEquals(path, descriptor.path);
 			}
 		}
 		return false;

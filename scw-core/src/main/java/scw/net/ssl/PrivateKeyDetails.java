@@ -34,7 +34,6 @@ import scw.core.Assert;
 /**
  * Private key details.
  *
- * @since 4.4
  */
 public final class PrivateKeyDetails {
 

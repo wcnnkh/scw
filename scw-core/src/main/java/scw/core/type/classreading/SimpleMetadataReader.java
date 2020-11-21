@@ -4,7 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import scw.asm.ClassReader;
+import org.objectweb.asm.ClassReader;
+
 import scw.core.type.AnnotationMetadata;
 import scw.core.type.ClassMetadata;
 import scw.io.Resource;

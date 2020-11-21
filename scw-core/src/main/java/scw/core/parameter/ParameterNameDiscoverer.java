@@ -27,9 +27,6 @@ import java.lang.reflect.Method;
  * emitted at compile time, and looking for argname annotation values optionally
  * accompanying AspectJ annotated methods.
  *
- * @author Rod Johnson
- * @author Adrian Colyer
- * @since 2.0
  */
 public interface ParameterNameDiscoverer {
 

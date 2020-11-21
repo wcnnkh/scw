@@ -5,7 +5,6 @@ import scw.core.instance.annotation.Configuration;
 import scw.data.Counter;
 import scw.data.generator.SequenceId;
 import scw.data.generator.SequenceIdGenerator;
-import scw.data.memory.MemoryDataManager;
 import scw.data.memory.MemoryDataTemplete;
 import scw.locks.JdkLockFactory;
 import scw.locks.Lock;
@@ -18,7 +17,7 @@ public class DefaultGeneratorService extends AbstractGeneratorService {
 	private final LockFactory lockFactory;
 	
 	public DefaultGeneratorService(){
-		this(new SequenceIdGenerator(), new MemoryDataTemplete(new MemoryDataManager()), new JdkLockFactory());
+		this(new SequenceIdGenerator(), new MemoryDataTemplete(), new JdkLockFactory());
 	}
 
 	public DefaultGeneratorService(SequenceIdGenerator sequeueIdGenerator, Counter counter,

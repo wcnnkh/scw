@@ -3,8 +3,9 @@ package scw.core.type.classreading;
 import java.lang.reflect.Field;
 import java.security.AccessControlException;
 
-import scw.asm.AnnotationVisitor;
-import scw.asm.Type;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Type;
+
 import scw.core.Constants;
 import scw.core.annotation.AnnotationAttributes;
 import scw.core.reflect.ReflectionUtils;

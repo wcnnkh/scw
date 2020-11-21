@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
-import scw.cglib.proxy.Enhancer;
-import scw.cglib.proxy.Factory;
-import scw.cglib.proxy.MethodProxy;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.Factory;
+import net.sf.cglib.proxy.MethodProxy;
 import scw.core.instance.annotation.Configuration;
 import scw.core.utils.ClassUtils;
 import scw.lang.NestedExceptionUtils;
@@ -62,7 +62,7 @@ public class CglibProxyFactory implements ProxyFactory {
 		return enhancer;
 	}
 
-	private static final class CglibMethodInterceptor implements scw.cglib.proxy.MethodInterceptor, Serializable {
+	private static final class CglibMethodInterceptor implements net.sf.cglib.proxy.MethodInterceptor, Serializable {
 		private static final long serialVersionUID = 1L;
 		private final Class<?> targetClass;
 		private final Iterable<? extends MethodInterceptor> filters;
@@ -111,7 +111,7 @@ public class CglibProxyFactory implements ProxyFactory {
 	public static final class CglibProxy extends AbstractProxy {
 		private Enhancer enhancer;
 
-		public CglibProxy(Class<?> clazz, Class<?>[] interfaces, scw.cglib.proxy.MethodInterceptor methodInterceptor) {
+		public CglibProxy(Class<?> clazz, Class<?>[] interfaces, net.sf.cglib.proxy.MethodInterceptor methodInterceptor) {
 			super(clazz);
 			this.enhancer = createEnhancer(clazz, interfaces);
 			this.enhancer.setCallback(methodInterceptor);

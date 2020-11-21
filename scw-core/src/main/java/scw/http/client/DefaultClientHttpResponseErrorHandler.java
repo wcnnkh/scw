@@ -63,7 +63,6 @@ public class DefaultClientHttpResponseErrorHandler implements
 	 *            the HTTP status code as raw value
 	 * @return {@code true} if the response indicates an error; {@code false}
 	 *         otherwise
-	 * @since 4.3.21
 	 * @see HttpStatus.Series#CLIENT_ERROR
 	 * @see HttpStatus.Series#SERVER_ERROR
 	 */
@@ -112,7 +111,6 @@ public class DefaultClientHttpResponseErrorHandler implements
 	 * @throws UnknownHttpStatusCodeException
 	 *             in case of an unknown status code that cannot be represented
 	 *             with the {@link HttpStatus} enum
-	 * @since 4.3.8
 	 */
 	protected HttpStatus getHttpStatusCode(ClientHttpResponse response)
 			throws IOException {
@@ -134,7 +132,6 @@ public class DefaultClientHttpResponseErrorHandler implements
 	 *            the response to inspect
 	 * @return the response body as a byte array, or an empty byte array if the
 	 *         body could not be read
-	 * @since 4.3.8
 	 */
 	protected byte[] getResponseBody(ClientHttpResponse response) {
 		try {
@@ -152,7 +149,6 @@ public class DefaultClientHttpResponseErrorHandler implements
 	 * @param response
 	 *            the response to inspect
 	 * @return the associated charset, or {@code null} if none
-	 * @since 4.3.8
 	 */
 	protected Charset getCharset(ClientHttpResponse response) {
 		HttpHeaders headers = response.getHeaders();

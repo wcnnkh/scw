@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import scw.cglib.core.CGLIBTypeUtils;
 import scw.core.Assert;
 import scw.core.reflect.ReflectionUtils;
 
@@ -119,7 +118,6 @@ public final class ClassUtils {
 	 *         extending the other), or {@code null} if none found. If any of
 	 *         the given classes is {@code null}, the other class will be
 	 *         returned.
-	 * @since 3.2.6
 	 */
 	public static Class<?> determineCommonAncestor(Class<?> clazz1, Class<?> clazz2) {
 		if (clazz1 == null) {
@@ -166,7 +164,6 @@ public final class ClassUtils {
 	 *            the clazz that the method is being invoked on (may be
 	 *            {@code null} to indicate the method's declaring class)
 	 * @return the qualified name of the method
-	 * @since 4.3.4
 	 */
 	public static String getQualifiedMethodName(Method method, Class<?> clazz) {
 		Assert.notNull(method, "Method must not be null");

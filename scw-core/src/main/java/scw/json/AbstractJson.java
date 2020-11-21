@@ -10,12 +10,12 @@ public abstract class AbstractJson<K> extends AbstractValueFactory<K> implements
 	}
 
 	public JsonObject getJsonObject(K key) {
-		JsonElement jsonElement = get(key);
+		JsonElement jsonElement = getValue(key);
 		return jsonElement == null ? getDefaultValue(key).getAsJsonObject() : jsonElement.getAsJsonObject();
 	}
 
 	public JsonArray getJsonArray(K key) {
-		JsonElement jsonElement = get(key);
+		JsonElement jsonElement = getValue(key);
 		return jsonElement == null ? getDefaultValue(key).getAsJsonArray() : jsonElement.getAsJsonArray();
 	}
 
@@ -25,6 +25,6 @@ public abstract class AbstractJson<K> extends AbstractValueFactory<K> implements
 
 	@Override
 	public String toString() {
-		return toJsonString();
+		return toJSONString();
 	}
 }

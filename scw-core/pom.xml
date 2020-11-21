@@ -8,22 +8,76 @@
 	</parent>
 	<artifactId>scw-core</artifactId>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/cglib/cglib -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>7.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>jarjar-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jarjar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<overwrite>true</overwrite>
+					<includes>
+						<include>*:asm*</include>
+						<include>*:cglib*</include>
+					</includes>
+					<rules>
+						<rule>
+							<pattern>org.objectweb.asm.*</pattern>
+							<result>scw.asm.$@1</result>
+						</rule>
+						<rule>
+							<pattern>org.objectweb.asm.**.*</pattern>
+							<result>scw.asm.@1.$@2</result>
+						</rule>
+						<rule>
+							<pattern>net.sf.cglib.*</pattern>
+							<result>scw.cglib.$@1</result>
+						</rule>
+						<rule>
+							<pattern>net.sf.cglib.**.*</pattern>
+							<result>scw.cglib.@1.$@2</result>
+						</rule>
+					</rules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

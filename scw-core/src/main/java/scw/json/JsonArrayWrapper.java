@@ -14,7 +14,11 @@ public class JsonArrayWrapper extends JsonWrapper<Integer> implements JsonArray 
 		return target.iterator();
 	}
 
-	public void add(Object value) {
-		target.add(value);
+	public boolean add(Object element) {
+		return target.add(element);
+	}
+
+	public boolean remove(int index) {
+		return target.remove(index);
 	}
 }

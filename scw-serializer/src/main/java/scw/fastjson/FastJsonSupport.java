@@ -35,7 +35,7 @@ public final class FastJsonSupport extends AbstractJSONSupport {
 	}
 
 	@Override
-	protected <T> T parseObjectInternal(String text, Type type) {
+	protected Object parseObjectInternal(String text, Type type) {
 		return JSON.parseObject(text, type, Feature.SupportNonPublicField);
 	}
 

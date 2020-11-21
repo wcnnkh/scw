@@ -21,7 +21,6 @@ public interface ClassMetadata {
 
 	/**
 	 * Return whether the underlying class represents an annotation.
-	 * @since 4.1
 	 */
 	boolean isAnnotation();
 
@@ -86,7 +85,6 @@ public interface ClassMetadata {
 	 * access, and private classes and interfaces declared by the class, but excludes
 	 * inherited classes and interfaces. An empty array is returned if no member classes
 	 * or interfaces exist.
-	 * @since 3.1
 	 */
 	String[] getMemberClassNames();
 

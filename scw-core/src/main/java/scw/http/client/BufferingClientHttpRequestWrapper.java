@@ -28,7 +28,6 @@ import scw.io.StreamUtils;
  * request.
  *
  * @author Arjen Poutsma
- * @since 3.1
  */
 final class BufferingClientHttpRequestWrapper extends AbstractBufferingClientHttpRequest {
  

@@ -7,12 +7,20 @@ import scw.data.TemporaryCache;
 import scw.util.XUtils;
 
 public abstract class AbstractLoginService<T> implements LoginService<T> {
-	private final TemporaryCache cacheService;
+	private final TemporaryCache temporaryCache;
 	private final int exp;
 
-	public AbstractLoginService(TemporaryCache cacheService, int exp) {
-		this.cacheService = cacheService;
+	public AbstractLoginService(TemporaryCache temporaryCache, int exp) {
+		this.temporaryCache = temporaryCache;
 		this.exp = exp;
+	}
+
+	public TemporaryCache getTemporaryCache() {
+		return temporaryCache;
+	}
+
+	public int getExp() {
+		return exp;
 	}
 
 	protected String generatorToken(T uid) {
@@ -28,11 +36,11 @@ public abstract class AbstractLoginService<T> implements LoginService<T> {
 			return null;
 		}
 
-		T uid = cacheService.getAndTouch(token, exp);
+		T uid = temporaryCache.getAndTouch(token, exp);
 		if (uid == null) {
 			return null;
 		}
-		cacheService.touch(formatUid(uid), exp);
+		temporaryCache.touch(formatUid(uid), exp);
 		return new UserToken<T>(token, uid);
 	}
 
@@ -41,12 +49,12 @@ public abstract class AbstractLoginService<T> implements LoginService<T> {
 			return null;
 		}
 
-		String token = cacheService.getAndTouch(formatUid(uid), exp);
+		String token = temporaryCache.getAndTouch(formatUid(uid), exp);
 		if (token == null) {
 			return null;
 		}
 
-		cacheService.touch(token, exp);
+		temporaryCache.touch(token, exp);
 		return new UserToken<T>(token, uid);
 	}
 
@@ -55,11 +63,11 @@ public abstract class AbstractLoginService<T> implements LoginService<T> {
 			return false;
 		}
 
-		T uid = cacheService.get(token);
+		T uid = temporaryCache.get(token);
 		if (uid != null) {
-			cacheService.delete(formatUid(uid));
+			temporaryCache.delete(formatUid(uid));
 		}
-		return cacheService.delete(token);
+		return temporaryCache.delete(token);
 	}
 
 	public boolean cancelLoginByUid(T uid) {
@@ -67,24 +75,24 @@ public abstract class AbstractLoginService<T> implements LoginService<T> {
 			return false;
 		}
 
-		String token = cacheService.get(formatUid(uid));
+		String token = temporaryCache.get(formatUid(uid));
 		if (token != null) {
-			cacheService.delete(token);
+			temporaryCache.delete(token);
 		}
-		return cacheService.delete(formatUid(uid));
+		return temporaryCache.delete(formatUid(uid));
 	}
 
 	public UserToken<T> login(T uid) {
 		Assert.notNull(uid);
 
-		String oldToken = cacheService.get(formatUid(uid));
+		String oldToken = temporaryCache.get(formatUid(uid));
 		if(oldToken != null){
-			cacheService.delete(oldToken);
+			temporaryCache.delete(oldToken);
 		}
 		
 		String token = generatorToken(uid);
-		cacheService.set(token, exp, uid);
-		cacheService.set(formatUid(uid), exp, token);
+		temporaryCache.set(token, exp, uid);
+		temporaryCache.set(formatUid(uid), exp, token);
 		return new UserToken<T>(token, uid);
 	}
 
@@ -98,6 +106,6 @@ public abstract class AbstractLoginService<T> implements LoginService<T> {
 			return false;
 		}
 
-		return ObjectUtils.equals(uid, userToken.getUid());
+		return ObjectUtils.nullSafeEquals(uid, userToken.getUid());
 	}
 }

@@ -2,7 +2,9 @@ package scw.json;
 
 import scw.value.Value;
 
-public interface JsonElement extends Value, JsonAware {
+public interface JsonElement extends Value, JSONAware {
+	static final String SPLIT = ",";
+	
 	JsonArray getAsJsonArray();
 
 	JsonObject getAsJsonObject();

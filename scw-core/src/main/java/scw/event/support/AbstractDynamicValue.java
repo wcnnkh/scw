@@ -71,11 +71,11 @@ public abstract class AbstractDynamicValue<T> implements DynamicValue<T> {
 		}
 
 		if (obj instanceof AbstractDynamicValue) {
-			return ObjectUtils.equals(this.value, ((AbstractDynamicValue) obj).value);
+			return ObjectUtils.nullSafeEquals(this.value, ((AbstractDynamicValue) obj).value);
 		}
 
 		if (obj instanceof DynamicValue) {
-			return ObjectUtils.equals(getValue(), ((DynamicValue) obj).getValue());
+			return ObjectUtils.nullSafeEquals(getValue(), ((DynamicValue) obj).getValue());
 		}
 
 		return false;

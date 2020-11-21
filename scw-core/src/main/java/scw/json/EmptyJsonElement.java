@@ -22,7 +22,7 @@ public class EmptyJsonElement extends EmptyValue implements JsonElement {
 		return false;
 	}
 
-	public String toJsonString() {
+	public String toJSONString() {
 		return null;
 	}
 }

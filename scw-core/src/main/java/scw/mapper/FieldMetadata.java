@@ -78,8 +78,8 @@ public class FieldMetadata implements Serializable {
 		}
 
 		if (obj instanceof FieldMetadata) {
-			return ObjectUtils.equals(getter, ((FieldMetadata) obj).getter)
-					&& ObjectUtils.equals(setter, ((FieldMetadata) obj).setter);
+			return ObjectUtils.nullSafeEquals(getter, ((FieldMetadata) obj).getter)
+					&& ObjectUtils.nullSafeEquals(setter, ((FieldMetadata) obj).setter);
 		}
 
 		return false;

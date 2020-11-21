@@ -65,7 +65,6 @@ public abstract class ParameterizedTypeReference<T> {
 	 * e.g. from {@link java.lang.reflect.Method#getGenericReturnType()})
 	 * @return a corresponding reference which may be passed into
 	 * {@code ParameterizedTypeReference}-accepting methods
-	 * @since 4.3.12
 	 */
 	public static <T> ParameterizedTypeReference<T> forType(Type type) {
 		return new ParameterizedTypeReference<T>(type) {

@@ -18,8 +18,8 @@ public class JsonWrapper<K> extends ValueFactoryWrapper<K> implements Json<K> {
 		return target.isEmpty();
 	}
 
-	public JsonElement get(K key) {
-		return target.get(key);
+	public JsonElement getValue(K key) {
+		return target.getValue(key);
 	}
 
 	public JsonArray getJsonArray(K key) {
@@ -30,8 +30,8 @@ public class JsonWrapper<K> extends ValueFactoryWrapper<K> implements Json<K> {
 		return target.getJsonObject(key);
 	}
 
-	public String toJsonString() {
-		return target.toJsonString();
+	public String toJSONString() {
+		return target.toJSONString();
 	}
 
 	@Override

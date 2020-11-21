@@ -90,28 +90,24 @@ public class MediaType extends MimeType implements Serializable {
 	/**
 	 * Public constant media type for {@code application/pdf}.
 	 * 
-	 * @since 4.3
 	 */
 	public final static MediaType APPLICATION_PDF;
 
 	/**
 	 * A String equivalent of {@link MediaType#APPLICATION_PDF}.
 	 * 
-	 * @since 4.3
 	 */
 	public final static String APPLICATION_PDF_VALUE = "application/pdf";
 
 	/**
 	 * Public constant media type for {@code application/rss+xml}.
 	 * 
-	 * @since 4.3.6
 	 */
 	public final static MediaType APPLICATION_RSS_XML;
 
 	/**
 	 * A String equivalent of {@link MediaType#APPLICATION_RSS_XML}.
 	 * 
-	 * @since 4.3.6
 	 */
 	public final static String APPLICATION_RSS_XML_VALUE = "application/rss+xml";
 
@@ -178,7 +174,6 @@ public class MediaType extends MimeType implements Serializable {
 	/**
 	 * Public constant media type for {@code text/event-stream}.
 	 * 
-	 * @since 4.3.6
 	 * @see <a href="https://www.w3.org/TR/eventsource/">Server-Sent Events W3C
 	 *      recommendation</a>
 	 */
@@ -187,7 +182,6 @@ public class MediaType extends MimeType implements Serializable {
 	/**
 	 * A String equivalent of {@link MediaType#TEXT_EVENT_STREAM}.
 	 * 
-	 * @since 4.3.6
 	 */
 	public final static String TEXT_EVENT_STREAM_VALUE = "text/event-stream";
 
@@ -204,14 +198,12 @@ public class MediaType extends MimeType implements Serializable {
 	/**
 	 * Public constant media type for {@code text/markdown}.
 	 * 
-	 * @since 4.3
 	 */
 	public final static MediaType TEXT_MARKDOWN;
 
 	/**
 	 * A String equivalent of {@link MediaType#TEXT_MARKDOWN}.
 	 * 
-	 * @since 4.3
 	 */
 	public final static String TEXT_MARKDOWN_VALUE = "text/markdown";
 
@@ -343,7 +335,6 @@ public class MediaType extends MimeType implements Serializable {
 	 *            the character set
 	 * @throws IllegalArgumentException
 	 *             if any of the parameters contain illegal characters
-	 * @since 4.3
 	 */
 	public MediaType(MimeType other, Charset charset) {
 		super(other, charset);
@@ -555,7 +546,6 @@ public class MediaType extends MimeType implements Serializable {
 	 * @return the list of media types
 	 * @throws InvalidMediaTypeException
 	 *             if the media type value cannot be parsed
-	 * @since 4.3.2
 	 */
 	public static List<MediaType> parseMediaTypes(List<String> mediaTypes) {
 		if (CollectionUtils.isEmpty(mediaTypes)) {

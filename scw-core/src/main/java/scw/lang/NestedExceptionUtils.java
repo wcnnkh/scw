@@ -43,7 +43,6 @@ public abstract class NestedExceptionUtils {
 	 * @param original
 	 *            the original exception to introspect
 	 * @return the innermost exception, or {@code null} if none
-	 * @since 4.3.9
 	 */
 	public static Throwable getRootCause(Throwable original) {
 		if (original == null) {
@@ -68,7 +67,6 @@ public abstract class NestedExceptionUtils {
 	 * @param original
 	 *            the original exception to introspect
 	 * @return the most specific cause (never {@code null})
-	 * @since 4.3.9
 	 */
 	public static Throwable getMostSpecificCause(Throwable original) {
 		Throwable rootCause = getRootCause(original);

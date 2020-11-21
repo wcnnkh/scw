@@ -11,8 +11,8 @@ public class ValueFactoryWrapper<K> implements ValueFactory<K> {
 		this.target = target;
 	}
 
-	public Value get(K key) {
-		return target.get(key);
+	public Value getValue(K key) {
+		return target.getValue(key);
 	}
 
 	public Byte getByte(K key) {

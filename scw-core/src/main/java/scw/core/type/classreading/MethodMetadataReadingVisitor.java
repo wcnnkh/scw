@@ -4,10 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import scw.asm.AnnotationVisitor;
-import scw.asm.MethodVisitor;
-import scw.asm.Opcodes;
-import scw.asm.Type;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+
 import scw.core.Constants;
 import scw.core.annotation.AnnotationAttributes;
 import scw.core.type.MethodMetadata;

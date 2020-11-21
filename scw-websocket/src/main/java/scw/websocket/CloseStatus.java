@@ -118,7 +118,6 @@ public class CloseStatus {
 	 * should be exercised, e.g. avoid sending any further data to the client
 	 * that may be done during normal shutdown.
 	 * 
-	 * @since 4.0.3
 	 */
 	public static final CloseStatus SESSION_NOT_RELIABLE = new CloseStatus(4500);
 

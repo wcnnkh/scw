@@ -32,8 +32,6 @@ import java.util.Properties;
  * but allowing for reading from any Reader and writing to any Writer
  * (which allows to specify an encoding for a properties file).
  *
- * @author Juergen Hoeller
- * @since 10.03.2004
  * @see DefaultPropertiesPersister
  * @see java.util.Properties
  */

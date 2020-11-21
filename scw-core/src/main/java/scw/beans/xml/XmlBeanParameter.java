@@ -99,7 +99,7 @@ public final class XmlBeanParameter implements Cloneable, ParameterDescriptor, S
 			value = instanceFactory.getInstance(xmlValue.formatValue(propertyFactory));
 			break;
 		case property:
-			Value v = propertyFactory.get(xmlValue.getValue());
+			Value v = propertyFactory.getValue(xmlValue.getValue());
 			if (v != null) {
 				value = formatStringValue(v, parameterDescriptor);
 			}

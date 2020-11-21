@@ -29,7 +29,6 @@ public abstract class DigestUtils {
 	 * Calculate the MD5 digest of the given stream.
 	 * @param inputStream the InputStream to calculate the digest over
 	 * @return the digest
-	 * @since 4.2
 	 */
 	public static byte[] md5Digest(InputStream inputStream) throws IOException {
 		return digest(MD5_ALGORITHM_NAME, inputStream);
@@ -48,7 +47,6 @@ public abstract class DigestUtils {
 	 * Return a hexadecimal string representation of the MD5 digest of the given stream.
 	 * @param inputStream the InputStream to calculate the digest over
 	 * @return a hexadecimal digest string
-	 * @since 4.2
 	 */
 	public static String md5DigestAsHex(InputStream inputStream) throws IOException {
 		return digestAsHexString(MD5_ALGORITHM_NAME, inputStream);
@@ -71,7 +69,6 @@ public abstract class DigestUtils {
 	 * @param inputStream the inputStream to calculate the digest over
 	 * @param builder the string builder to append the digest to
 	 * @return the given string builder
-	 * @since 4.2
 	 */
 	public static StringBuilder appendMd5DigestAsHex(InputStream inputStream, StringBuilder builder) throws IOException {
 		return appendDigestAsHex(MD5_ALGORITHM_NAME, inputStream, builder);

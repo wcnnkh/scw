@@ -27,21 +27,6 @@ import scw.http.client.SimpleClientHttpRequestFactory;
 import scw.logger.Logger;
 import scw.logger.LoggerFactory;
 
-/**
- * Base class for
- * {@link scw.http.client.springframework.web.client.RestTemplate} and other
- * HTTP accessing gateway helpers, defining common properties such as the
- * {@link ClientHttpRequestFactory} to operate on.
- *
- * <p>
- * Not intended to be used directly. See
- * {@link scw.http.client.springframework.web.client.RestTemplate}.
- *
- * @author Arjen Poutsma
- * @author Juergen Hoeller
- * @since 3.0
- * @see scw.http.client.springframework.web.client.RestTemplate
- */
 public abstract class HttpAccessor {
 
 	/** Logger available to subclasses */

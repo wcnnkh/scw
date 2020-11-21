@@ -26,8 +26,8 @@ public class JsonElementWrapper extends ValueWrapper implements JsonElement {
 		return target.isJsonObject();
 	}
 
-	public String toJsonString() {
-		return target.toJsonString();
+	public String toJSONString() {
+		return target.toJSONString();
 	}
 	
 	@Override

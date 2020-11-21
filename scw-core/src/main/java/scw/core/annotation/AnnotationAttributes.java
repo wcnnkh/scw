@@ -61,7 +61,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * specified {@code annotationType}.
 	 * @param annotationType the type of annotation represented by this
 	 * {@code AnnotationAttributes} instance; never {@code null}
-	 * @since 4.2
 	 */
 	public AnnotationAttributes(Class<? extends Annotation> annotationType) {
 		Assert.notNull(annotationType, "'annotationType' must not be null");
@@ -76,7 +75,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * {@code AnnotationAttributes} instance; never {@code null}
 	 * @param classLoader the ClassLoader to try to load the annotation type on,
 	 * or {@code null} to just store the annotation type name
-	 * @since 4.3.2
 	 */
 	public AnnotationAttributes(String annotationType, ClassLoader classLoader) {
 		Assert.notNull(annotationType, "'annotationType' must not be null");
@@ -127,7 +125,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * Get the type of annotation represented by this
 	 * {@code AnnotationAttributes} instance.
 	 * @return the annotation type, or {@code null} if unknown
-	 * @since 4.2
 	 */
 	public Class<? extends Annotation> annotationType() {
 		return this.annotationType;
@@ -165,11 +162,7 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * not exist or are not of type {@code String}
 	 * @throws AnnotationConfigurationException if the attribute and its
 	 * alias are both present with different non-empty values
-	 * @since 4.2
-	 * @deprecated as of Spring 4.3.2, in favor of built-in alias resolution
-	 * in {@link #getString} itself
 	 */
-	@Deprecated
 	public String getAliasedString(String attributeName, Class<? extends Annotation> annotationType,
 			Object annotationSource) {
 
@@ -211,11 +204,8 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * not exist or are not of type {@code String[]}
 	 * @throws AnnotationConfigurationException if the attribute and its
 	 * alias are both present with different non-empty values
-	 * @since 4.2
-	 * @deprecated as of Spring 4.3.2, in favor of built-in alias resolution
 	 * in {@link #getStringArray} itself
 	 */
-	@Deprecated
 	public String[] getAliasedStringArray(String attributeName, Class<? extends Annotation> annotationType,
 			Object annotationSource) {
 
@@ -307,11 +297,7 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * not exist or are not of type {@code Class[]}
 	 * @throws AnnotationConfigurationException if the attribute and its
 	 * alias are both present with different non-empty values
-	 * @since 4.2
-	 * @deprecated as of Spring 4.3.2, in favor of built-in alias resolution
-	 * in {@link #getClassArray} itself
 	 */
-	@Deprecated
 	public Class<?>[] getAliasedClassArray(String attributeName, Class<? extends Annotation> annotationType,
 			Object annotationSource) {
 
@@ -342,7 +328,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * @return the annotation
 	 * @throws IllegalArgumentException if the attribute does not exist or
 	 * if it is not of the expected type
-	 * @since 4.2
 	 */
 	public <A extends Annotation> A getAnnotation(String attributeName, Class<A> annotationType) {
 		return getRequiredAttribute(attributeName, annotationType);
@@ -378,7 +363,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * @return the annotation array
 	 * @throws IllegalArgumentException if the attribute does not exist or
 	 * if it is not of the expected type
-	 * @since 4.2
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A[] getAnnotationArray(String attributeName, Class<A> annotationType) {
@@ -437,7 +421,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * not exist or are not of the {@code expectedType}
 	 * @throws AnnotationConfigurationException if the attribute and its
 	 * alias are both present with different non-empty values
-	 * @since 4.2
 	 * @see ObjectUtils#isEmpty(Object)
 	 */
 	private <T> T getRequiredAttributeWithAlias(String attributeName, Class<? extends Annotation> annotationType,
@@ -545,7 +528,6 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
 	 * value was previously stored in this map
 	 * @see #get
 	 * @see #put
-	 * @since 4.2
 	 */
 	@Override
 	public Object putIfAbsent(String key, Object value) {

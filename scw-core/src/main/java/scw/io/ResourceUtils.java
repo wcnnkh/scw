@@ -239,7 +239,6 @@ public final class ResourceUtils {
 	 * @return a corresponding File object
 	 * @throws FileNotFoundException
 	 *             if the URL cannot be resolved to a file in the file system
-	 * @since 2.5
 	 */
 	public static File getFile(URI resourceUri) throws FileNotFoundException {
 		return getFile(resourceUri, "URI");
@@ -257,7 +256,6 @@ public final class ResourceUtils {
 	 * @return a corresponding File object
 	 * @throws FileNotFoundException
 	 *             if the URL cannot be resolved to a file in the file system
-	 * @since 2.5
 	 */
 	public static File getFile(URI resourceUri, String description) throws FileNotFoundException {
 		Assert.notNull(resourceUri, "Resource URI must not be null");
@@ -304,7 +302,6 @@ public final class ResourceUtils {
 	 * @param url
 	 *            the URL to check
 	 * @return whether the URL has been identified as a JAR file URL
-	 * @since 4.1
 	 */
 	public static boolean isJarFileURL(URL url) {
 		return (URL_PROTOCOL_FILE.equals(url.getProtocol())
@@ -355,7 +352,6 @@ public final class ResourceUtils {
 	 * @return the URL for the actual jar file
 	 * @throws MalformedURLException
 	 *             if no valid jar file URL could be extracted
-	 * @since 4.1.8
 	 * @see #extractJarFileURL(URL)
 	 */
 	public static URL extractArchiveURL(URL jarUrl) throws MalformedURLException {

@@ -33,10 +33,10 @@ public abstract class AbstractJSONSupport implements JSONSupport {
 		if (type instanceof Class) {
 			return parseObject(text, (Class<T>) type);
 		}
-		return parseObjectInternal(text, type);
+		return (T) parseObjectInternal(text, type);
 	}
 
-	protected abstract <T> T parseObjectInternal(String text, Type type);
+	protected abstract Object parseObjectInternal(String text, Type type);
 
 	public JsonArray parseArray(Reader reader) throws IOException {
 		return parseArray(new String(IOUtils.toCharArray(reader)));
@@ -71,10 +71,10 @@ public abstract class AbstractJSONSupport implements JSONSupport {
 		} else if (type == JsonArray.class) {
 			return (T) parseArray(reader);
 		}
-		return parseObjectInternal(reader, type);
+		return (T) parseObjectInternal(reader, type);
 	}
 
-	protected <T> T parseObjectInternal(Reader reader, Type type) throws IOException {
+	protected Object parseObjectInternal(Reader reader, Type type) throws IOException {
 		return parseObject(new String(IOUtils.toCharArray(reader)), type);
 	}
 	
@@ -91,8 +91,8 @@ public abstract class AbstractJSONSupport implements JSONSupport {
 			return String.valueOf(obj);
 		}
 		
-		if(obj instanceof JsonAware){
-			return ((JsonAware) obj).toJsonString();
+		if(obj instanceof JSONAware){
+			return ((JSONAware) obj).toJSONString();
 		}
 		
 		return toJsonStringInternal(obj);

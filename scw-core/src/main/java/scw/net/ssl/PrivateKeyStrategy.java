@@ -32,7 +32,6 @@ import java.util.Map;
 /**
  * A strategy allowing for a choice of an alias during SSL authentication.
  *
- * @since 4.4
  */
 public interface PrivateKeyStrategy {
 

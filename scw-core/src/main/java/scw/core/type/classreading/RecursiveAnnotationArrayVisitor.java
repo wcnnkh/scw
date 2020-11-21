@@ -4,8 +4,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import scw.asm.AnnotationVisitor;
-import scw.asm.Type;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Type;
+
 import scw.core.annotation.AnnotationAttributes;
 import scw.core.utils.ObjectUtils;
 

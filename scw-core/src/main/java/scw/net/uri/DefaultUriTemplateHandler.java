@@ -54,7 +54,6 @@ public class DefaultUriTemplateHandler extends AbstractUriTemplateHandler {
 	 * 
 	 * @param strictEncoding
 	 *            whether to perform strict encoding
-	 * @since 4.3
 	 */
 	public void setStrictEncoding(boolean strictEncoding) {
 		this.strictEncoding = strictEncoding;

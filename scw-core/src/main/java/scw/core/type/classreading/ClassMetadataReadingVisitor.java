@@ -3,12 +3,13 @@ package scw.core.type.classreading;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import scw.asm.AnnotationVisitor;
-import scw.asm.Attribute;
-import scw.asm.ClassVisitor;
-import scw.asm.FieldVisitor;
-import scw.asm.MethodVisitor;
-import scw.asm.Opcodes;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
 import scw.core.Constants;
 import scw.core.type.ClassMetadata;
 import scw.core.utils.ClassUtils;

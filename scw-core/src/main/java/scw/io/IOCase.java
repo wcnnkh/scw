@@ -16,7 +16,6 @@ import java.io.Serializable;
  * class to compare filenames.
  *
  * @version $Id: IOCase.java 1304052 2012-03-22 20:55:29Z ggregory $
- * @since 1.3
  */
 public final class IOCase implements Serializable {
 
@@ -196,7 +195,6 @@ public final class IOCase implements Serializable {
      * @return the first index of the search String,
      *  -1 if no match or <code>null</code> string input
      * @throws NullPointerException if either string is null
-     * @since 2.0
      */
     public int checkIndexOf(String str, int strStartIndex, String search) {
         int endIndex = str.length() - search.length();

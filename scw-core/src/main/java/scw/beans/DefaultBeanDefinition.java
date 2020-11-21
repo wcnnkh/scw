@@ -116,9 +116,9 @@ public class DefaultBeanDefinition extends DefaultInstanceBuilder<Object> implem
 				}
 			}
 			
-			Value value = propertyFactory.get(prefix + field.getSetter().getName());
+			Value value = propertyFactory.getValue(prefix + field.getSetter().getName());
 			if(value == null || value.isEmpty()){
-				value = propertyFactory.get(prefix + StringUtils.humpNamingReplacement(field.getSetter().getName(), "-"));
+				value = propertyFactory.getValue(prefix + StringUtils.humpNamingReplacement(field.getSetter().getName(), "-"));
 			}
 			
 			if(value != null && !value.isEmpty()){

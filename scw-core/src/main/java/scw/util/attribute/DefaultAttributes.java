@@ -73,7 +73,7 @@ public class DefaultAttributes<K, V> implements Attributes<K, V> {
 		}
 
 		if (obj instanceof DefaultAttributes) {
-			return ObjectUtils.equals(attributeMap, ((DefaultAttributes) obj).attributeMap);
+			return ObjectUtils.nullSafeEquals(attributeMap, ((DefaultAttributes) obj).attributeMap);
 		}
 
 		return false;

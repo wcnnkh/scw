@@ -46,7 +46,6 @@ public abstract class AbstractUriTemplateHandler implements UriTemplateHandler {
 	 * not with an array, where the Map supplied to {@link #expand(String, Map)}
 	 * can override the default values.
 	 * @param defaultUriVariables the default URI variable values
-	 * @since 4.3
 	 */
 	public void setDefaultUriVariables(Map<String, ?> defaultUriVariables) {
 		this.defaultUriVariables.clear();

@@ -2,18 +2,23 @@ package scw.fastjson;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import scw.core.Converter;
+import scw.core.IteratorConverter;
+import scw.json.AbstractJson;
+import scw.json.JsonArray;
+import scw.json.JsonElement;
+import scw.json.JsonObject;
+import scw.util.KeyValuePair;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONAware;
 import com.alibaba.fastjson.JSONObject;
 
-import scw.json.AbstractJson;
-import scw.json.JsonArray;
-import scw.json.JsonElement;
-import scw.json.JsonObject;
-
-public final class FastJsonObject extends AbstractJson<String> implements JsonObject, JSONAware, Serializable {
+public final class FastJsonObject extends AbstractJson<String> implements JsonObject, JSONAware, Serializable, Converter<Entry<String, Object>, KeyValuePair<String, JsonElement>> {
 	private static final long serialVersionUID = 1L;
 	private JSONObject jsonObject;
 
@@ -21,8 +26,9 @@ public final class FastJsonObject extends AbstractJson<String> implements JsonOb
 		this.jsonObject = jsonObject;
 	}
 
-	public void put(String key, Object value) {
+	public boolean put(String key, Object value) {
 		jsonObject.put(key, value);
+		return true;
 	}
 
 	public scw.json.JsonObject getJsonObject(String key) {
@@ -35,13 +41,9 @@ public final class FastJsonObject extends AbstractJson<String> implements JsonOb
 		return json == null ? null : new FastJsonArray(json);
 	}
 
-	public JsonElement get(String key) {
+	public JsonElement getValue(String key) {
 		String text = jsonObject.getString(key);
 		return text == null ? null : new FastJsonElement(text, getDefaultValue(key));
-	}
-
-	public Collection<String> keys() {
-		return jsonObject.keySet();
 	}
 
 	public boolean containsKey(String key) {
@@ -84,5 +86,21 @@ public final class FastJsonObject extends AbstractJson<String> implements JsonOb
 		}
 
 		return false;
+	}
+
+	public Set<String> keySet() {
+		return jsonObject.keySet();
+	}
+
+	public boolean remove(String key) {
+		return jsonObject.remove(key) != null;
+	}
+
+	public Iterator<KeyValuePair<String, JsonElement>> iterator() {
+		return new IteratorConverter<Entry<String, Object>, KeyValuePair<String, JsonElement>>(jsonObject.entrySet().iterator(), this);
+	}
+
+	public KeyValuePair<String, JsonElement> convert(Entry<String, Object> k) {
+		return new KeyValuePair<String, JsonElement>(k.getKey(), getValue(k.getKey()));
 	}
 }

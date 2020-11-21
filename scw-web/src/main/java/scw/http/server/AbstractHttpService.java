@@ -35,22 +35,27 @@ public abstract class AbstractHttpService implements HttpService {
 			logger.debug(requestToUse);
 		}
 
+		WebUtils.setLocalServerHttpRequest(requestToUse);
 		Iterable<? extends HttpServiceInterceptor> interceptors = getHttpServiceInterceptors();
 		HttpService service = new HttpServiceInterceptorChain(interceptors == null ? null : interceptors.iterator(),
 				handlerAccessor);
 		try {
 			service.service(requestToUse, responseToUse);
 		} finally {
-			if (!responseToUse.isCommitted()) {
-				if (requestToUse.isSupportAsyncControl()) {
-					ServerHttpAsyncControl serverHttpAsyncControl = requestToUse.getAsyncControl(responseToUse);
-					if (serverHttpAsyncControl.isStarted()) {
-						serverHttpAsyncControl.addListener(new ServerHttpResponseCompleteAsyncListener(responseToUse));
-						return;
+			try {
+				if (!responseToUse.isCommitted()) {
+					if (requestToUse.isSupportAsyncControl()) {
+						ServerHttpAsyncControl serverHttpAsyncControl = requestToUse.getAsyncControl(responseToUse);
+						if (serverHttpAsyncControl.isStarted()) {
+							serverHttpAsyncControl.addListener(new ServerHttpResponseCompleteAsyncListener(responseToUse));
+							return;
+						}
 					}
 				}
+				responseToUse.close();
+			} catch (Exception e) {
+				WebUtils.setLocalServerHttpRequest(null);
 			}
-			responseToUse.close();
 		}
 	}
 

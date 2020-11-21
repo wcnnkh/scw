@@ -245,7 +245,7 @@ public final class ConfigUtils {
 				fieldFilter);
 		for (Field field : fields) {
 			String name = field.getSetter().getName();
-			Value value = propertyFactory.get(StringUtils.isEmpty(propertyPrefix) ? name : (propertyPrefix + name));
+			Value value = propertyFactory.getValue(StringUtils.isEmpty(propertyPrefix) ? name : (propertyPrefix + name));
 			if (value == null && nameList != null) {
 				Iterator<String> iterator = nameList.iterator();
 				while (iterator.hasNext()) {
@@ -260,7 +260,7 @@ public final class ConfigUtils {
 						if (asName.equals(name)) {
 							for (String n : names) {
 								value = propertyFactory
-										.get(StringUtils.isEmpty(propertyPrefix) ? n : (propertyPrefix + n));
+										.getValue(StringUtils.isEmpty(propertyPrefix) ? n : (propertyPrefix + n));
 								if (value != null) {
 									break;
 								}

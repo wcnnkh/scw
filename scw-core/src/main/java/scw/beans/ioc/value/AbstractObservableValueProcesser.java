@@ -48,7 +48,7 @@ public abstract class AbstractObservableValueProcesser<R> extends AbstractValueP
 	 * @param insertNull
 	 *            是否可以插入空值
 	 */
-	protected void set(BeanDefinition beanDefinition, BeanFactory beanFactory, PropertyFactory propertyFactory,
+	protected synchronized void set(BeanDefinition beanDefinition, BeanFactory beanFactory, PropertyFactory propertyFactory,
 			Object bean, Field field, Value value, String name, String charsetName, R res, boolean insertNull)
 			throws Exception {
 		Object v = null;

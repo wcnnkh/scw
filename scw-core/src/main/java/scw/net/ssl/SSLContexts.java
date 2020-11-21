@@ -35,7 +35,6 @@ import javax.net.ssl.SSLContext;
 /**
  * {@link javax.net.ssl.SSLContext} factory methods.
  *
- * @since 4.4
  */
 public class SSLContexts {
 
