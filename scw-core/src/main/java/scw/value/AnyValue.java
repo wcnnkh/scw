@@ -9,13 +9,24 @@ import scw.core.utils.ClassUtils;
 import scw.core.utils.ObjectUtils;
 import scw.core.utils.StringUtils;
 import scw.core.utils.TypeUtils;
+import scw.json.JSONSupport;
+import scw.json.JSONUtils;
 
 public class AnyValue extends SupportDefaultValue implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private volatile JSONSupport jsonSupport;
 	private Object value;
 
 	public AnyValue(Object value) {
 		this(value, EmptyValue.INSTANCE);
+	}
+
+	public JSONSupport getJsonSupport() {
+		return jsonSupport == null ? JSONUtils.getJsonSupport() : jsonSupport;
+	}
+
+	public void setJsonSupport(JSONSupport jsonSupport) {
+		this.jsonSupport = jsonSupport;
 	}
 
 	public AnyValue(Object value, Value defaultValue) {
@@ -24,7 +35,7 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 	}
 
 	public Object getValue() {
-		if(value instanceof AnyValue){
+		if (value instanceof AnyValue) {
 			return ((AnyValue) value).value;
 		}
 		return value;
@@ -87,7 +98,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsByteValue();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsByteValue();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsByteValue();
 	}
 
 	public Short getAsShort() {
@@ -127,7 +139,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsShortValue();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsShortValue();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsShortValue();
 	}
 
 	public Integer getAsInteger() {
@@ -167,7 +180,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsIntValue();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsIntValue();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsIntValue();
 	}
 
 	public Long getAsLong() {
@@ -207,7 +221,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsLongValue();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsLongValue();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsLongValue();
 	}
 
 	public Boolean getAsBoolean() {
@@ -287,7 +302,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsFloatValue();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsFloatValue();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsFloatValue();
 	}
 
 	public Double getAsDouble() {
@@ -327,7 +343,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsDoubleValue();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsDoubleValue();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsDoubleValue();
 	}
 
 	public char getAsChar() {
@@ -359,7 +376,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsCharacter();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsCharacter();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsCharacter();
 	}
 
 	public BigInteger getAsBigInteger() {
@@ -379,7 +397,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsBigInteger();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsBigInteger();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsBigInteger();
 	}
 
 	public BigDecimal getAsBigDecimal() {
@@ -403,7 +422,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsBigDecimal();
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsBigDecimal();
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsBigDecimal();
 	}
 
 	public Number getAsNumber() {
@@ -451,58 +471,65 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 			return ((Value) value).getAsEnum(enumType);
 		}
 
-		return new StringValue(getAsString(), getDefaultValue()).getAsEnum(enumType);
+		return new StringValue(getAsString(), getDefaultValue())
+				.getAsEnum(enumType);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected <T> T getAsObjectNotSupport(Class<? extends T> type) {
+	public <T> T getAsObject(Class<? extends T> type) {
 		if (value == null) {
 			return getDefaultValue().getAsObject(type);
 		}
 
-		if (type.isInstance(value)) {
+		if (type == Object.class || type == null) {
 			return (T) value;
+		}
+
+		if (type.isInstance(value) || ClassUtils.isAssignableValue(type, value)) {
+			return type.cast(value);
+		}
+
+		if (value instanceof Value) {
+			return ((Value) value).getAsObject(type);
+		}
+		return super.getAsObject(type);
+	}
+
+	@Override
+	public Object getAsObject(Type type) {
+		if (value == null) {
+			return getDefaultValue().getAsObject(type);
+		}
+
+		if (type == Object.class || type == null) {
+			return value;
 		}
 
 		if (value instanceof Value) {
 			return ((Value) value).getAsObject(type);
 		}
 
-		if (ClassUtils.isAssignableValue(type, value)) {
-			return (T) value;
-		}
+		return super.getAsObject(type);
+	}
 
+	@Override
+	protected <T> T getAsObjectNotSupport(Class<? extends T> type) {
 		if (ValueUtils.isBaseType(value.getClass())) {
-			return new StringValue(getAsString(), getDefaultValue()).getAsObject(type);
+			return new StringValue(getAsString(), getDefaultValue())
+					.getAsObject(type);
 		}
 
-		return internalParseObject(type);
+		return getJsonSupport().parseObject(getJsonSupport().toJSONString(value), type);
 	}
 
 	@Override
 	protected Object getAsObjectNotSupport(Type type) {
-		if (value == null) {
-			return getDefaultValue().getAsObject(type);
+		if(TypeUtils.toClass(type).isInstance(value)){
+			return TypeUtils.toClass(type).cast(value);
 		}
-
-		if (value instanceof Value) {
-			return ((Value) value).getAsObject(type);
-		}
-
-		if (type instanceof Class) {
-			return getAsObjectNotSupport((Class<?>) type);
-		}
-
-		return internalParseObject(type);
-	}
-
-	protected <T> T internalParseObject(Class<? extends T> type) {
-		return type.cast(type);
-	}
-
-	protected Object internalParseObject(Type type) {
-		return internalParseObject(TypeUtils.toClass(type));
+		
+		return getJsonSupport().parseObject(getJsonSupport().toJSONString(value), type);
 	}
 
 	@Override
@@ -535,8 +562,8 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 		if (value instanceof CharSequence) {
 			return StringUtils.isEmpty((CharSequence) value);
 		}
-		
-		if(value instanceof Value){
+
+		if (value instanceof Value) {
 			return ((Value) value).isEmpty();
 		}
 		return false;
@@ -554,13 +581,13 @@ public class AnyValue extends SupportDefaultValue implements Serializable {
 		if (value instanceof CharSequence) {
 			return StringUtils.isNumeric((CharSequence) value);
 		}
-		
-		if(value instanceof Value){
+
+		if (value instanceof Value) {
 			return ((Value) value).isNumber();
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getAsString();
