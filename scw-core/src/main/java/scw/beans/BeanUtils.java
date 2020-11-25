@@ -1,15 +1,20 @@
 package scw.beans;
 
 import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import scw.beans.annotation.Singleton;
 import scw.core.Constants;
 import scw.core.annotation.AnnotationUtils;
 import scw.core.instance.InstanceUtils;
 import scw.core.utils.CollectionUtils;
+import scw.logger.Logger;
 import scw.util.MultiServiceLoader;
 import scw.util.ServiceLoader;
 import scw.value.ValueFactory;
@@ -115,5 +120,27 @@ public final class BeanUtils {
 		}
 
 		return null;
+	}
+	
+	public static void destroy(BeanFactory beanFactory, Map<String, Object> instanceMap, Logger logger){
+		List<String> beanKeyList = new ArrayList<String>();
+		for (Entry<String, Object> entry : instanceMap.entrySet()) {
+			beanKeyList.add(entry.getKey());
+		}
+
+		ListIterator<String> keyIterator = beanKeyList.listIterator(beanKeyList.size());
+		while (keyIterator.hasPrevious()) {
+			BeanDefinition beanDefinition = beanFactory.getDefinition(keyIterator.previous());
+			if (beanDefinition == null) {
+				continue;
+			}
+
+			Object obj = instanceMap.get(beanDefinition.getId());
+			try {
+				beanDefinition.destroy(obj);
+			} catch (Throwable e) {
+				logger.error(e, "destroy error: {}", beanDefinition.getId());
+			}
+		}
 	}
 }

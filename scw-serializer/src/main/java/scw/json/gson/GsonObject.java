@@ -37,7 +37,8 @@ public final class GsonObject extends AbstractJson<String> implements JsonObject
 	}
 
 	public Set<String> keySet() {
-		return gsonJsonObject.keySet();
+		//return gsonJsonObject.keySet();
+		return null;
 	}
 
 	public boolean containsKey(String key) {

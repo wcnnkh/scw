@@ -1,9 +1,9 @@
 package scw.security.session;
 
 public interface UserSessionFactory<T> {
-	UserSession<T> getSession(T uid);
+	UserSessions<T> getUserSessions(T uid);
+	
+	UserSession<T> getUserSession(T uid, String sessionId);
 
-	UserSession<T> getSession(String sessionId);
-
-	UserSession<T> getSession(T uid, String sessionId, boolean create);
+	UserSession<T> getUserSession(T uid, String sessionId, boolean create);
 }

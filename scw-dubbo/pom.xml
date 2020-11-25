@@ -29,7 +29,17 @@
 					<groupId>org.yaml</groupId>
 					<artifactId>snakeyaml</artifactId>
 				</exclusion>
+				<exclusion>
+					<!-- 排除2.8.6版本，因为他使用了jdk1.9的特性，导致tomcat8.0.39(只测试了此版本)无法识别 -->
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>gson</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
 		</dependency>
 
 		<!-- 因为排除的spring，缺少此jar -->

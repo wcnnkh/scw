@@ -1,10 +1,14 @@
 package scw.security.session;
 
 public abstract class AbstractSessionFactory implements SessionFactory {
-	private int defaultMaxInactiveInterval;
+	private int maxInactiveInterval;
 
-	public AbstractSessionFactory(int defaultMaxInactiveInterval) {
-		this.defaultMaxInactiveInterval = defaultMaxInactiveInterval;
+	public AbstractSessionFactory(int maxInactiveInterval) {
+		this.maxInactiveInterval = maxInactiveInterval;
+	}
+	
+	public int getMaxInactiveInterval() {
+		return maxInactiveInterval;
 	}
 
 	public Session getSession(String sessionId) {
@@ -16,7 +20,7 @@ public abstract class AbstractSessionFactory implements SessionFactory {
 		if (sessionData == null && create) {
 			sessionData = new SessionData();
 			sessionData.setCreateTime(System.currentTimeMillis());
-			sessionData.setMaxInactiveInterval(defaultMaxInactiveInterval);
+			sessionData.setMaxInactiveInterval(maxInactiveInterval);
 			sessionData.setSessionId(sessionId);
 			setSessionData(sessionData);
 			return new DefaultSession(this, sessionData, true);

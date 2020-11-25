@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -569,25 +568,7 @@ public class DefaultBeanFactory extends BeanLifecycle implements BeanFactory, Ac
 	@Override
 	public void beforeDestroy() throws Throwable {
 		synchronized (singletonMap) {
-			List<String> beanKeyList = new ArrayList<String>();
-			for (Entry<String, Object> entry : singletonMap.entrySet()) {
-				beanKeyList.add(entry.getKey());
-			}
-
-			ListIterator<String> keyIterator = beanKeyList.listIterator(beanKeyList.size());
-			while (keyIterator.hasPrevious()) {
-				BeanDefinition beanDefinition = getDefinitionByCache(keyIterator.previous());
-				if (beanDefinition == null) {
-					continue;
-				}
-
-				Object obj = singletonMap.get(beanDefinition.getId());
-				try {
-					beanDefinition.destroy(obj);
-				} catch (Throwable e) {
-					logger.error(e, "destroy error: {}", beanDefinition.getId());
-				}
-			}
+			BeanUtils.destroy(this, singletonMap, logger);
 		}
 		super.beforeDestroy();
 	}

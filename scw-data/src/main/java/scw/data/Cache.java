@@ -18,6 +18,12 @@ public interface Cache {
 
 	<T> Map<String, T> get(Collection<String> keys);
 
+	/**
+	 * 如果不存在就添加
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	boolean add(String key, Object value);
 
 	void set(String key, Object value);

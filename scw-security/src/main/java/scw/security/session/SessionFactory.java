@@ -1,6 +1,8 @@
 package scw.security.session;
 
 public interface SessionFactory {
+	int getMaxInactiveInterval();
+	
 	/**
 	 * 获取session
 	 * @param sessionId

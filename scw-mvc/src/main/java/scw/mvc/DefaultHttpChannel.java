@@ -7,20 +7,17 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
-import scw.beans.BeanDefinition;
 import scw.beans.BeanFactory;
-import scw.beans.BeansException;
 import scw.beans.Destroy;
+import scw.beans.ExtendBeanFactory;
 import scw.compatible.CompatibleUtils;
 import scw.core.Constants;
+import scw.core.ResolvableType;
+import scw.core.instance.NoArgsInstanceFactory;
 import scw.core.parameter.AbstractParameterFactory;
 import scw.core.parameter.ParameterDescriptor;
 import scw.core.parameter.ParameterDescriptors;
@@ -49,8 +46,12 @@ import scw.mvc.annotation.IP;
 import scw.mvc.annotation.RequestBean;
 import scw.mvc.annotation.RequestBody;
 import scw.mvc.parameter.RequestBodyParse;
+import scw.mvc.security.UserSessionFactoryAdapter;
+import scw.mvc.security.UserSessionResolver;
 import scw.net.RestfulParameterMapAware;
 import scw.security.session.Session;
+import scw.security.session.UserSession;
+import scw.security.session.UserSessionFactory;
 import scw.util.MultiValueMap;
 import scw.util.Target;
 import scw.util.XUtils;
@@ -63,20 +64,19 @@ import scw.web.WebUtils;
 public class DefaultHttpChannel extends AbstractParameterFactory implements HttpChannel, Destroy, Target {
 	private static Logger logger = LoggerUtils.getLogger(DefaultHttpChannel.class);
 	private final long createTime;
-	private final BeanFactory beanFactory;
 	private final JSONSupport jsonSupport;
 	private boolean completed = false;
 	private final ServerHttpRequest request;
 	private final ServerHttpResponse response;
-	private volatile Map<String, Object> beanMap;
+	private final ExtendBeanFactory extendBeanFactory;
 
 	public DefaultHttpChannel(BeanFactory beanFactory, JSONSupport jsonSupport, ServerHttpRequest request,
 			ServerHttpResponse response) {
 		this.createTime = System.currentTimeMillis();
-		this.beanFactory = beanFactory;
 		this.jsonSupport = jsonSupport;
 		this.request = request;
 		this.response = response;
+		this.extendBeanFactory = new ExtendBeanFactory(this, beanFactory);
 	}
 
 	public final JSONSupport getJsonSupport() {
@@ -87,91 +87,8 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 		return completed;
 	}
 
-	protected void destroyBeans() {
-		if (beanMap == null) {
-			return;
-		}
-
-		List<String> idList = new ArrayList<String>(beanMap.keySet());
-		ListIterator<String> iterator = idList.listIterator(idList.size());
-		while (iterator.hasPrevious()) {
-			String name = iterator.previous();
-			BeanDefinition beanDefinition = beanFactory.getDefinition(name);
-			if (beanDefinition == null) {
-				continue;
-			}
-
-			Object bean = beanMap.get(name);
-			if (bean == null) {
-				continue;
-			}
-
-			try {
-				beanDefinition.destroy(bean);
-			} catch (Throwable e) {
-				logger.error(e, "销毁bean异常：" + name);
-			}
-		}
-	}
-
-	public final <T> T getBean(Class<T> type) {
-		return getBean(type.getName());
-	}
-
-	private Object getBeanInstance(String id) {
-		return beanMap == null ? null : beanMap.get(id);
-	}
-
-	private Map<String, Object> createBeanMap() {
-		return new LinkedHashMap<String, Object>(4);
-	}
-
-	@SuppressWarnings("unchecked")
-	public final <T> T getBean(String name) {
-		BeanDefinition beanDefinition = beanFactory.getDefinition(name);
-		if (beanDefinition == null) {
-			return null;
-		}
-
-		Object bean = getBeanInstance(beanDefinition.getId());
-		if (bean != null) {
-			return (T) bean;
-		}
-
-		for (ParameterDescriptors parameterDescriptors : beanDefinition) {
-			if (isAccept(parameterDescriptors)) {
-				if (beanDefinition.isSingleton()) {
-					synchronized (this) {
-						bean = getBeanInstance(beanDefinition.getId());
-						if (bean == null) {
-							try {
-								bean = beanDefinition.create(parameterDescriptors.getTypes(),
-										getParameters(parameterDescriptors));
-								if (beanMap == null) {
-									beanMap = createBeanMap();
-								}
-								beanMap.put(beanDefinition.getId(), bean);
-								beanDefinition.dependence(bean);
-								beanDefinition.init(bean);
-							} catch (Throwable e) {
-								throw new BeansException(beanDefinition.getId(), e);
-							}
-						}
-					}
-				} else {
-					try {
-						bean = beanDefinition.create(parameterDescriptors.getTypes(),
-								getParameters(parameterDescriptors));
-						beanDefinition.dependence(bean);
-						beanDefinition.init(bean);
-					} catch (Throwable e) {
-						throw new BeansException(beanDefinition.getId(), e);
-					}
-				}
-				break;
-			}
-		}
-		return (T) bean;
+	public NoArgsInstanceFactory getInstanceFactory() {
+		return extendBeanFactory;
 	}
 
 	public void destroy() throws Exception {
@@ -184,7 +101,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 			logger.trace("destroy channel: {}", toString());
 		}
 
-		destroyBeans();
+		extendBeanFactory.destroy();
 	}
 
 	public final long getCreateTime() {
@@ -258,30 +175,41 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 		Value value = getValue(parameterDescriptor.getName(), defaultValue);
 		return value.getAsObject(parameterDescriptor.getGenericType());
 	}
-	
+
 	public <T> T getTarget(Class<T> targetType) {
 		T target = XUtils.getTarget(getRequest(), targetType);
-		if(target != null){
+		if (target != null) {
 			return target;
 		}
-		
+
 		target = XUtils.getTarget(getResponse(), targetType);
-		if(target != null){
+		if (target != null) {
 			return target;
 		}
 		return null;
 	}
 
+	public Session getSession(boolean create) {
+		return getRequest().getSession(create);
+	}
+
 	public Object getParameter(ParameterDescriptor parameterDescriptor) {
 		Object target = XUtils.getTarget(this, parameterDescriptor.getType());
-		if(target != null){
+		if (target != null) {
 			return target;
 		}
-		
-		if(parameterDescriptor.getType().isInstance(this)){
+
+		if (parameterDescriptor.getType().isInstance(this)) {
 			return this;
-		} else if (Session.class == parameterDescriptor.getType()) {
-			return getRequest().getSession();
+		}
+
+		if (UserSession.class == parameterDescriptor.getType()) {
+			ResolvableType resolvableType = ResolvableType.forType(parameterDescriptor.getGenericType());
+			return getUserSession(resolvableType.getGeneric(0).getRawClass());
+		}
+
+		if (Session.class == parameterDescriptor.getType()) {
+			return getSession(false);
 		}
 
 		if (parameterDescriptor.getAnnotatedElement().getAnnotation(IP.class) != null) {
@@ -295,7 +223,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 
 		RequestBody requestBody = parameterDescriptor.getAnnotatedElement().getAnnotation(RequestBody.class);
 		if (requestBody != null) {
-			RequestBodyParse requestBodyParse = getBean(requestBody.value());
+			RequestBodyParse requestBodyParse = getInstanceFactory().getInstance(requestBody.value());
 			try {
 				return requestBodyParse.requestBodyParse(this, getJsonSupport(), parameterDescriptor);
 			} catch (Exception e) {
@@ -305,8 +233,9 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 
 		RequestBean requestBean = parameterDescriptor.getAnnotatedElement().getAnnotation(RequestBean.class);
 		if (requestBean != null) {
-			return StringUtils.isEmpty(requestBean.value()) ? getBean(parameterDescriptor.getType().getName())
-					: getBean(requestBean.value());
+			return StringUtils.isEmpty(requestBean.value())
+					? getInstanceFactory().getInstance(parameterDescriptor.getType().getName())
+					: getInstanceFactory().getInstance(requestBean.value());
 		}
 
 		ParameterName parameterName = parameterDescriptor.getAnnotatedElement().getAnnotation(ParameterName.class);
@@ -414,6 +343,47 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 		return getRequest().toString();
 	}
 
+	public UserSessionResolver getUserSessionResolver() {
+		return getService(UserSessionResolver.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> T getUid(Class<T> type) {
+		T uid = (T) getRequest().getAttribute(UID_ATTRIBUTE);
+		if (uid != null) {
+			return uid;
+		}
+
+		UserSessionResolver userSessionResolver = getUserSessionResolver();
+		if (userSessionResolver == null) {
+			return null;
+		}
+
+		uid = userSessionResolver.getUid(this, type);
+		if (uid != null) {
+			getRequest().setAttribute(UID_ATTRIBUTE, uid);
+		}
+		return uid;
+	}
+
+	public String getSessionId() {
+		String sessionId = (String) getRequest().getAttribute(SESSIONID_ATTRIBUTE);
+		if (sessionId != null) {
+			return sessionId;
+		}
+
+		UserSessionResolver userSessionResolver = getUserSessionResolver();
+		if (userSessionResolver == null) {
+			return null;
+		}
+
+		sessionId = userSessionResolver.getSessionId(this);
+		if (sessionId != null) {
+			getRequest().setAttribute(SESSIONID_ATTRIBUTE, sessionId);
+		}
+		return sessionId;
+	}
+
 	private final class RequestValue extends AbstractStringValue {
 		private final String name;
 
@@ -435,7 +405,7 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 
 			// 不可以被实例化且不存在无参的构造方法
 			if (!ReflectionUtils.isInstance(type, true)) {
-				return getBean(type);
+				return getInstanceFactory().getInstance(type);
 			}
 
 			Value value = WebUtils.getParameter(getRequest(), name);
@@ -463,8 +433,100 @@ public class DefaultHttpChannel extends AbstractParameterFactory implements Http
 			if (!value.isEmpty()) {
 				return value.getAsObject(type);
 			}
-			
+
 			return getAsObjectNotSupport(TypeUtils.toClass(type));
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T getService(Class<T> type) {
+		T service = (T) getRequest().getAttribute(type.getName());
+		if (service != null) {
+			return service;
+		}
+
+		if (extendBeanFactory.isInstance(type)) {
+			service = extendBeanFactory.getInstance(type);
+		}
+
+		if (service != null) {
+			getRequest().setAttribute(type.getName(), service);
+		}
+		return service;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> UserSessionFactory<T> getUserSessionFactory(Class<T> type) {
+		UserSessionFactory<T> userSessionFactory = (UserSessionFactory<T>) getRequest()
+				.getAttribute(UserSessionFactory.class.getName());
+		if (userSessionFactory != null) {
+			return userSessionFactory;
+		}
+
+		UserSessionFactoryAdapter userSessionFactoryAdapter = getService(UserSessionFactoryAdapter.class);
+		if (userSessionFactoryAdapter != null) {
+			userSessionFactory = userSessionFactoryAdapter.getUserSessionFactory(type);
+		}
+
+		if (userSessionFactory == null && extendBeanFactory.isInstance(UserSessionFactory.class)) {
+			userSessionFactory = extendBeanFactory.getInstance(UserSessionFactory.class);
+		}
+
+		if (userSessionFactory != null) {
+			getRequest().setAttribute(UserSessionFactory.class.getName(), userSessionFactory);
+		}
+
+		if (userSessionFactory == null) {
+			logger.error("Not support user session factory: {}", this.toString());
+		}
+		return userSessionFactory;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> UserSession<T> getUserSession(Class<T> type) {
+		UserSession<T> userSession = (UserSession<T>) getRequest().getAttribute(UserSession.class.getName());
+		if (userSession != null) {
+			return userSession;
+		}
+
+		T uid = getUid(type);
+		if (uid == null) {
+			return null;
+		}
+
+		String sessionId = getSessionId();
+		if (StringUtils.isEmpty(sessionId)) {
+			return null;
+		}
+
+		UserSessionFactory<T> userSessionFactory = getUserSessionFactory(type);
+		if (userSessionFactory == null) {
+			return null;
+		}
+
+		userSession = userSessionFactory.getUserSession(uid, sessionId);
+		if (userSession != null) {
+			getRequest().setAttribute(UserSession.class.getName(), userSession);
+		}
+		return userSession;
+	}
+
+	public <T> UserSession<T> createUserSession(Class<T> type, T uid, String sessionId) {
+		if(uid == null || type == null || StringUtils.isEmpty(sessionId)){
+			throw new IllegalArgumentException();
+		}
+		
+		UserSessionFactory<T> userSessionFactory = getUserSessionFactory(type);
+		if (userSessionFactory == null) {
+			return null;
+		}
+
+		UserSession<T> userSession = userSessionFactory.getUserSession(uid, sessionId, true);
+		if (userSession != null) {
+			getRequest().setAttribute(UID_ATTRIBUTE, uid);
+			getRequest().setAttribute(SESSIONID_ATTRIBUTE, sessionId);
+			getRequest().setAttribute(UserSession.class.getName(), userSession);
+		}
+		return userSession;
 	}
 }
