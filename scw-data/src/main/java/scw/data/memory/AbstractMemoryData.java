@@ -27,6 +27,11 @@ public abstract class AbstractMemoryData implements MemoryData {
 	}
 
 	public boolean setIfAbsent(Object value) {
+		if(cas.get() == 0){//第一次set数据
+			set(value);
+			return true;
+		}
+		
 		if (!isExpire()) {
 			return false;
 		}
@@ -36,6 +41,10 @@ public abstract class AbstractMemoryData implements MemoryData {
 	}
 
 	public boolean setIfAbsent(CAS<Object> value) {
+		if(cas.get() == 0){//第一次set数据
+			return set(value);
+		}
+		
 		if (!isExpire()) {
 			return false;
 		}

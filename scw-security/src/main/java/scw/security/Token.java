@@ -59,18 +59,23 @@ public class Token implements Serializable, Cloneable {
 	public boolean isNew() {
 		return isNew;
 	}
+	
+	public boolean isExpired(){
+		return isExpired(0);
+	}
+	
 
 	/**
 	 * 是否已过期,如果expiresIn或createTime小于等于0那么始终返回false
-	 * 
+	 * @param ahead 提前多久过期(秒)
 	 * @return
 	 */
-	public boolean isExpired() {
+	public boolean isExpired(int ahead) {
 		if (expiresIn <= 0 || createTime <= 0) {
 			return false;
 		}
 
-		return (System.currentTimeMillis() - createTime) > expiresIn * 1000;
+		return (System.currentTimeMillis() - createTime) > ((expiresIn - ahead) * 1000);
 	}
 
 	/**

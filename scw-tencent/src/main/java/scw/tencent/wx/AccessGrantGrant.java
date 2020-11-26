@@ -29,13 +29,13 @@ public class AccessGrantGrant extends AbstractCredentialsClient {
 
 	public Token getTicket(String scope, String type) {
 		if (temporaryCache == null) {
-			return WeiXinUtils.getTicket(getAccessToken(scope).getAccessToken().getToken(), type);
+			return WeiXinUtils.getTicket(getAccessToken(scope).getToken().getToken(), type);
 		}
 
 		String key = "wx_ticket:" + configuration.getAppId() + "&" + scope + "&" + type;
 		Token token = temporaryCache.get(key);
 		if (token == null || token.isExpired()) {
-			token = WeiXinUtils.getTicket(getAccessToken(scope).getAccessToken().getToken(), type);
+			token = WeiXinUtils.getTicket(getAccessToken(scope).getToken().getToken(), type);
 			temporaryCache.set(key, token.getExpiresIn(), token.clone());
 		}
 		return token;

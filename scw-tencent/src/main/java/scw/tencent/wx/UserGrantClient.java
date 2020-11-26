@@ -29,6 +29,6 @@ public class UserGrantClient implements AuthorizationCodeClient {
 
 	public Userinfo getUserinfo(String code, String redirect_uri, String lang) {
 		UserAccessToken userAccessToken = getAccessToken(code, redirect_uri);
-		return WeiXinUtils.getUserinfo(userAccessToken.getOpenid(), userAccessToken.getAccessToken().getToken(), lang);
+		return WeiXinUtils.getUserinfo(userAccessToken.getOpenid(), userAccessToken.getToken().getToken(), lang);
 	}
 }

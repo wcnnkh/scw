@@ -13,6 +13,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import scw.compatible.CompatibleUtils;
+import scw.core.Constants;
+import scw.json.JSONUtils;
 import scw.json.JsonObject;
 import scw.tencent.wx.WeiXinUtils;
 import scw.util.Base64;
@@ -152,7 +154,7 @@ public final class WeiXinMiniprogramUtils {
 		return new Session(json);
 	}
 
-	public static String decrypt(String encryptedData, String key, String iv) {
+	public static PhoneNumber decrypt(String encryptedData, String key, String iv) {
 		byte[] dataBytes = Base64.decode(encryptedData);
 		byte[] keyBytes = Base64.decode(key);
 		byte[] ivKeys = Base64.decode(iv);
@@ -160,7 +162,8 @@ public final class WeiXinMiniprogramUtils {
 			Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
 			cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(keyBytes, "AES"), new IvParameterSpec(ivKeys));
 			byte[] data = cipher.doFinal(dataBytes);
-			return CompatibleUtils.getStringOperations().createString(data, "UTF-8").trim();
+			String content = CompatibleUtils.getStringOperations().createString(data, Constants.UTF_8_NAME).trim();
+			return JSONUtils.getJsonSupport().parseObject(content, PhoneNumber.class);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -67,7 +67,6 @@ public final class MemoryDataTemplete implements DataTemplete {
 		if (!memoryData.setIfAbsent(value)) {
 			return false;
 		}
-
 		memoryData.setExpire(exp);
 		return true;
 	}

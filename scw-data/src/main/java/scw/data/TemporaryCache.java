@@ -13,8 +13,8 @@ public interface TemporaryCache extends Cache {
 
 	/**
 	 * 如果数据不存在就添加
-	 * @param key 过期时间(秒)
-	 * @param exp
+	 * @param key
+	 * @param exp 过期时间(秒)
 	 * @param value
 	 * @return
 	 */

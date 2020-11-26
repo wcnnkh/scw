@@ -69,11 +69,16 @@ public final class DefaultUserSessionFactory<T> implements UserSessionFactory<T>
 		SessionIds<T> ids = temporaryCache.getAndTouch(key, sessionFactory.getMaxInactiveInterval());
 		if(ids == null){
 			if(create){
-				ids = new SessionIds<T>(sessionFactory.getMaxInactiveInterval());
-				if(temporaryCache.add(key, sessionFactory.getMaxInactiveInterval(), ids)){
-					return ids;
-				}else{
-					return getSessionIds(uid, create);
+				while(true){
+					ids = temporaryCache.getAndTouch(key, sessionFactory.getMaxInactiveInterval());
+					if(ids != null){
+						break;
+					}
+					
+					ids = new SessionIds<T>(sessionFactory.getMaxInactiveInterval());
+					if(temporaryCache.add(key, sessionFactory.getMaxInactiveInterval(), ids)){
+						break;
+					}
 				}
 			}
 		}

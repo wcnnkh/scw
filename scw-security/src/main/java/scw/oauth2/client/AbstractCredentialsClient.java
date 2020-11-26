@@ -5,9 +5,18 @@ import scw.oauth2.AccessToken;
 
 public abstract class AbstractCredentialsClient implements CredentialsClient {
 	protected final TemporaryCache temporaryCache;
+	private int tokenExpireAheadTime = 60;//token提前过期时间
 
 	public AbstractCredentialsClient(TemporaryCache temporaryCache) {
 		this.temporaryCache = temporaryCache;
+	}
+	
+	public final int getTokenExpireAheadTime() {
+		return tokenExpireAheadTime;
+	}
+
+	public void setTokenExpireAheadTime(int tokenExpireAheadTime) {
+		this.tokenExpireAheadTime = tokenExpireAheadTime;
 	}
 
 	public AccessToken getAccessToken(String scope) {
@@ -17,9 +26,9 @@ public abstract class AbstractCredentialsClient implements CredentialsClient {
 
 		String key = getTemporaryCacheKey(scope);
 		AccessToken accessToken = temporaryCache.get(key);
-		if (accessToken == null || accessToken.getAccessToken().isExpired()) {
+		if (accessToken == null || accessToken.getToken().isExpired(tokenExpireAheadTime)) {
 			if (accessToken != null && accessToken.getRefreshToken() != null
-					&& !accessToken.getRefreshToken().isExpired()) {
+					&& !accessToken.getRefreshToken().isExpired(tokenExpireAheadTime)) {
 				accessToken = refreshAccessToken(accessToken, scope);
 				if (accessToken == null) {
 					accessToken = getNewAccessToken(scope);
@@ -28,7 +37,7 @@ public abstract class AbstractCredentialsClient implements CredentialsClient {
 				accessToken = getNewAccessToken(scope);
 			}
 			temporaryCache.set(key,
-					Math.max(accessToken.getAccessToken().getExpiresIn(),
+					Math.max(accessToken.getToken().getExpiresIn(),
 							accessToken.getRefreshToken() == null ? 0 : accessToken.getRefreshToken().getExpiresIn()),
 					accessToken.clone());
 		}

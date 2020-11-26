@@ -3,7 +3,7 @@ package scw.tencent.wx.miniprogram;
 import java.util.Collection;
 import java.util.EnumMap;
 
-import scw.tencent.wx.token.AccessTokenFactory;
+import scw.tencent.wx.TokenFactory;
 
 /**
  * 微信小程序实现
@@ -12,22 +12,22 @@ import scw.tencent.wx.token.AccessTokenFactory;
  *
  */
 public class WeixinMiniprogram {
-	private final AccessTokenFactory accessTokenFactory;
+	private final TokenFactory tokenFactory;
 
-	public WeixinMiniprogram(AccessTokenFactory accessTokenFactory) {
-		this.accessTokenFactory = accessTokenFactory;
+	public WeixinMiniprogram(TokenFactory tokenFactory) {
+		this.tokenFactory = tokenFactory;
 	}
 
 	public final String getAppId() {
-		return accessTokenFactory.getAppId();
+		return tokenFactory.getAppId();
 	}
 
 	public final String getAppSecret() {
-		return accessTokenFactory.getAppSecret();
+		return tokenFactory.getAppSecret();
 	}
 
 	public final String getAccessToken() {
-		return accessTokenFactory.getAccessToken();
+		return tokenFactory.getAccessToken().getToken().getToken();
 	}
 
 	public Session code2session(String js_code) {
