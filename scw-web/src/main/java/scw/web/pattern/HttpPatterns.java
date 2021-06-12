@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import scw.core.OrderComparator;
-import scw.core.utils.CollectionUtils;
 import scw.logger.Logger;
 import scw.logger.LoggerFactory;
 import scw.web.HttpService;
@@ -63,8 +62,11 @@ public class HttpPatterns<T> implements Comparator<T> {
 				if (((ServerHttpRequestAccept) service).accept(request)) {
 					return service;
 				}
+			} else {
+				//因为services已经进行过排序了，ServerHttpRequestAccept一定在前面
+				return service;
 			}
 		}
-		return CollectionUtils.first(services);
+		return null;
 	}
 }
