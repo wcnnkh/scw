@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>scw</groupId>
 		<artifactId>scw</artifactId>
-		<version>2.0</version>
+		<version>2.0.1</version>
 	</parent>
 	<artifactId>scw-mysql</artifactId>
 	<dependencies>

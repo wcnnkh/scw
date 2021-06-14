@@ -7,7 +7,7 @@
 	<!-- generateBackupPoms 是否备份旧的pom.xml -->
 	<!-- newVersion 新的版本号 -->
 	<!-- mvn versions:set -DnewVersion=2.0 -DgenerateBackupPoms=false -->
-	<version>2.0</version>
+	<version>2.0.1</version>
 	<packaging>pom</packaging>
 	<name>scw</name>
 	<description>一些常见的实现</description>
@@ -89,367 +89,367 @@
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-core</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-context</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-transaction</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-orm</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-beans</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-tcc</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-messageing</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-boot</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-sql</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-log4j</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-log4j2</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-cloud</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-lucene</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-web</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-rpc</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-sql-orm</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-yaml</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-mysql</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-sqlite</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-websocket</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-dubbo</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-timer</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-mvc</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-security</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-data</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-memcached</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-redis</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-druid</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-hikaricp</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-hibernate</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-ibatis</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-db</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-amqp</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-jms</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-activemq</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-microsoft</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-freemarker</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-mail</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-rabbitmq</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-upload</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-zookeeper</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-netflix-eureka-client</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-netflix-eureka-server</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-netflix-hystrix</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-feign</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-tomcat</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-quartz</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-rmi</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-elasticsearch</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-jmx</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-protobuf</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-kryo</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-fastjson</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-hessian</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-kafka</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-netty</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-slf4j</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-consistency</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-jackson</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-apollo-client</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 			
 			<dependency>
 				<groupId>scw</groupId>
 				<artifactId>scw-dom</artifactId>
-				<version>2.0</version>
+				<version>2.0.1</version>
 			</dependency>
 
 			<!-- 通用的依赖版本定义 -->
